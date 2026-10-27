@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="sq">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>Modus Vestendi · Shop</title>
+<meta name="description" content="Modus Vestendi — moda italiane dhe spanjolle e përzgjedhur. Porosit online, paguaj në dorëzim.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Modus Vestendi · Shop">
+<meta property="og:description" content="Veshje italiane dhe spanjolle të përzgjedhura · Capi italiani e spagnoli selezionati · Curated Italian & Spanish fashion">
+<meta property="og:image" content="https://shop.modusvestendi.com/icons/icon-512.png">
+<meta property="og:url" content="https://shop.modusvestendi.com/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="icons/favicon.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<style>
+:root{
+  --bg:#ffffff; --soft:#f5f2ee; --soft2:#efe9e1; --ink:#1a1a1a; --muted:#6b6b6b; --line:#e6e1da;
+  --accent:#4c2f2a; --tan:#deb598; --sale:#c8102e; --good:#2f7a4a;
+  --r:4px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,"Segoe UI",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:1px solid var(--ink);background:#fff;color:var(--ink);border-radius:var(--r);padding:10px 16px}
+button.primary{background:var(--ink);color:#fff;font-weight:600}
+button.primary:hover{background:#000}
+button.ghost{border-color:var(--line)}
+button:disabled{opacity:.4;cursor:not-allowed}
+input,select,textarea{font:inherit;width:100%;padding:12px;border:1px solid #bdb6ad;border-radius:var(--r);background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--ink);outline-offset:-1px}
+label{display:block;font-size:13px;font-weight:600;margin:14px 0 6px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 16px}
+@media(min-width:900px){.wrap{padding:0 28px}}
+/* promo strip */
+.promo{background:var(--ink);color:#fff;font-size:12.5px;text-align:center;padding:8px 12px;letter-spacing:.02em}
+.promo b{font-weight:600}
+/* header */
+header{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--line)}
+.hrow{display:flex;align-items:center;gap:14px;height:60px}
+.logo{display:flex;align-items:center;gap:9px;font-family:Jost,sans-serif;font-size:17px;letter-spacing:.16em;text-transform:lowercase;white-space:nowrap}
+.logo img{height:28px}
+.search{flex:1;max-width:520px;margin:0 auto;position:relative}
+.search input{padding:10px 12px 10px 38px;background:var(--soft);border-color:var(--soft);border-radius:999px}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.icons{display:flex;align-items:center;gap:4px;margin-left:auto}
+.ib{position:relative;border:0;background:none;padding:8px;display:grid;place-items:center;border-radius:50%}
+.ib:hover{background:var(--soft)}
+.cnt{position:absolute;top:2px;right:0;background:var(--accent);color:#fff;font-size:10px;font-weight:700;min-width:17px;height:17px;border-radius:9px;display:grid;place-items:center;padding:0 4px}
+.lang{border:1px solid var(--line);border-radius:999px;padding:5px 8px;width:auto;font-size:12.5px;background:#fff}
+@media(max-width:719px){.hrow .search{display:none}.msearch{display:block!important;padding:0 0 10px}.logo span{font-size:14px;letter-spacing:.12em}}
+.msearch{display:none}
+nav.cats{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;border-top:1px solid var(--line)}
+nav.cats::-webkit-scrollbar{display:none}
+nav.cats a{white-space:nowrap;padding:12px 12px;font-size:14px;font-weight:500;border-bottom:2px solid transparent;color:#333}
+nav.cats a.on,nav.cats a:hover{border-bottom-color:var(--ink);color:var(--ink)}
+nav.cats a.hot{color:var(--sale)}
+/* hero */
+.hero{display:grid;grid-template-columns:1fr;background:var(--soft2);margin:18px 0 8px;border-radius:var(--r);overflow:hidden;min-height:260px}
+@media(min-width:760px){.hero{grid-template-columns:1.1fr 1fr;min-height:400px}}
+.hero .txt{padding:28px 24px;display:flex;flex-direction:column;justify-content:center;gap:12px}
+@media(min-width:760px){.hero .txt{padding:48px}}
+.hero h1{font-family:Jost,sans-serif;font-weight:400;font-size:clamp(28px,4.4vw,48px);line-height:1.08;margin:0;letter-spacing:.01em}
+.hero p{margin:0;color:#444;max-width:420px}
+.hero .img{background:var(--tan) center/cover no-repeat;min-height:240px}
+.hero button{align-self:flex-start;padding:13px 26px}
+.usp{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 6px;font-size:12.5px;color:#333}
+.usp div{display:flex;gap:8px;align-items:center;justify-content:center;background:var(--soft);padding:10px 8px;border-radius:var(--r);text-align:center}
+@media(max-width:600px){.usp{grid-template-columns:1fr}.usp div{justify-content:flex-start}}
+h2.sec{font-size:20px;font-weight:700;margin:30px 0 12px;display:flex;justify-content:space-between;align-items:baseline}
+h2.sec a{font-size:13px;font-weight:500;text-decoration:underline}
+.brands{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.brands::-webkit-scrollbar{display:none}
+.brands a{white-space:nowrap;border:1px solid var(--line);padding:12px 18px;border-radius:var(--r);font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.brands a:hover{border-color:var(--ink)}
+.row-scroll{display:grid;grid-auto-flow:column;grid-auto-columns:46%;gap:12px;overflow-x:auto;scrollbar-width:none;padding-bottom:6px}
+@media(min-width:760px){.row-scroll{grid-auto-columns:23%}}
+.row-scroll::-webkit-scrollbar{display:none}
+/* toolbar */
+.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:14px 0 10px;position:sticky;top:var(--hh,108px);background:#fff;z-index:10}
+.toolbar .count{color:var(--muted);font-size:13px;margin-right:auto}
+.toolbar select{width:auto;padding:9px 10px;border-radius:999px;border-color:var(--line);font-size:13px}
+.fbtn{border-radius:999px;border-color:var(--line);padding:9px 14px;font-size:13px;display:flex;gap:6px;align-items:center}
+.fbtn.on{border-color:var(--ink);font-weight:600}
+.chips{display:flex;gap:6px;flex-wrap:wrap;padding-bottom:10px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12.5px;background:var(--soft);display:inline-flex;gap:6px;align-items:center}
+.chip.x{cursor:pointer}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 10px;padding-bottom:50px}
+@media(min-width:760px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:30px 16px}}
+@media(min-width:1100px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.card{display:block;position:relative}
+.ph{aspect-ratio:3/4;background:var(--soft);position:relative;overflow:hidden;border-radius:var(--r)}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .35s}
+.ph img.b{opacity:0}
+@media(hover:hover){.card:hover .ph img.b{opacity:1}}
+.ph .noimg{position:absolute;inset:0;display:grid;place-items:center;font-family:Jost,sans-serif;letter-spacing:.2em;color:var(--tan);font-size:26px}
+.heart{position:absolute;right:8px;top:8px;width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.92);display:grid;place-items:center;padding:0;z-index:2}
+.heart.on svg{fill:var(--ink)}
+.badges{position:absolute;left:0;bottom:10px;display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.bdg{background:#fff;font-size:11px;font-weight:700;padding:3px 8px;letter-spacing:.04em;text-transform:uppercase}
+.bdg.sale{background:var(--sale);color:#fff}
+.bdg.new{background:var(--ink);color:#fff}
+.meta{padding:10px 2px 0}
+.br{font-weight:700;font-size:13.5px}
+.nm{color:#444;font-size:13.5px;margin:1px 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pr{font-weight:600;font-size:14px}
+.pr .old{color:var(--muted);text-decoration:line-through;font-weight:400;margin-left:6px;font-size:13px}
+.pr.sale .now{color:var(--sale)}
+.sz{color:var(--muted);font-size:12px;margin-top:3px}
+.dots{display:flex;gap:4px;margin-top:6px}
+.dot{width:12px;height:12px;border-radius:50%;border:1px solid rgba(0,0,0,.18);flex:none}
+.empty{text-align:center;color:var(--muted);padding:60px 0}
+/* product page */
+.crumbs{font-size:12.5px;color:var(--muted);padding:14px 0}
+.crumbs a:hover{text-decoration:underline}
+.pd{display:grid;grid-template-columns:1fr;gap:24px;padding-bottom:40px}
+@media(min-width:900px){.pd{grid-template-columns:1.25fr 1fr;gap:44px}}
+.gal{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:900px){.gal{grid-template-columns:76px 1fr}}
+.thumbs{display:none;flex-direction:column;gap:8px}
+@media(min-width:900px){.thumbs{display:flex}}
+.thumbs img{width:76px;aspect-ratio:3/4;object-fit:cover;border:1px solid transparent;cursor:pointer;border-radius:var(--r)}
+.thumbs img.on{border-color:var(--ink)}
+.main{position:relative;aspect-ratio:3/4;background:var(--soft);overflow:hidden;border-radius:var(--r)}
+.slides{display:flex;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.slides::-webkit-scrollbar{display:none}
+.slides img{flex:0 0 100%;width:100%;height:100%;object-fit:cover;scroll-snap-align:start}
+.gdots{position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;gap:6px}
+.gdots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.6);border:1px solid rgba(0,0,0,.15)}
+.gdots span.on{background:var(--ink)}
+.info .brl{font-weight:700;font-size:18px;text-decoration:underline;text-underline-offset:3px}
+.info h1{font-size:20px;font-weight:400;margin:4px 0 10px}
+.info .price{font-size:20px;font-weight:700}
+.info .price .old{color:var(--muted);text-decoration:line-through;font-weight:400;font-size:15px;margin-left:8px}
+.info .price.sale .now{color:var(--sale)}
+.info .vat{font-size:12px;color:var(--muted)}
+.opt{display:flex;flex-wrap:wrap;gap:8px}
+.cbtn{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-color:var(--line);border-radius:999px}
+.cbtn .dot{width:22px;height:22px}
+.cbtn.on,.sbtn.on{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.sbtn{min-width:58px;padding:11px 12px;border-color:var(--line);font-weight:500}
+.low{color:var(--sale);font-size:12.5px;font-weight:600;margin-top:8px;min-height:18px}
+.cta{display:flex;gap:8px;margin-top:14px}
+.cta .primary{flex:1;padding:15px;font-size:15px}
+.cta .hbig{width:52px;padding:0;display:grid;place-items:center}
+.cta .hbig.on svg{fill:var(--ink)}
+.box{border:1px solid var(--line);border-radius:var(--r);margin-top:18px}
+.box div.l{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-top:1px solid var(--line);font-size:13px}
+.box div.l:first-child{border-top:0}
+.box div.l b{display:block;font-size:13.5px}
+.ask{display:flex;gap:8px;margin-top:14px}
+.ask button{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;border-color:var(--line);font-size:13px}
+details.acc{border-top:1px solid var(--line)}
+details.acc:last-of-type{border-bottom:1px solid var(--line)}
+details.acc summary{list-style:none;padding:16px 2px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between}
+details.acc summary::-webkit-details-marker{display:none}
+details.acc summary::after{content:'+';font-weight:400;font-size:18px}
+details.acc[open] summary::after{content:'–'}
+details.acc .c{padding:0 2px 16px;color:#333;white-space:pre-line;font-size:13.5px}
+.sticky-buy{position:fixed;left:0;right:0;bottom:0;z-index:30;background:#fff;border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;gap:10px;align-items:center;transform:translateY(110%);transition:transform .25s}
+.sticky-buy.show{transform:none}
+.sticky-buy .p{flex:1;min-width:0}
+.sticky-buy .p div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+@media(min-width:900px){.sticky-buy{display:none}}
+/* cart / checkout */
+.page{display:grid;grid-template-columns:1fr;gap:24px;padding:20px 0 60px}
+@media(min-width:900px){.page{grid-template-columns:1.6fr 1fr;gap:40px}}
+.page h1{font-size:24px;margin:0 0 6px}
+.line{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+.line img,.line .ni{width:90px;aspect-ratio:3/4;object-fit:cover;background:var(--soft);flex:none;border-radius:var(--r)}
+.line .d{flex:1;min-width:0;font-size:13.5px}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:var(--r);margin-top:8px}
+.qty button{border:0;padding:6px 12px}
+.qty b{min-width:22px;text-align:center}
+.link{border:0;background:none;padding:0;text-decoration:underline;font-size:12.5px;color:var(--muted)}
+.sum{background:var(--soft);padding:20px;border-radius:var(--r);align-self:start;position:sticky;top:130px}
+.sum .r{display:flex;justify-content:space-between;padding:6px 0;font-size:14px}
+.sum .r.t{border-top:1px solid var(--line);margin-top:8px;padding-top:12px;font-weight:700;font-size:16px}
+.sum .note{font-size:12.5px;color:var(--muted);margin-top:10px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.err{color:var(--sale);font-size:13.5px;margin-top:10px}
+.ok{max-width:520px;margin:50px auto;text-align:center}
+.ok .big{width:64px;height:64px;border-radius:50%;background:var(--good);color:#fff;display:grid;place-items:center;font-size:30px;margin:0 auto 14px}
+/* filter sheet */
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:60;display:flex;justify-content:flex-end}
+.sheet{background:#fff;width:100%;max-width:420px;height:100%;display:flex;flex-direction:column}
+.sheet .hd{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line);font-weight:700;font-size:16px}
+.sheet .bd{flex:1;overflow:auto;padding:4px 18px 20px}
+.sheet .bd h4{margin:20px 0 10px;font-size:14px}
+.sheet .ft{display:flex;gap:10px;padding:14px 18px;border-top:1px solid var(--line)}
+.sheet .ft button{flex:1}
+footer{background:var(--soft);margin-top:30px;padding:34px 0 50px;font-size:13px;color:#333}
+.fcols{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:24px}
+footer h4{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.08em}
+footer p{margin:4px 0}
+footer a{text-decoration:underline}
+.pay{display:inline-block;border:1px solid var(--line);background:#fff;padding:5px 10px;border-radius:var(--r);font-weight:600;font-size:12px;margin-top:6px}
+.nl{background:var(--accent);color:#fff;border-radius:var(--r);padding:26px 22px;margin:34px 0 10px;display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:800px){.nl{grid-template-columns:1fr 1.1fr;align-items:center;padding:34px 40px}}
+.nl h2{margin:0 0 6px;font-family:Jost,sans-serif;font-weight:400;font-size:28px}
+.nl p{margin:0;opacity:.9}
+.nl form{display:grid;gap:8px}
+.nl input{border-color:transparent}
+.nl .cons{font-size:12px;opacity:.85;display:flex;gap:8px;align-items:flex-start}
+.nl .cons input{width:auto;margin-top:2px}
+.nl button{background:#fff;color:var(--accent);border-color:#fff;font-weight:700;padding:13px}
+.nl .codebox{background:#fff;color:var(--ink);border-radius:var(--r);padding:16px;text-align:center}
+.nl .codebox b{font-size:24px;letter-spacing:.12em;display:block;margin:6px 0}
+.pop-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:70;display:grid;place-items:center;padding:16px}
+.pop{max-width:440px;width:100%;position:relative;margin:0}
+.pop .x{position:absolute;right:10px;top:10px;background:none;border:0;color:#fff;font-size:20px;padding:4px 8px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:var(--r);z-index:90;font-size:14px;box-shadow:0 6px 24px rgba(0,0,0,.2)}
+</style>
+</head>
+<body>
+<div class="promo" id="promo"></div>
+<header id="hdr"><div class="wrap">
+  <div class="hrow">
+    <a class="logo" href="#/"><img src="icons/mv-mark.png" alt="MV"><span>modus vestendi</span></a>
+    <div class="search"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" autocomplete="off"></div>
+    <div class="icons">
+      <select class="lang" id="lang" aria-label="language"></select>
+      <a class="ib" href="#/wish" aria-label="wishlist"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="cnt" id="wcnt" hidden></span></a>
+      <a class="ib" href="#/cart" aria-label="cart"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 7h14l-1 13H6z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg><span class="cnt" id="ccnt" hidden></span></a>
+    </div>
+  </div>
+  <div class="search msearch"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q2" type="search" autocomplete="off"></div>
+  <nav class="cats" id="cats"></nav>
+</div></header>
+<main class="wrap" id="view"><div class="empty">…</div></main>
+<footer><div class="wrap fcols" id="foot"></div></footer>
+<div class="sticky-buy" id="sbuy"></div>
+<script>
+const IG_USER = 'modus.vestendi', WA_NUMBER = '393760336650', EMAIL = 'info@modusvestendi.com';
+const SB_URL = 'https://xmdbknlmdzodilvcbpwj.supabase.co', SB_KEY = 'sb_publishable_nJQfqCvShsVCkDknNhfb6w_O5aJLvAL';
+const sb = window.supabase.createClient(SB_URL, SB_KEY, {auth:{persistSession:false}});
+const LANGS = ['sq','it','en'];
+const store = {get(k, d){ try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }};
+let L = (() => { try { const q = new URLSearchParams(location.search).get('lang') || store.get('mvshop_lang2', null); return LANGS.includes(q) ? q : 'sq'; } catch (e) { return 'sq'; } })();
+const TX = {
+  promo:['<b>Pagesë në dorëzim</b> · Dërgesë në Shqipëri, Kosovë dhe Maqedoni · Ndërrim mase','<b>Pagamento alla consegna</b> · Spedizione in Albania, Kosovo e Macedonia · Cambio taglia','<b>Pay on delivery</b> · Shipping to Albania, Kosovo and North Macedonia · Size exchange'],
+  search:['Kërko marka, produkte…','Cerca brand, prodotti…','Search brands, items…'],
+  hero_t:['Moda italiane,<br>e zgjedhur për ju','Moda italiana,<br>scelta per te','Italian fashion,<br>picked for you'],
+  hero_p:['Copë origjinale nga markat më të mira italiane dhe spanjolle. Sasi të kufizuara.','Capi originali dei migliori brand italiani e spagnoli. Quantità limitate.','Original pieces from the best Italian and Spanish brands. Limited quantities.'],
+  hero_b:['Shiko të gjitha','Scopri tutto','Shop all'],
+  usp1:['💶 Pagesë në dorëzim','💶 Paghi alla consegna','💶 Pay on delivery'], usp2:['🚚 Dërgesë AL · XK · MK','🚚 Spedizione AL · XK · MK','🚚 Shipping AL · XK · MK'], usp3:['💬 Këshillim në WhatsApp','💬 Consulenza su WhatsApp','💬 Advice on WhatsApp'],
+  all:['Të gjitha','Tutto','All'], news:['Të reja','Novità','New in'], sale:['Ulje','Saldi','Sale'], brands:['Markat','Brand','Brands'], see_all:['Shiko të gjitha','Vedi tutto','See all'],
+  new_in:['Të sapoardhura','Ultimi arrivi','Just in'], products:['produkte','prodotti','items'], product1:['produkt','prodotto','item'],
+  sort:['Rendit','Ordina','Sort'], s_new:['Më të rejat','Più recenti','Newest'], s_low:['Çmimi: nga më i ulëti','Prezzo crescente','Price: low to high'], s_high:['Çmimi: nga më i larti','Prezzo decrescente','Price: high to low'],
+  filters:['Filtro','Filtri','Filters'], f_size:['Masa','Taglia','Size'], f_color:['Ngjyra','Colore','Colour'], f_brand:['Marka','Brand','Brand'], f_cat:['Kategoria','Categoria','Category'], f_price:['Çmimi (€)','Prezzo (€)','Price (€)'],
+  min:['Min','Min','Min'], max:['Max','Max','Max'], clear:['Pastro','Azzera','Clear'], show:['Shfaq','Mostra','Show'],
+  b_new:['E re','Novità','New'], b_last:['E fundit','Ultimo pezzo','Last one'],
+  home:['Kryefaqja','Home','Home'], color:['Ngjyra','Colore','Colour'], size:['Masa','Taglia','Size'], choose_size:['Zgjidh masën','Scegli la taglia','Select size'],
+  add:['Shto në shportë','Aggiungi al carrello','Add to bag'], added:['U shtua në shportë','Aggiunto al carrello','Added to bag'], go_cart:['Shko te shporta','Vai al carrello','Go to bag'],
+  only_left:['Vetëm {n} copë e mbetur','Solo {n} pezzo rimasto','Only {n} left'], one:['Masë e vetme','Taglia unica','One size'],
+  d1:['Pagesë në dorëzim','Pagamento alla consegna','Pay on delivery'], d1s:['Paguani me para në dorë kur merrni porosinë.','Paghi in contanti quando ricevi l\'ordine.','Pay cash when you receive your order.'],
+  d2:['Dërgesë','Spedizione','Shipping'], d2s:['Në Shqipëri, Kosovë dhe Maqedoni të Veriut. Kostoja konfirmohet me telefon.','In Albania, Kosovo e Macedonia del Nord. Il costo viene confermato al telefono.','To Albania, Kosovo and North Macedonia. Cost confirmed by phone.'],
+  d3:['Ndërrim mase','Cambio taglia','Size exchange'], d3s:['Nuk ju rri mirë? Na shkruani dhe e ndërrojmë.','Non ti sta bene? Scrivici e la cambiamo.','Doesn\'t fit? Message us and we\'ll swap it.'],
+  desc:['Përshkrimi','Descrizione','Description'], fit:['Masat dhe përshtatja','Taglie e vestibilità','Size & fit'], fit_def:['Masat janë italiane. Nëse nuk jeni të sigurt, na shkruani gjatësinë dhe peshën tuaj dhe ju këshillojmë masën.','Le taglie sono italiane. Se hai dubbi, scrivici altezza e peso e ti consigliamo la taglia.','Sizes are Italian. Not sure? Send us your height and weight and we\'ll suggest your size.'],
+  ship:['Dërgesa dhe pagesa','Spedizione e pagamento','Shipping & payment'], ship_t:['Pas porosisë ju telefonojmë për konfirmim. Artikujt rezervohen për ju 48 orë. Pagesa bëhet në dorëzim.','Dopo l\'ordine ti chiamiamo per confermare. I capi restano riservati per te 48 ore. Paghi alla consegna.','After you order we call you to confirm. Items are reserved for you for 48 hours. You pay on delivery.'],
+  ask:['Keni pyetje për këtë produkt?','Hai domande su questo capo?','Questions about this item?'], ask_ig:['Instagram','Instagram','Instagram'], ask_wa:['WhatsApp','WhatsApp','WhatsApp'],
+  ask_msg:['Përshëndetje! Kam një pyetje për këtë produkt:','Ciao! Ho una domanda su questo capo:','Hi! I have a question about this item:'],
+  ask_copied:['Mesazhi me linkun u kopjua: ngjite në chat-in e Instagram.','Messaggio con il link copiato: incollalo nella chat di Instagram.','Message with the link copied: paste it in the Instagram chat.'],
+  like:['Mund t\'ju pëlqejnë edhe','Potrebbe piacerti anche','You may also like'],
+  wish:['Të preferuarat','Preferiti','Wishlist'], wish_empty:['Ende asnjë produkt i preferuar. Prekni ♡ te produktet.','Ancora nessun preferito. Tocca ♡ sui prodotti.','No favourites yet. Tap ♡ on items.'],
+  cart:['Shporta','Carrello','Bag'], cart_empty:['Shporta juaj është bosh.','Il tuo carrello è vuoto.','Your bag is empty.'], continue:['Vazhdo blerjet','Continua lo shopping','Continue shopping'],
+  remove:['Hiq','Rimuovi','Remove'], summary:['Përmbledhje','Riepilogo','Summary'], subtotal:['Nëntotali','Subtotale','Subtotal'], shipping:['Dërgesa','Spedizione','Shipping'], ship_tbd:['Konfirmohet me telefon','Confermata al telefono','Confirmed by phone'],
+  total:['Totali','Totale','Total'], checkout:['Vazhdo te porosia','Procedi all\'ordine','Checkout'], pay_cod:['Pagesë në dorëzim (para në dorë)','Pagamento alla consegna (contanti)','Cash on delivery'],
+  your_data:['Të dhënat tuaja','I tuoi dati','Your details'], delivery:['Adresa e dërgesës','Indirizzo di consegna','Delivery address'],
+  name:['Emri dhe mbiemri','Nome e cognome','Full name'], phone:['Telefoni (WhatsApp)','Telefono (WhatsApp)','Phone (WhatsApp)'], ig:['Instagram (opsional)','Instagram (facoltativo)','Instagram (optional)'],
+  country:['Shteti','Paese','Country'], city:['Qyteti','Città','City'], address:['Adresa (rruga, numri, pallati)','Indirizzo (via, numero, palazzo)','Address (street, number, building)'], notes:['Shënime (opsionale)','Note (facoltative)','Notes (optional)'],
+  send:['Dërgo porosinë','Invia ordine','Place order'], back_cart:['← Kthehu te shporta','← Torna al carrello','← Back to bag'],
+  terms:['Duke dërguar porosinë, ju do të kontaktoheni për konfirmim. Nuk paguani asgjë tani.','Inviando l\'ordine verrai contattato per la conferma. Non paghi nulla ora.','After placing the order we will contact you to confirm. You pay nothing now.'],
+  ok_t:['Faleminderit! Porosia u mor.','Grazie! Ordine ricevuto.','Thank you! Order received.'], ok_p:['Numri i porosisë','Numero ordine','Order number'],
+  ok_n:['Artikujt janë rezervuar për ju për 48 orë. Do t\'ju kontaktojmë së shpejti për konfirmim dhe dërgesë.','I capi sono riservati per te per 48 ore. Ti contatteremo a breve per conferma e spedizione.','Your items are reserved for 48 hours. We will contact you soon to confirm and arrange delivery.'],
+  none:['Nuk u gjet asnjë produkt.','Nessun prodotto trovato.','No items found.'], soon:['Së shpejti produkte të reja.','Presto nuovi prodotti.','New items coming soon.'],
+  e_missing_contact:['Shkruani emrin dhe një numër telefoni të saktë.','Inserisci nome e un numero di telefono valido.','Please enter your name and a valid phone number.'],
+  e_missing_address:['Shkruani qytetin dhe adresën.','Inserisci città e indirizzo.','Please enter city and address.'],
+  e_not_available:['Një artikull nuk është më në dispozicion. Shporta u përditësua.','Un capo non è più disponibile. Il carrello è stato aggiornato.','An item is no longer available. Your bag was updated.'],
+  e_too_many:['Shumë porosi në pak kohë. Na shkruani në Instagram.','Troppi ordini in poco tempo. Scrivici su Instagram.','Too many orders in a short time. Please message us on Instagram.'],
+  e_generic:['Diçka shkoi keq. Provoni përsëri.','Qualcosa è andato storto. Riprova.','Something went wrong. Please try again.'],
+  nl_t:['Merr 10% zbritje','Ricevi il 10% di sconto','Get 10% off'], nl_p:['Regjistrohu në newsletter me email ose Instagram dhe merr 10% zbritje në blerjen e parë. Je i pari që mëson për ardhjet e reja.','Iscriviti alla newsletter con email o Instagram e ricevi il 10% di sconto sul primo acquisto. Sarai il primo a scoprire i nuovi arrivi.','Join our newsletter with email or Instagram and get 10% off your first purchase. Be the first to hear about new arrivals.'],
+  nl_email:['Email','Email','Email'], nl_ig:['ose Instagram (@)','oppure Instagram (@)','or Instagram (@)'], nl_cons:['Pranoj të marr mesazhe nga Modus Vestendi për të rejat dhe ofertat. Mund të çregjistrohem kur të dua.','Accetto di ricevere messaggi da Modus Vestendi su novità e offerte. Posso cancellarmi quando voglio.','I agree to receive messages from Modus Vestendi about new arrivals and offers. I can unsubscribe any time.'],
+  nl_btn:['Dua 10% zbritje','Voglio il 10% di sconto','Get my 10% off'], nl_ok:['Kodi juaj i zbritjes','Il tuo codice sconto','Your discount code'], nl_ok2:['Ruajeni: aplikohet automatikisht në shportë në këtë pajisje.','Conservalo: si applica da solo nel carrello su questo dispositivo.','Keep it: it is applied automatically in your bag on this device.'], nl_used:['Ky kod është përdorur tashmë.','Questo codice è già stato usato.','This code has already been used.'],
+  e_bad_email:['Email jo e saktë.','Email non valida.','Invalid email.'], e_bad_instagram:['Emri i Instagram jo i saktë.','Nome Instagram non valido.','Invalid Instagram name.'], e_nl_missing:['Shkruani email-in ose Instagram-in.','Inserisci email o Instagram.','Enter your email or Instagram.'], e_consent:['Duhet të pranoni për të marrë kodin.','Devi accettare per ricevere il codice.','Please agree to get the code.'],
+  code:['Kodi i zbritjes','Codice sconto','Discount code'], apply:['Apliko','Applica','Apply'], disc:['Zbritje','Sconto','Discount'], code_ok:['Kodi u aplikua: -{n}%','Codice applicato: -{n}%','Code applied: -{n}%'],
+  e_bad_code:['Kodi nuk ekziston.','Codice non valido.','Invalid code.'], e_code_used:['Kodi është përdorur tashmë.','Codice già usato.','Code already used.'], e_code_first_only:['Kodi vlen vetëm për blerjen e parë.','Il codice vale solo per il primo acquisto.','The code is valid only for your first purchase.'],
+  f_help:['Ndihmë','Aiuto','Help'], f_how:['Si të porosisni: zgjidhni masën, shtoni në shportë, plotësoni adresën. Ju telefonojmë për konfirmim.','Come ordinare: scegli la taglia, aggiungi al carrello, inserisci l\'indirizzo. Ti chiamiamo per conferma.','How to order: pick your size, add to bag, enter your address. We call you to confirm.'],
+  f_contact:['Kontakt','Contatti','Contact'], f_pay:['Pagesa','Pagamento','Payment'], f_about:['Rreth nesh','Chi siamo','About'],
+  f_about_t:['Modus Vestendi sjell veshje origjinale nga markat italiane dhe spanjolle, të zgjedhura një nga një.','Modus Vestendi porta capi originali di brand italiani e spagnoli, scelti uno per uno.','Modus Vestendi brings original pieces from Italian and Spanish brands, hand-picked one by one.']
+};
+const COUNTRIES = [['AL',['Shqipëri','Albania','Albania']],['XK',['Kosovë','Kosovo','Kosovo']],['MK',['Maqedoni e Veriut','Macedonia del Nord','North Macedonia']],['IT',['Itali','Italia','Italy']],['UK',['Mbretëri e Bashkuar','Regno Unito','United Kingdom']],['altro',['Tjetër','Altro','Other']]];
+const t = (k, n) => { const v = TX[k][LANGS.indexOf(L)]; return n == null ? v : v.replace('{n}', n); };
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const eur = n => new Intl.NumberFormat(L === 'en' ? 'en-GB' : L === 'it' ? 'it-IT' : 'de-DE', {style:'currency', currency:'EUR', maximumFractionDigits:0}).format(Number(n) || 0);
+const RAINBOW = 'conic-gradient(#e8a3b5,#e8c33d,#7fb3e0,#2e6b3f,#e8a3b5)';
+const CMAP = {nero:'#1f1b1b',zeze:'#1f1b1b',black:'#1f1b1b',bianco:'#f7f5f0',bardhe:'#f7f5f0',white:'#f7f5f0',panna:'#efe6d2',crema:'#efe6d2',cream:'#efe6d2',bordo:'#6d1a2a',bordeaux:'#6d1a2a',burgundy:'#6d1a2a',rosso:'#c0272d',red:'#c0272d',kuqe:'#c0272d',rosa:'#e8a3b5',pink:'#e8a3b5',roze:'#e8a3b5',blu:'#1f3c88',blue:'#1f3c88',navy:'#1b2a4a',azzurro:'#7fb3e0',celeste:'#a7cdea',verde:'#2e6b3f',green:'#2e6b3f',beige:'#d9c3a5',bezhe:'#d9c3a5',cammello:'#b8875a',camel:'#b8875a',marrone:'#6b4430',brown:'#6b4430',kafe:'#6b4430',grigio:'#8c8c8c',grey:'#8c8c8c',gray:'#8c8c8c',gri:'#8c8c8c',giallo:'#e8c33d',yellow:'#e8c33d',viola:'#6a3d8f',purple:'#6a3d8f',oro:'#c9a54b',gold:'#c9a54b',argento:'#c0c0c0',silver:'#c0c0c0',kaki:'#8a8455',khaki:'#8a8455'};
+const norm = c => String(c || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z ]/g, '').trim();
+const hexOf = (c, h) => h || CMAP[norm(c)] || CMAP[norm(c).split(' ')[0]] || CMAP[norm(c).split(' ').pop()] || null;
+const SIZE_ORDER = ['XXS','XS','S','M','L','XL','XXL','XXXL','TU','U'];
+const sRank = z => { const u = String(z || '').toUpperCase(); const i = SIZE_ORDER.indexOf(u); return i >= 0 ? i : (isNaN(Number(u)) ? 100 : 200 + Number(u)); };
+const sizeLbl = z => ['TU','U'].includes(String(z).toUpperCase()) ? t('one') : z;
+const HEART = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>';
+const NEW_DAYS = 21;
+
+let CODE = store.get('mvshop_code', null), CODEOK = null;
+let P = [], URLS = {}, CART = store.get('mvshop_cart', []), WISH = store.get('mvshop_wish', []), Q = '', SORT = 'new', F = {size:[], color:[], brand:[], cat:'', min:'', max:'', sale:false, news:false};
+const saveCart = () => { store.set('mvshop_cart', CART); badges(); };
+const saveWish = () => { store.set('mvshop_wish', WISH); badges(); };
+function toast(m, html){ document.querySelectorAll('.toast').forEach(x => x.remove()); const d = document.createElement('div'); d.className = 'toast'; if (html) d.innerHTML = m; else d.textContent = m; document.body.appendChild(d); setTimeout(() => d.remove(), 2600); }
+const price = p => { const ps = p.variants.map(v => Number(v.price)); return Math.min(...ps); };
+const isSale = p => Number(p.list_price) > price(p) + 0.5;
+const pct = p => Math.round((1 - price(p) / Number(p.list_price)) * 100);
+const isNew = p => (Date.now() - new Date(p.created_at).getTime()) < NEW_DAYS * 864e5;
+const pieces = p => p.variants.reduce((a, v) => a + v.available, 0);
+const sizesOf = p => [...new Set(p.variants.map(v => v.size))].sort((a, b) => sRank(a) - sRank(b));
+const colorsOf = p => [...new Map(p.variants.map(v => [norm(v.color), v])).values()];
+const pUrl = id => location.origin + location.pathname.replace(/preview\.html$/, '') + '#/p/' + id;
+
+async function load(){
+  const {data, error} = await sb.rpc('shop_catalog');
+  if (error){ $('#view').innerHTML = `<div class="empty">${t('e_generic')}</div>`; return; }
+  P = data || [];
+  const paths = P.flatMap(p => p.photos);
+  if (paths.length){ const r = await sb.storage.from('foto').createSignedUrls(paths, 60 * 60 * 6); (r.data || []).forEach(x => { if (x.signedUrl) URLS[x.path] = x.signedUrl; }); }
+  const avail = {}; P.forEach(p => p.variants.forEach(v => avail[v.id] = v.available));
+  CART = CART.filter(c => avail[c.v] > 0).map(c => ({...c, q: Math.min(c.q, avail[c.v])})); saveCart();
+  WISH = WISH.filter(id => P.some(p => p.id === id)); saveWish();
+  chrome(); route();
+}
+function chrome(){
+  document.documentElement.lang = L;
+  $('#promo').innerHTML = t('promo');
+  $('#lang').innerHTML = LANGS.map(l => `<option value="${l}" ${l === L ? 'selected' : ''}>${l.toUpperCase()}</option>`).join('');
+  ['#q', '#q2'].forEach(s => { $(s).placeholder = t('search'); $(s).value = Q; });
+  const cats = [...new Map(P.filter(p => p.category?.id).map(p => [p.category.id, p.category])).values()];
+  const r = location.hash;
+  $('#cats').innerHTML = `<a href="#/shop" class="${r === '#/shop' && !F.cat && !F.news && !F.sale ? 'on' : ''}">${t('all')}</a>` +
+    (P.some(isNew) ? `<a href="#/shop?news" class="${F.news ? 'on' : ''}">${t('news')}</a>` : '') +
+    cats.map(c => `<a href="#/shop?cat=${c.id}" class="${String(F.cat) === String(c.id) ? 'on' : ''}">${esc(c[L])}</a>`).join('') +
+    (P.some(isSale) ? `<a href="#/shop?sale" class="hot ${F.sale ? 'on' : ''}">${t('sale')}</a>` : '') +
+    `<a href="#/brands">${t('brands')}</a>`;
+  $('#foot').innerHTML = `<div><h4>${t('f_about')}</h4><p>${t('f_about_t')}</p></div>
+    <div><h4>${t('f_help')}</h4><p>${t('f_how')}</p></div>
+    <div><h4>${t('f_contact')}</h4><p><a href="https://wa.me/${WA_NUMBER}" target="_blank" rel="noopener">WhatsApp +${WA_NUMBER.replace(/^(\d{2})(\d{3})(\d{3})(\d+)/, '$1 $2 $3 $4')}</a></p><p><a href="https://www.instagram.com/${IG_USER}/" target="_blank" rel="noopener">Instagram @${IG_USER}</a></p><p><a href="mailto:${EMAIL}">${EMAIL}</a></p></div>
+    <div><h4>${t('f_pay')}</h4><span class="pay">💶 ${t('d1')}</span><p style="margin-top:12px"><a href="#/" onclick="setTimeout(()=>document.querySelector('.nl')?.scrollIntoView({behavior:'smooth'}),300)">🎁 ${t('nl_t')}</a></p></div>`;
+  badges();
+}
+function badges(){ const n = CART.reduce((a, c) => a + c.q, 0); const c = $('#ccnt'); c.hidden = !n; c.textContent = n; const w = $('#wcnt'); w.hidden = !WISH.length; w.textContent = WISH.length; }
+$('#lang').addEventListener('change', e => { L = e.target.value; store.set('mvshop_lang2', L); chrome(); route(); });
+const onSearch = e => { Q = e.target.value; ['#q', '#q2'].forEach(s => { if ($(s) !== e.target) $(s).value = Q; }); if (!location.hash.startsWith('#/shop')) location.hash = '#/shop'; else renderShop(true); };
+$('#q').addEventListener('input', onSearch); $('#q2').addEventListener('input', onSearch);
+
+// ---------- router ----------
+window.addEventListener('hashchange', route);
+function route(){
+  const h = location.hash || '#/';
+  $('#sbuy').classList.remove('show');
+  const legacy = h.match(/^#p\/(\d+)/); if (legacy) { location.replace('#/p/' + legacy[1]); return; }
+  const pm = h.match(/^#\/p\/(\d+)/);
+  if (h.startsWith('#/shop')){ const qs = new URLSearchParams(h.split('?')[1] || ''); F.cat = qs.get('cat') || ''; F.news = qs.has('news'); F.sale = qs.has('sale'); const b = qs.get('brand'); F.brand = b ? [b] : (qs.has('keep') ? F.brand : []); chrome(); renderShop(); }
+  else if (pm) renderProduct(Number(pm[1]));
+  else if (h === '#/cart') renderCart();
+  else if (h === '#/checkout') renderCheckout();
+  else if (h === '#/wish') renderWish();
+  else if (h === '#/brands') renderBrands();
+  else renderHome();
+  if (!pm) window.scrollTo(0, 0);
+  setHH();
+}
+function setHH(){ document.documentElement.style.setProperty('--hh', $('#hdr').offsetHeight + 'px'); }
+window.addEventListener('resize', setHH);
+
+// ---------- cards ----------
+function card(p){
+  const a = URLS[p.photos[0]], b = URLS[p.photos[1]], sale = isSale(p), cols = colorsOf(p);
+  return `<a class="card" href="#/p/${p.id}"><div class="ph">${a ? `<img src="${esc(a)}" alt="${esc(p.brand + ' ' + p.name)}" loading="lazy">` : '<div class="noimg">MV</div>'}${b ? `<img class="b" src="${esc(b)}" alt="" loading="lazy">` : ''}
+    <button class="heart ${WISH.includes(p.id) ? 'on' : ''}" onclick="event.preventDefault();toggleWish(${p.id},this)" aria-label="wishlist">${HEART}</button>
+    <div class="badges">${sale ? `<span class="bdg sale">-${pct(p)}%</span>` : ''}${isNew(p) ? `<span class="bdg new">${t('b_new')}</span>` : ''}${pieces(p) === 1 ? `<span class="bdg">${t('b_last')}</span>` : ''}</div></div>
+    <div class="meta"><div class="br">${esc(p.brand || '')}</div><div class="nm">${esc(p.name)}</div>
+    <div class="pr ${sale ? 'sale' : ''}"><span class="now">${eur(price(p))}</span>${sale ? `<span class="old">${eur(p.list_price)}</span>` : ''}</div>
+    <div class="sz">${sizesOf(p).map(sizeLbl).map(esc).join(' · ')}</div>
+    ${cols.some(v => v.color) && cols.length > 1 ? `<div class="dots">${cols.map(v => `<span class="dot" title="${esc(v.color)}" style="background:${hexOf(v.color, v.color_hex) || RAINBOW}"></span>`).join('')}</div>` : ''}</div></a>`;
+}
+function toggleWish(id, el){ const i = WISH.indexOf(id); if (i >= 0) WISH.splice(i, 1); else WISH.push(id); saveWish(); document.querySelectorAll(`[data-wish="${id}"]`).forEach(x => x.classList.toggle('on', WISH.includes(id))); if (el) el.classList.toggle('on', WISH.includes(id)); if (location.hash === '#/wish') renderWish(); }
+
+// ---------- newsletter ----------
+function nlBlock(){
+  const done = store.get('mvshop_nl', null);
+  return `<section class="nl"><div><h2>${t('nl_t')}</h2><p>${t('nl_p')}</p></div><div class="nlf">${done ? nlDone(done) : nlForm()}</div></section>`;
+}
+const nlForm = () => `<form onsubmit="subscribe(event)"><input name="email" type="email" placeholder="${t('nl_email')}" autocomplete="email"><input name="ig" placeholder="${t('nl_ig')}" autocomplete="off">
+  <label class="cons"><input type="checkbox" name="cons" checked> <span>${t('nl_cons')}</span></label><button>${t('nl_btn')}</button><div class="err" style="color:#ffd3d3" data-err></div></form>`;
+const nlDone = d => `<div class="codebox">${t('nl_ok')}<b>${esc(d.code)}</b><small>${d.used ? t('nl_used') : t('nl_ok2')}</small></div>`;
+async function subscribe(e){
+  e.preventDefault(); const f = e.target, err = f.querySelector('[data-err]'); err.textContent = '';
+  const email = f.email.value.trim(), ig = f.ig.value.trim();
+  if (!email && !ig){ err.textContent = t('e_nl_missing'); return; }
+  if (!f.cons.checked){ err.textContent = t('e_consent'); return; }
+  f.querySelector('button').disabled = true;
+  const {data, error} = await sb.rpc('shop_subscribe', {p_email: email || null, p_instagram: ig || null, p_name: null, p_lang: L});
+  if (error){ const m = String(error.message || ''); const k = ['bad_email','bad_instagram','too_many'].find(x => m.includes(x)); err.textContent = t('e_' + (k || 'generic')); f.querySelector('button').disabled = false; return; }
+  store.set('mvshop_nl', data); store.set('mvshop_popup', 1);
+  if (!data.used){ CODE = data.code; store.set('mvshop_code', CODE); CODEOK = null; }
+  document.querySelectorAll('.nlf').forEach(x => x.innerHTML = nlDone(data));
+}
+function maybePopup(){
+  if (store.get('mvshop_popup', 0) || store.get('mvshop_nl', null)) return;
+  setTimeout(() => { if (document.querySelector('.pop-bg') || location.hash === '#/checkout') return; store.set('mvshop_popup', 1);
+    const bg = document.createElement('div'); bg.className = 'pop-bg'; bg.innerHTML = `<section class="nl pop"><button class="x" aria-label="close">✕</button><div><h2>${t('nl_t')}</h2><p>${t('nl_p')}</p></div><div class="nlf">${nlForm()}</div></section>`;
+    bg.addEventListener('click', e => { if (e.target === bg || e.target.closest('.x')) bg.remove(); }); document.body.appendChild(bg); }, 9000);
+}
+
+// ---------- home ----------
+function renderHome(){
+  chrome();
+  if (!P.length){ $('#view').innerHTML = `<div class="empty">${t('soon')}</div>`; return; }
+  const heroP = P.find(p => p.photos.length) || P[0];
+  const fresh = [...P].sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, 8);
+  const brands = [...new Set(P.map(p => p.brand).filter(Boolean))].sort();
+  $('#view').innerHTML = `
+  <section class="hero"><div class="txt"><h1>${t('hero_t')}</h1><p>${t('hero_p')}</p><button class="primary" onclick="location.hash='#/shop'">${t('hero_b')} →</button></div>
+    <a class="img" href="#/p/${heroP.id}" style="${URLS[heroP.photos[0]] ? `background-image:url('${esc(URLS[heroP.photos[0]])}')` : ''}"></a></section>
+  <div class="usp"><div>${t('usp1')}</div><div>${t('usp2')}</div><div>${t('usp3')}</div></div>
+  <h2 class="sec">${t('new_in')}<a href="#/shop">${t('see_all')}</a></h2>
+  <div class="row-scroll">${fresh.map(card).join('')}</div>
+  ${brands.length > 1 ? `<h2 class="sec">${t('brands')}</h2><div class="brands">${brands.map(b => `<a href="#/shop?brand=${encodeURIComponent(b)}">${esc(b)}</a>`).join('')}</div>` : ''}
+  <h2 class="sec">${t('all')}<a href="#/shop">${t('see_all')}</a></h2>
+  <div class="grid" style="padding-bottom:0">${P.slice(0, 12).map(card).join('')}</div>
+  ${nlBlock()}`;
+}
+function renderBrands(){
+  chrome();
+  const brands = [...new Set(P.map(p => p.brand).filter(Boolean))].sort();
+  $('#view').innerHTML = `<div class="crumbs"><a href="#/">${t('home')}</a> / ${t('brands')}</div><h1 style="font-size:24px">${t('brands')}</h1>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr))">${brands.map(b => { const n = P.filter(p => p.brand === b).length; return `<a href="#/shop?brand=${encodeURIComponent(b)}" style="border:1px solid var(--line);border-radius:4px;padding:24px 14px;text-align:center"><div style="font-weight:700;letter-spacing:.06em;text-transform:uppercase">${esc(b)}</div><div class="sz">${n} ${n === 1 ? t('product1') : t('products')}</div></a>`; }).join('')}</div>`;
+}
+
+// ---------- shop listing ----------
+function filtered(){
+  const q = norm(Q);
+  let list = P.filter(p => {
+    if (F.cat && String(p.category?.id) !== String(F.cat)) return false;
+    if (F.news && !isNew(p)) return false;
+    if (F.sale && !isSale(p)) return false;
+    if (F.brand.length && !F.brand.includes(p.brand)) return false;
+    if (F.size.length && !p.variants.some(v => F.size.includes(v.size))) return false;
+    if (F.color.length && !p.variants.some(v => F.color.includes(norm(v.color)))) return false;
+    if (F.min !== '' && price(p) < Number(F.min)) return false;
+    if (F.max !== '' && price(p) > Number(F.max)) return false;
+    if (q){ const hay = norm([p.brand, p.name, p.category?.it, p.category?.en, p.category?.sq, ...p.variants.map(v => v.color)].join(' ')); if (!q.split(' ').every(w => hay.includes(w))) return false; }
+    return true; });
+  if (SORT === 'low') list.sort((a, b) => price(a) - price(b));
+  else if (SORT === 'high') list.sort((a, b) => price(b) - price(a));
+  else list.sort((a, b) => b.created_at.localeCompare(a.created_at));
+  return list;
+}
+function renderShop(onlyGrid){
+  const list = filtered();
+  const title = F.cat ? (P.find(p => String(p.category?.id) === String(F.cat))?.category?.[L] || '') : F.news ? t('news') : F.sale ? t('sale') : F.brand.length === 1 ? F.brand[0] : t('all');
+  const active = [...F.size.map(s => ['size', s, sizeLbl(s)]), ...F.color.map(c => ['color', c, (P.flatMap(p => p.variants).find(v => norm(v.color) === c) || {}).color || c]), ...F.brand.map(b => ['brand', b, b]),
+    ...(F.min !== '' ? [['min', F.min, '≥ ' + eur(F.min)]] : []), ...(F.max !== '' ? [['max', F.max, '≤ ' + eur(F.max)]] : [])];
+  const nF = active.length;
+  const gridHtml = list.length ? list.map(card).join('') : `<div class="empty" style="grid-column:1/-1">${t('none')}</div>`;
+  if (onlyGrid && $('#grid')){ $('#grid').innerHTML = gridHtml; $('#cnt').textContent = `${list.length} ${list.length === 1 ? t('product1') : t('products')}`; return; }
+  $('#view').innerHTML = `<div class="crumbs"><a href="#/">${t('home')}</a> / ${esc(title)}</div><h1 style="font-size:24px;margin:0">${esc(title)}</h1>
+  <div class="toolbar"><span class="count" id="cnt">${list.length} ${list.length === 1 ? t('product1') : t('products')}</span>
+    <button class="fbtn ${nF ? 'on' : ''}" onclick="openFilters()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>${t('filters')}${nF ? ' (' + nF + ')' : ''}</button>
+    <select onchange="SORT=this.value;renderShop(true)" aria-label="${t('sort')}"><option value="new" ${SORT === 'new' ? 'selected' : ''}>${t('s_new')}</option><option value="low" ${SORT === 'low' ? 'selected' : ''}>${t('s_low')}</option><option value="high" ${SORT === 'high' ? 'selected' : ''}>${t('s_high')}</option></select></div>
+  ${nF ? `<div class="chips">${active.map(([k, v, l]) => `<span class="chip x" onclick="rmF('${k}',${esc(JSON.stringify(v))})">${esc(l)} ✕</span>`).join('')}<span class="chip x" onclick="clearF()">${t('clear')}</span></div>` : ''}
+  <div class="grid" id="grid">${gridHtml}</div>`;
+}
+function rmF(k, v){ if (k === 'min' || k === 'max') F[k] = ''; else F[k] = F[k].filter(x => x !== v); renderShop(); }
+function clearF(){ F.size = []; F.color = []; F.brand = []; F.min = ''; F.max = ''; renderShop(); }
+function openFilters(){
+  const all = P.flatMap(p => p.variants);
+  const sizes = [...new Set(all.map(v => v.size))].sort((a, b) => sRank(a) - sRank(b));
+  const colors = [...new Map(all.filter(v => v.color).map(v => [norm(v.color), v])).entries()];
+  const brands = [...new Set(P.map(p => p.brand).filter(Boolean))].sort();
+  const tmp = {size:[...F.size], color:[...F.color], brand:[...F.brand]};
+  const bg = document.createElement('div'); bg.className = 'sheet-bg';
+  const sec = (k, title, items) => `<h4>${title}</h4><div class="chips">${items.map(([v, l, extra]) => `<span class="chip x ${tmp[k].includes(v) ? 'on' : ''}" data-k="${k}" data-v="${esc(v)}">${extra || ''}${esc(l)}</span>`).join('')}</div>`;
+  bg.innerHTML = `<div class="sheet"><div class="hd">${t('filters')}<button class="ib" data-close aria-label="close">✕</button></div><div class="bd">
+    ${sec('size', t('f_size'), sizes.map(s => [s, sizeLbl(s)]))}
+    ${colors.length ? sec('color', t('f_color'), colors.map(([k, v]) => [k, v.color, `<span class="dot" style="background:${hexOf(v.color, v.color_hex) || RAINBOW}"></span>`])) : ''}
+    ${brands.length > 1 ? sec('brand', t('f_brand'), brands.map(b => [b, b])) : ''}
+    <h4>${t('f_price')}</h4><div class="two"><input id="fmin" type="number" inputmode="numeric" placeholder="${t('min')}" value="${F.min}"><input id="fmax" type="number" inputmode="numeric" placeholder="${t('max')}" value="${F.max}"></div>
+  </div><div class="ft"><button data-clear>${t('clear')}</button><button class="primary" data-apply>${t('show')}</button></div></div>`;
+  bg.addEventListener('click', e => {
+    if (e.target === bg || e.target.closest('[data-close]')) return bg.remove();
+    const c = e.target.closest('.chip[data-k]'); if (c){ const k = c.dataset.k, v = c.dataset.v; const i = tmp[k].indexOf(v); if (i >= 0) tmp[k].splice(i, 1); else tmp[k].push(v); c.classList.toggle('on'); }
+    if (e.target.closest('[data-clear]')){ tmp.size = []; tmp.color = []; tmp.brand = []; bg.querySelectorAll('.chip.on').forEach(x => x.classList.remove('on')); bg.querySelector('#fmin').value = ''; bg.querySelector('#fmax').value = ''; }
+    if (e.target.closest('[data-apply]')){ F.size = tmp.size; F.color = tmp.color; F.brand = tmp.brand; F.min = bg.querySelector('#fmin').value; F.max = bg.querySelector('#fmax').value; bg.remove(); renderShop(); }
+  });
+  document.body.appendChild(bg);
+}
+
+// ---------- product ----------
+let SEL = {};
+function renderProduct(id){
+  chrome();
+  const p = P.find(x => x.id === id);
+  if (!p){ $('#view').innerHTML = P.length ? `<div class="empty">${t('none')}</div>` : `<div class="empty">…</div>`; return; }
+  const groups = {}; p.variants.forEach(v => { const k = norm(v.color); (groups[k] = groups[k] || {name: v.color, hex: hexOf(v.color, v.color_hex), list: []}).list.push(v); });
+  Object.values(groups).forEach(g => g.list.sort((a, b) => sRank(a.size) - sRank(b.size)));
+  SEL = {p, groups, col: SEL.p?.id === id && groups[SEL.col] ? SEL.col : Object.keys(groups)[0], v: null};
+  if (groups[SEL.col].list.length === 1) SEL.v = groups[SEL.col].list[0];
+  const photos = p.photos.map(x => URLS[x]).filter(Boolean);
+  const desc = (L === 'en' && p.description_en) || (L === 'sq' && p.description_sq) || p.description || '';
+  const sale = isSale(p);
+  const related = P.filter(x => x.id !== p.id && (x.category?.id === p.category?.id || x.brand === p.brand)).slice(0, 8);
+  $('#view').innerHTML = `<div class="crumbs"><a href="#/">${t('home')}</a> / ${p.category?.id ? `<a href="#/shop?cat=${p.category.id}">${esc(p.category[L])}</a> / ` : ''}${esc(p.name)}</div>
+  <div class="pd"><div class="gal"><div class="thumbs">${photos.map((u, i) => `<img src="${esc(u)}" alt="" class="${i ? '' : 'on'}" onclick="goSlide(${i})">`).join('')}</div>
+    <div class="main"><div class="slides" id="slides" onscroll="slideDots()">${photos.length ? photos.map(u => `<img src="${esc(u)}" alt="${esc(p.brand + ' ' + p.name)}">`).join('') : '<div class="ph" style="flex:0 0 100%"><div class="noimg">MV</div></div>'}</div>
+    ${photos.length > 1 ? `<div class="gdots" id="gdots">${photos.map((_, i) => `<span class="${i ? '' : 'on'}"></span>`).join('')}</div>` : ''}
+    <div class="badges" style="bottom:14px">${sale ? `<span class="bdg sale">-${pct(p)}%</span>` : ''}${isNew(p) ? `<span class="bdg new">${t('b_new')}</span>` : ''}</div></div></div>
+  <div class="info"><a class="brl" href="#/shop?brand=${encodeURIComponent(p.brand || '')}">${esc(p.brand || '')}</a><h1>${esc(p.name)}</h1>
+    <div class="price ${sale ? 'sale' : ''}" id="price"></div>
+    <div id="opts"></div><div class="low" id="low"></div>
+    <div class="cta"><button class="primary" id="addb" onclick="addToCart()">${t('add')}</button><button class="hbig ${WISH.includes(p.id) ? 'on' : ''}" data-wish="${p.id}" onclick="toggleWish(${p.id})" aria-label="wishlist">${HEART}</button></div>
+    <div class="box"><div class="l">💶<div><b>${t('d1')}</b>${t('d1s')}</div></div><div class="l">🚚<div><b>${t('d2')}</b>${t('d2s')}</div></div><div class="l">🔁<div><b>${t('d3')}</b>${t('d3s')}</div></div></div>
+    <div style="margin-top:18px;font-size:13px;font-weight:600">${t('ask')}</div>
+    <div class="ask"><button onclick="askWA(${p.id})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 12a8 8 0 1 1-3.6-6.7A8 8 0 0 1 20 12z"/><path d="M4.5 19.5 6 15.6"/></svg>${t('ask_wa')}</button><button onclick="askIG(${p.id})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg>${t('ask_ig')}</button></div>
+    <div style="margin-top:18px">${desc ? `<details class="acc" open><summary>${t('desc')}</summary><div class="c">${esc(desc)}</div></details>` : ''}
+    <details class="acc"><summary>${t('fit')}</summary><div class="c">${esc(p.size_guide || t('fit_def'))}</div></details>
+    <details class="acc"><summary>${t('ship')}</summary><div class="c">${t('ship_t')}</div></details></div></div></div>
+  ${related.length ? `<h2 class="sec">${t('like')}</h2><div class="row-scroll" style="padding-bottom:30px">${related.map(card).join('')}</div>` : ''}`;
+  $('#sbuy').innerHTML = `<div class="p"><b>${esc(p.brand || '')}</b><div>${esc(p.name)}</div></div><button class="primary" onclick="sbuyClick()" id="sbuyb">${t('add')}</button>`;
+  drawOpts(); window.scrollTo(0, 0);
+  const io = new IntersectionObserver(es => es.forEach(e => $('#sbuy').classList.toggle('show', !e.isIntersecting && location.hash.startsWith('#/p/'))));
+  io.observe($('#addb'));
+}
+function sbuyClick(){ if (!SEL.v){ $('#opts').scrollIntoView({behavior:'smooth', block:'center'}); toast(t('choose_size')); } else addToCart(); }
+function goSlide(i){ const s = $('#slides'); s.scrollTo({left: i * s.clientWidth, behavior:'smooth'}); }
+function slideDots(){ const s = $('#slides'); const i = Math.round(s.scrollLeft / s.clientWidth); document.querySelectorAll('#gdots span').forEach((x, j) => x.classList.toggle('on', i === j)); document.querySelectorAll('.thumbs img').forEach((x, j) => x.classList.toggle('on', i === j)); }
+function drawOpts(){
+  const {groups, col, v, p} = SEL; const keys = Object.keys(groups); const g = groups[col];
+  $('#opts').innerHTML = `${keys.length > 1 || g.name ? `<label>${t('color')}: <span style="font-weight:400">${esc(g.name || '')}</span></label><div class="opt">${keys.map(k => `<button class="cbtn ${k === col ? 'on' : ''}" onclick="pickCol('${esc(k)}')"><span class="dot" style="background:${groups[k].hex || RAINBOW}"></span>${esc(groups[k].name || '—')}</button>`).join('')}</div>` : ''}
+  <label>${t('size')}</label><div class="opt">${g.list.map(x => `<button class="sbtn ${v?.id === x.id ? 'on' : ''}" onclick="pickV(${x.id})">${esc(sizeLbl(x.size))}</button>`).join('')}</div>`;
+  const pr = v ? Number(v.price) : Math.min(...g.list.map(x => Number(x.price)));
+  const sale = Number(p.list_price) > pr + 0.5;
+  $('#price').className = 'price' + (sale ? ' sale' : '');
+  $('#price').innerHTML = `<span class="now">${eur(pr)}</span>${sale ? `<span class="old">${eur(p.list_price)}</span>` : ''}`;
+  $('#low').textContent = v && v.available <= 2 ? t('only_left', v.available) : '';
+  $('#addb').textContent = v ? t('add') : t('choose_size');
+  const sb2 = $('#sbuyb'); if (sb2) sb2.textContent = v ? `${t('add')} · ${eur(pr)}` : t('choose_size');
+}
+function pickCol(k){ SEL.col = k; const g = SEL.groups[k]; SEL.v = g.list.length === 1 ? g.list[0] : null; drawOpts(); }
+function pickV(id){ SEL.v = SEL.groups[SEL.col].list.find(x => x.id === id); drawOpts(); }
+function addToCart(){
+  if (!SEL.v){ toast(t('choose_size')); $('#opts').scrollIntoView({behavior:'smooth', block:'center'}); return; }
+  const ex = CART.find(c => c.v === SEL.v.id);
+  if (ex) ex.q = Math.min(SEL.v.available, ex.q + 1); else CART.push({v: SEL.v.id, q: 1});
+  saveCart(); toast(`✓ ${t('added')} · <a href="#/cart" style="text-decoration:underline">${t('go_cart')}</a>`, true);
+}
+function askText(id){ const p = P.find(x => x.id === id); const v = SEL.p?.id === id ? SEL.v : null; return `${pUrl(id)}\n${t('ask_msg')} ${p ? p.brand + ' · ' + p.name : ''}${v ? ' (' + [v.color, sizeLbl(v.size)].filter(Boolean).join(' · ') + ')' : ''}\n`; }
+async function askIG(id){ const txt = askText(id); try { await navigator.clipboard.writeText(txt); toast(t('ask_copied')); } catch (e) {} setTimeout(() => window.open('https://ig.me/m/' + IG_USER, '_blank', 'noopener'), 900); }
+function askWA(id){ window.open('https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(askText(id)), '_blank', 'noopener'); }
+
+// ---------- wishlist ----------
+function renderWish(){
+  chrome();
+  const list = WISH.map(id => P.find(p => p.id === id)).filter(Boolean);
+  $('#view').innerHTML = `<div class="crumbs"><a href="#/">${t('home')}</a> / ${t('wish')}</div><h1 style="font-size:24px">${t('wish')}</h1>
+    ${list.length ? `<div class="grid">${list.map(card).join('')}</div>` : `<div class="empty">${t('wish_empty')}<p><button onclick="location.hash='#/shop'">${t('continue')}</button></p></div>`}`;
+}
+
+// ---------- cart & checkout ----------
+const findV = id => { for (const p of P){ const v = p.variants.find(x => x.id === id); if (v) return [p, v]; } return []; };
+const cartLines = () => CART.map(c => { const [p, v] = findV(c.v); return p ? {c, p, v} : null; }).filter(Boolean);
+const cartTotal = () => cartLines().reduce((a, l) => a + l.c.q * Number(l.v.price), 0);
+const discAmt = () => CODEOK ? Math.round(cartTotal() * CODEOK.pct) / 100 : 0;
+function summaryBox(btn, withCode){
+  const tot = cartTotal(), d = discAmt();
+  return `<aside class="sum" id="sumbox"><h3 style="margin:0 0 10px">${t('summary')}</h3><div class="r"><span>${t('subtotal')}</span><span>${eur(tot)}</span></div>
+    ${d ? `<div class="r" style="color:var(--sale)"><span>${t('disc')} (${esc(CODE)})</span><span>−${eur(d)}</span></div>` : ''}
+    <div class="r"><span>${t('shipping')}</span><span style="color:var(--muted)">${t('ship_tbd')}</span></div>
+    <div class="r t"><span>${t('total')}</span><span>${eur(tot - d)}</span></div>
+    ${withCode ? `<label style="margin-top:14px">${t('code')}</label><div style="display:flex;gap:6px"><input id="codein" value="${esc(CODE || '')}" placeholder="MV10-…" style="text-transform:uppercase"><button type="button" onclick="applyCode()">${t('apply')}</button></div><div id="codemsg" style="font-size:12.5px;margin-top:6px;${CODEOK ? 'color:var(--good)' : ''}">${CODEOK ? t('code_ok', CODEOK.pct) : ''}</div>` : ''}
+    ${btn || ''}<div class="note">💶 ${t('pay_cod')}</div></aside>`;
+}
+async function applyCode(silent){
+  const inp = $('#codein'); const c = (inp ? inp.value : CODE || '').trim().toUpperCase();
+  if (!c){ CODE = null; CODEOK = null; store.set('mvshop_code', null); refreshSum(); return; }
+  const {data} = await sb.rpc('shop_check_code', {p_code: c});
+  if (data && data.valid){ CODE = c; CODEOK = {pct: Number(data.pct)}; store.set('mvshop_code', c); }
+  else { CODEOK = null; if (!silent){ const m = $('#codemsg'); if (m){ m.style.color = 'var(--sale)'; m.textContent = data?.used ? t('e_code_used') : t('e_bad_code'); } return; } }
+  refreshSum();
+}
+function refreshSum(){ if (location.hash === '#/cart') renderCart(); else if (location.hash === '#/checkout'){ const b = $('#sendb'); const old = $('#sumbox'); if (old){ const tmp = document.createElement('div'); tmp.innerHTML = checkoutSummary(); old.replaceWith(tmp.firstElementChild); } if (b) b.textContent = `${t('send')} · ${eur(cartTotal() - discAmt())}`; } }
+function renderCart(){
+  chrome();
+  const lines = cartLines();
+  if (!lines.length){ $('#view').innerHTML = `<div class="ok"><h1 style="font-size:22px">${t('cart')}</h1><p class="empty" style="padding:20px 0">${t('cart_empty')}</p><button class="primary" onclick="location.hash='#/shop'">${t('continue')}</button></div>`; return; }
+  $('#view').innerHTML = `<div class="page"><div><h1>${t('cart')} <span style="font-weight:400;color:var(--muted);font-size:16px">(${CART.reduce((a, c) => a + c.q, 0)})</span></h1>
+    ${lines.map(l => `<div class="line"><a href="#/p/${l.p.id}">${URLS[l.p.photos[0]] ? `<img src="${esc(URLS[l.p.photos[0]])}" alt="">` : '<div class="ni"></div>'}</a>
+      <div class="d"><div class="br">${esc(l.p.brand || '')}</div><div>${esc(l.p.name)}</div><div style="color:var(--muted);margin-top:4px">${esc([l.v.color, t('size') + ': ' + sizeLbl(l.v.size)].filter(Boolean).join(' · '))}</div>
+      <div class="qty"><button onclick="chq(${l.v.id},-1)" aria-label="-">−</button><b>${l.c.q}</b><button onclick="chq(${l.v.id},1)" aria-label="+" ${l.c.q >= l.v.available ? 'disabled' : ''}>+</button></div>
+      <div style="margin-top:8px"><button class="link" onclick="rmCart(${l.v.id})">${t('remove')}</button></div></div>
+      <div style="font-weight:700">${eur(l.c.q * l.v.price)}</div></div>`).join('')}
+    <p><a href="#/shop" style="text-decoration:underline">← ${t('continue')}</a></p></div>
+    ${summaryBox(`<button class="primary" style="width:100%;padding:14px;margin-top:14px" onclick="location.hash='#/checkout'">${t('checkout')}</button>`, true)}</div>`;
+  if (CODE && !CODEOK) applyCode(true);
+}
+function chq(id, d){ const c = CART.find(x => x.v === id); const [, v] = findV(id); if (!c) return; c.q = Math.max(1, Math.min(v?.available || 1, c.q + d)); saveCart(); renderCart(); }
+function rmCart(id){ CART = CART.filter(c => c.v !== id); saveCart(); renderCart(); }
+function renderCheckout(){
+  chrome();
+  if (!cartLines().length){ location.hash = '#/cart'; return; }
+  const me = store.get('mvshop_me', {});
+  const f = (n, lbl, type = 'text', extra = '') => `<label for="f_${n}">${t(lbl)}</label><input id="f_${n}" name="${n}" type="${type}" value="${esc(me[n] || '')}" ${extra}>`;
+  $('#view').innerHTML = `<div class="page"><div><p><a href="#/cart" style="text-decoration:underline">${t('back_cart')}</a></p><h1>${t('checkout')}</h1>
+    <form id="co" onsubmit="sendOrder(event)"><h3 style="margin:22px 0 0">${t('your_data')}</h3>
+    ${f('name', 'name', 'text', 'required autocomplete="name"')}<div class="two"><div>${f('phone', 'phone', 'tel', 'required autocomplete="tel" inputmode="tel"')}</div><div>${f('instagram', 'ig', 'text', 'autocomplete="off" placeholder="@"')}</div></div>
+    <h3 style="margin:26px 0 0">${t('delivery')}</h3>
+    <div class="two"><div><label for="f_country">${t('country')}</label><select id="f_country" name="country">${COUNTRIES.map(([k, n]) => `<option value="${k}" ${(me.country || 'AL') === k ? 'selected' : ''}>${esc(n[LANGS.indexOf(L)])}</option>`).join('')}</select></div><div>${f('city', 'city', 'text', 'required autocomplete="address-level2"')}</div></div>
+    ${f('address', 'address', 'text', 'required autocomplete="street-address"')}
+    <label for="f_notes">${t('notes')}</label><textarea id="f_notes" name="notes" rows="3"></textarea>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">${t('terms')}</p><div class="err" id="err"></div>
+    <button class="primary" id="sendb" style="width:100%;padding:15px;margin-top:6px;font-size:15px">${t('send')} · ${eur(cartTotal() - discAmt())}</button></form></div>
+    ${checkoutSummary()}</div>`;
+  if (CODE && !CODEOK) applyCode(true);
+}
+const checkoutSummary = () => summaryBox(`<div style="margin-top:12px">${cartLines().map(l => `<div style="display:flex;gap:10px;align-items:center;padding:6px 0;font-size:13px">${URLS[l.p.photos[0]] ? `<img src="${esc(URLS[l.p.photos[0]])}" style="width:44px;aspect-ratio:3/4;object-fit:cover;border-radius:3px" alt="">` : ''}<div style="flex:1;min-width:0"><b>${esc(l.p.brand || '')}</b> ${esc(l.p.name)}<div style="color:var(--muted)">${esc(sizeLbl(l.v.size))}${l.v.color ? ' · ' + esc(l.v.color) : ''} · ${l.c.q}×</div></div><span>${eur(l.c.q * l.v.price)}</span></div>`).join('')}</div>`, true);
+async function sendOrder(e){
+  e.preventDefault();
+  const fd = Object.fromEntries(new FormData(e.target).entries());
+  store.set('mvshop_me', {name: fd.name, phone: fd.phone, instagram: fd.instagram, country: fd.country, city: fd.city, address: fd.address});
+  const b = $('#sendb'); b.disabled = true; $('#err').textContent = '';
+  const {data, error} = await sb.rpc('shop_order_v2', {p_name: fd.name, p_phone: fd.phone, p_instagram: fd.instagram, p_country: fd.country, p_city: fd.city, p_address: fd.address, p_lines: CART.map(c => ({variant_id: c.v, qty: c.q})), p_notes: fd.notes, p_lang: L, p_code: CODEOK ? CODE : null});
+  if (error){
+    const m = String(error.message || ''); const k = ['missing_contact','missing_address','not_available','too_many','bad_code','code_used','code_first_only'].find(x => m.includes(x));
+    if (['bad_code','code_used','code_first_only'].includes(k)){ CODEOK = null; CODE = null; store.set('mvshop_code', null); }
+    $('#err').textContent = t('e_' + (k || 'generic')); b.disabled = false;
+    if (k === 'not_available'){ const id = Number(m.split(':').pop()); CART = CART.filter(c => c.v !== id); saveCart(); }
+    return;
+  }
+  CART = []; saveCart(); if (CODEOK){ store.set('mvshop_code', null); const n = store.get('mvshop_nl', null); if (n) store.set('mvshop_nl', {...n, used: true}); CODE = null; CODEOK = null; }
+  $('#view').innerHTML = `<div class="ok"><div class="big">✓</div><h1 style="font-size:24px">${t('ok_t')}</h1><p>${t('ok_p')}: <b>${esc(data)}</b></p><p style="color:var(--muted)">${t('ok_n')}</p><button class="primary" onclick="location.hash='#/';load()">${t('continue')}</button></div>`;
+  window.scrollTo(0, 0);
+}
+chrome(); load(); maybePopup();
+</script>
+</body>
+</html>
