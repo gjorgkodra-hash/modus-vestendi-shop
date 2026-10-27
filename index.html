@@ -71,7 +71,7 @@ nav.cats a.hot{color:var(--sale)}
 .hero button{align-self:flex-start;padding:13px 26px}
 .usp{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 6px;font-size:12.5px;color:#333}
 .usp div{display:flex;gap:8px;align-items:center;justify-content:center;background:var(--soft);padding:10px 8px;border-radius:var(--r);text-align:center}
-@media(max-width:600px){.usp{grid-template-columns:1fr}.usp div{justify-content:flex-start}}
+@media(max-width:600px){.usp{grid-template-columns:repeat(3,minmax(0,1fr));font-size:11px}.usp div{padding:8px 4px}.hero{margin-top:12px}.hero .txt{padding:22px 20px}.hero .img{min-height:190px}}
 h2.sec{font-size:20px;font-weight:700;margin:30px 0 12px;display:flex;justify-content:space-between;align-items:baseline}
 h2.sec a{font-size:13px;font-weight:500;text-decoration:underline}
 .brands{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
@@ -287,7 +287,7 @@ const TX = {
   e_too_many:['Shumë porosi në pak kohë. Na shkruani në Instagram.','Troppi ordini in poco tempo. Scrivici su Instagram.','Too many orders in a short time. Please message us on Instagram.'],
   e_generic:['Diçka shkoi keq. Provoni përsëri.','Qualcosa è andato storto. Riprova.','Something went wrong. Please try again.'],
   nl_t:['Merr 10% zbritje','Ricevi il 10% di sconto','Get 10% off'], nl_p:['Regjistrohu dhe merr 10% zbritje për një produkt në blerjen e parë. Vlen për klientët e rinj. Je i pari që mëson për ardhjet e reja.','Registrati e ricevi il 10% di sconto su un prodotto al tuo primo acquisto. Valido per i nuovi clienti. Sarai il primo a scoprire i nuovi arrivi.','Sign up and get 10% off one item on your first purchase. For new customers. Be the first to hear about new arrivals.'],
-  nl_name:['Emri dhe mbiemri','Nome e cognome','Full name'], nl_phone:['Telefoni (WhatsApp)','Telefono (WhatsApp)','Phone (WhatsApp)'], nl_email:['Email (opsionale)','Email (facoltativa)','Email (optional)'], nl_ig:['Instagram (opsional, @)','Instagram (facoltativo, @)','Instagram (optional, @)'], e_already_customer:['Ju jeni tashmë klient i Modus Vestendi: zbritja vlen vetëm për klientët e rinj. Na shkruani për ofertat për klientët besnikë!','Risulti già cliente di Modus Vestendi: lo sconto è riservato ai nuovi clienti. Scrivici per le offerte dedicate ai clienti fedeli!','You are already a Modus Vestendi customer: this discount is for new customers. Message us for loyal-customer offers!'], one_item:['1 artikull','1 capo','1 item'], nl_cons:['Pranoj të marr mesazhe nga Modus Vestendi për të rejat dhe ofertat. Mund të çregjistrohem kur të dua.','Accetto di ricevere messaggi da Modus Vestendi su novità e offerte. Posso cancellarmi quando voglio.','I agree to receive messages from Modus Vestendi about new arrivals and offers. I can unsubscribe any time.'],
+  nl_strip:['10% zbritje për klientët e rinj','10% di sconto per i nuovi clienti','10% off for new customers'], nl_cta:['Regjistrohu','Registrati','Sign up'], nl_band:['🎁 Klient i ri? Regjistrohu dhe merr <b>10% zbritje</b> në blerjen e parë','🎁 Nuovo cliente? Registrati e ricevi il <b>10% di sconto</b> sul primo acquisto','🎁 New customer? Sign up and get <b>10% off</b> your first purchase'], nl_name:['Emri dhe mbiemri','Nome e cognome','Full name'], nl_phone:['Telefoni (WhatsApp)','Telefono (WhatsApp)','Phone (WhatsApp)'], nl_email:['Email (opsionale)','Email (facoltativa)','Email (optional)'], nl_ig:['Instagram (opsional, @)','Instagram (facoltativo, @)','Instagram (optional, @)'], e_already_customer:['Ju jeni tashmë klient i Modus Vestendi: zbritja vlen vetëm për klientët e rinj. Na shkruani për ofertat për klientët besnikë!','Risulti già cliente di Modus Vestendi: lo sconto è riservato ai nuovi clienti. Scrivici per le offerte dedicate ai clienti fedeli!','You are already a Modus Vestendi customer: this discount is for new customers. Message us for loyal-customer offers!'], one_item:['1 artikull','1 capo','1 item'], nl_cons:['Pranoj të marr mesazhe nga Modus Vestendi për të rejat dhe ofertat. Mund të çregjistrohem kur të dua.','Accetto di ricevere messaggi da Modus Vestendi su novità e offerte. Posso cancellarmi quando voglio.','I agree to receive messages from Modus Vestendi about new arrivals and offers. I can unsubscribe any time.'],
   nl_btn:['Dua 10% zbritje','Voglio il 10% di sconto','Get my 10% off'], nl_ok:['Kodi juaj i zbritjes','Il tuo codice sconto','Your discount code'], nl_ok2:['Ruajeni: aplikohet automatikisht në shportë në këtë pajisje.','Conservalo: si applica da solo nel carrello su questo dispositivo.','Keep it: it is applied automatically in your bag on this device.'], nl_used:['Ky kod është përdorur tashmë.','Questo codice è già stato usato.','This code has already been used.'],
   e_bad_email:['Email jo e saktë.','Email non valida.','Invalid email.'], e_bad_instagram:['Emri i Instagram jo i saktë.','Nome Instagram non valido.','Invalid Instagram name.'], e_nl_missing:['Shkruani emrin dhe telefonin.','Inserisci nome e telefono.','Enter your name and phone.'], e_consent:['Duhet të pranoni për të marrë kodin.','Devi accettare per ricevere il codice.','Please agree to get the code.'],
   code:['Kodi i zbritjes','Codice sconto','Discount code'], apply:['Apliko','Applica','Apply'], disc:['Zbritje','Sconto','Discount'], code_ok:['Kodi u aplikua: -{n}%','Codice applicato: -{n}%','Code applied: -{n}%'],
@@ -338,7 +338,7 @@ async function load(){
 }
 function chrome(){
   document.documentElement.lang = L;
-  $('#promo').innerHTML = t('promo');
+  $('#promo').innerHTML = t('promo') + (store.get('mvshop_nl', null) ? '' : ` · <a href="javascript:openSignup()" style="text-decoration:underline;font-weight:700">🎁 ${t('nl_strip')}</a>`);
   $('#lang').innerHTML = LANGS.map(l => `<option value="${l}" ${l === L ? 'selected' : ''}>${l.toUpperCase()}</option>`).join('');
   ['#q', '#q2'].forEach(s => { $(s).placeholder = t('search'); $(s).value = Q; });
   const cats = [...new Map(P.filter(p => p.category?.id).map(p => [p.category.id, p.category])).values()];
@@ -351,7 +351,7 @@ function chrome(){
   $('#foot').innerHTML = `<div><h4>${t('f_about')}</h4><p>${t('f_about_t')}</p></div>
     <div><h4>${t('f_help')}</h4><p>${t('f_how')}</p></div>
     <div><h4>${t('f_contact')}</h4><p><a href="https://wa.me/${WA_NUMBER}" target="_blank" rel="noopener">WhatsApp +${WA_NUMBER.replace(/^(\d{2})(\d{3})(\d{3})(\d+)/, '$1 $2 $3 $4')}</a></p><p><a href="https://www.instagram.com/${IG_USER}/" target="_blank" rel="noopener">Instagram @${IG_USER}</a></p><p><a href="mailto:${EMAIL}">${EMAIL}</a></p></div>
-    <div><h4>${t('f_pay')}</h4><span class="pay">💶 ${t('d1')}</span><p style="margin-top:12px"><a href="#/" onclick="setTimeout(()=>document.querySelector('.nl')?.scrollIntoView({behavior:'smooth'}),300)">🎁 ${t('nl_t')}</a></p></div>`;
+    <div><h4>${t('f_pay')}</h4><span class="pay">💶 ${t('d1')}</span><p style="margin-top:12px"><a href="javascript:openSignup()">🎁 ${t('nl_t')}</a></p></div>`;
   badges();
 }
 function badges(){ const n = CART.reduce((a, c) => a + c.q, 0); const c = $('#ccnt'); c.hidden = !n; c.textContent = n; const w = $('#wcnt'); w.hidden = !WISH.length; w.textContent = WISH.length; }
@@ -410,8 +410,15 @@ async function subscribe(e){
   if (error){ const m = String(error.message || ''); const k = ['already_customer','bad_email','bad_instagram','too_many','missing_contact'].find(x => m.includes(x)); if (k === 'missing_contact'){ err.textContent = t('e_nl_missing'); f.querySelector('button').disabled = false; return; } err.textContent = t('e_' + (k || 'generic')); f.querySelector('button').disabled = false; return; }
   store.set('mvshop_nl', data); store.set('mvshop_popup', 1); const me = store.get('mvshop_me', {}); store.set('mvshop_me', {...me, name: me.name || name, phone: me.phone || phone, instagram: me.instagram || ig});
   if (!data.used){ CODE = data.code; store.set('mvshop_code', CODE); CODEOK = null; }
-  document.querySelectorAll('.nlf').forEach(x => x.innerHTML = nlDone(data));
+  document.querySelectorAll('.nlf').forEach(x => x.innerHTML = nlDone(data)); $('#promo').innerHTML = t('promo');
 }
+function openSignup(){
+  document.querySelectorAll('.pop-bg').forEach(x => x.remove()); store.set('mvshop_popup', 1);
+  const done = store.get('mvshop_nl', null);
+  const bg = document.createElement('div'); bg.className = 'pop-bg'; bg.innerHTML = `<section class="nl pop"><button class="x" aria-label="close">✕</button><div><h2>${t('nl_t')}</h2><p>${t('nl_p')}</p></div><div class="nlf">${done ? nlDone(done) : nlForm()}</div></section>`;
+  bg.addEventListener('click', e => { if (e.target === bg || e.target.closest('.x')) bg.remove(); }); document.body.appendChild(bg);
+}
+const nlBand = () => store.get('mvshop_nl', null) ? '' : `<button onclick="openSignup()" style="width:100%;margin:12px 0 0;background:var(--accent);color:#fff;border-color:var(--accent);padding:14px;font-size:14px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap"><span>${t('nl_band')}</span><span style="text-decoration:underline;font-weight:700">${t('nl_cta')} →</span></button>`;
 function maybePopup(){
   if (store.get('mvshop_popup', 0) || store.get('mvshop_nl', null)) return;
   setTimeout(() => { if (document.querySelector('.pop-bg') || location.hash === '#/checkout') return; store.set('mvshop_popup', 1);
@@ -429,6 +436,7 @@ function renderHome(){
   $('#view').innerHTML = `
   <section class="hero"><div class="txt"><h1>${t('hero_t')}</h1><p>${t('hero_p')}</p><button class="primary" onclick="location.hash='#/shop'">${t('hero_b')} →</button></div>
     <a class="img" href="#/p/${heroP.id}" style="${URLS[heroP.photos[0]] ? `background-image:url('${esc(URLS[heroP.photos[0]])}')` : ''}"></a></section>
+  ${nlBand()}
   <div class="usp"><div>${t('usp1')}</div><div>${t('usp2')}</div><div>${t('usp3')}</div></div>
   <h2 class="sec">${t('new_in')}<a href="#/shop">${t('see_all')}</a></h2>
   <div class="row-scroll">${fresh.map(card).join('')}</div>
@@ -476,7 +484,7 @@ function renderShop(onlyGrid){
     <button class="fbtn ${nF ? 'on' : ''}" onclick="openFilters()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>${t('filters')}${nF ? ' (' + nF + ')' : ''}</button>
     <select onchange="SORT=this.value;renderShop(true)" aria-label="${t('sort')}"><option value="new" ${SORT === 'new' ? 'selected' : ''}>${t('s_new')}</option><option value="low" ${SORT === 'low' ? 'selected' : ''}>${t('s_low')}</option><option value="high" ${SORT === 'high' ? 'selected' : ''}>${t('s_high')}</option></select></div>
   ${nF ? `<div class="chips">${active.map(([k, v, l]) => `<span class="chip x" onclick="rmF('${k}',${esc(JSON.stringify(v))})">${esc(l)} ✕</span>`).join('')}<span class="chip x" onclick="clearF()">${t('clear')}</span></div>` : ''}
-  <div class="grid" id="grid">${gridHtml}</div>`;
+  ${nlBand()}<div class="grid" id="grid" style="margin-top:14px">${gridHtml}</div>`;
 }
 function rmF(k, v){ if (k === 'min' || k === 'max') F[k] = ''; else F[k] = F[k].filter(x => x !== v); renderShop(); }
 function clearF(){ F.size = []; F.color = []; F.brand = []; F.min = ''; F.max = ''; renderShop(); }
@@ -526,6 +534,7 @@ function renderProduct(id){
     <div class="price ${sale ? 'sale' : ''}" id="price"></div>
     <div id="opts"></div><div class="low" id="low"></div>
     <div class="cta"><button class="primary" id="addb" onclick="addToCart()">${t('add')}</button><button class="hbig ${WISH.includes(p.id) ? 'on' : ''}" data-wish="${p.id}" onclick="toggleWish(${p.id})" aria-label="wishlist">${HEART}</button></div>
+    ${nlBand()}
     <div class="box"><div class="l">💶<div><b>${t('d1')}</b>${t('d1s')}</div></div><div class="l">🚚<div><b>${t('d2')}</b>${t('d2s')}</div></div><div class="l">🔁<div><b>${t('d3')}</b>${t('d3s')}</div></div></div>
     <div style="margin-top:18px;font-size:13px;font-weight:600">${t('ask')}</div>
     <div class="ask"><button onclick="askWA(${p.id})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 12a8 8 0 1 1-3.6-6.7A8 8 0 0 1 20 12z"/><path d="M4.5 19.5 6 15.6"/></svg>${t('ask_wa')}</button><button onclick="askIG(${p.id})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg>${t('ask_ig')}</button></div>
