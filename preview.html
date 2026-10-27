@@ -286,10 +286,10 @@ const TX = {
   e_not_available:['Një artikull nuk është më në dispozicion. Shporta u përditësua.','Un capo non è più disponibile. Il carrello è stato aggiornato.','An item is no longer available. Your bag was updated.'],
   e_too_many:['Shumë porosi në pak kohë. Na shkruani në Instagram.','Troppi ordini in poco tempo. Scrivici su Instagram.','Too many orders in a short time. Please message us on Instagram.'],
   e_generic:['Diçka shkoi keq. Provoni përsëri.','Qualcosa è andato storto. Riprova.','Something went wrong. Please try again.'],
-  nl_t:['Merr 10% zbritje','Ricevi il 10% di sconto','Get 10% off'], nl_p:['Regjistrohu në newsletter me email ose Instagram dhe merr 10% zbritje në blerjen e parë. Je i pari që mëson për ardhjet e reja.','Iscriviti alla newsletter con email o Instagram e ricevi il 10% di sconto sul primo acquisto. Sarai il primo a scoprire i nuovi arrivi.','Join our newsletter with email or Instagram and get 10% off your first purchase. Be the first to hear about new arrivals.'],
-  nl_email:['Email','Email','Email'], nl_ig:['ose Instagram (@)','oppure Instagram (@)','or Instagram (@)'], nl_cons:['Pranoj të marr mesazhe nga Modus Vestendi për të rejat dhe ofertat. Mund të çregjistrohem kur të dua.','Accetto di ricevere messaggi da Modus Vestendi su novità e offerte. Posso cancellarmi quando voglio.','I agree to receive messages from Modus Vestendi about new arrivals and offers. I can unsubscribe any time.'],
+  nl_t:['Merr 10% zbritje','Ricevi il 10% di sconto','Get 10% off'], nl_p:['Regjistrohu dhe merr 10% zbritje për një produkt në blerjen e parë. Vlen për klientët e rinj. Je i pari që mëson për ardhjet e reja.','Registrati e ricevi il 10% di sconto su un prodotto al tuo primo acquisto. Valido per i nuovi clienti. Sarai il primo a scoprire i nuovi arrivi.','Sign up and get 10% off one item on your first purchase. For new customers. Be the first to hear about new arrivals.'],
+  nl_name:['Emri dhe mbiemri','Nome e cognome','Full name'], nl_phone:['Telefoni (WhatsApp)','Telefono (WhatsApp)','Phone (WhatsApp)'], nl_email:['Email (opsionale)','Email (facoltativa)','Email (optional)'], nl_ig:['Instagram (opsional, @)','Instagram (facoltativo, @)','Instagram (optional, @)'], e_already_customer:['Ju jeni tashmë klient i Modus Vestendi: zbritja vlen vetëm për klientët e rinj. Na shkruani për ofertat për klientët besnikë!','Risulti già cliente di Modus Vestendi: lo sconto è riservato ai nuovi clienti. Scrivici per le offerte dedicate ai clienti fedeli!','You are already a Modus Vestendi customer: this discount is for new customers. Message us for loyal-customer offers!'], one_item:['1 artikull','1 capo','1 item'], nl_cons:['Pranoj të marr mesazhe nga Modus Vestendi për të rejat dhe ofertat. Mund të çregjistrohem kur të dua.','Accetto di ricevere messaggi da Modus Vestendi su novità e offerte. Posso cancellarmi quando voglio.','I agree to receive messages from Modus Vestendi about new arrivals and offers. I can unsubscribe any time.'],
   nl_btn:['Dua 10% zbritje','Voglio il 10% di sconto','Get my 10% off'], nl_ok:['Kodi juaj i zbritjes','Il tuo codice sconto','Your discount code'], nl_ok2:['Ruajeni: aplikohet automatikisht në shportë në këtë pajisje.','Conservalo: si applica da solo nel carrello su questo dispositivo.','Keep it: it is applied automatically in your bag on this device.'], nl_used:['Ky kod është përdorur tashmë.','Questo codice è già stato usato.','This code has already been used.'],
-  e_bad_email:['Email jo e saktë.','Email non valida.','Invalid email.'], e_bad_instagram:['Emri i Instagram jo i saktë.','Nome Instagram non valido.','Invalid Instagram name.'], e_nl_missing:['Shkruani email-in ose Instagram-in.','Inserisci email o Instagram.','Enter your email or Instagram.'], e_consent:['Duhet të pranoni për të marrë kodin.','Devi accettare per ricevere il codice.','Please agree to get the code.'],
+  e_bad_email:['Email jo e saktë.','Email non valida.','Invalid email.'], e_bad_instagram:['Emri i Instagram jo i saktë.','Nome Instagram non valido.','Invalid Instagram name.'], e_nl_missing:['Shkruani emrin dhe telefonin.','Inserisci nome e telefono.','Enter your name and phone.'], e_consent:['Duhet të pranoni për të marrë kodin.','Devi accettare per ricevere il codice.','Please agree to get the code.'],
   code:['Kodi i zbritjes','Codice sconto','Discount code'], apply:['Apliko','Applica','Apply'], disc:['Zbritje','Sconto','Discount'], code_ok:['Kodi u aplikua: -{n}%','Codice applicato: -{n}%','Code applied: -{n}%'],
   e_bad_code:['Kodi nuk ekziston.','Codice non valido.','Invalid code.'], e_code_used:['Kodi është përdorur tashmë.','Codice già usato.','Code already used.'], e_code_first_only:['Kodi vlen vetëm për blerjen e parë.','Il codice vale solo per il primo acquisto.','The code is valid only for your first purchase.'],
   f_help:['Ndihmë','Aiuto','Help'], f_how:['Si të porosisni: zgjidhni masën, shtoni në shportë, plotësoni adresën. Ju telefonojmë për konfirmim.','Come ordinare: scegli la taglia, aggiungi al carrello, inserisci l\'indirizzo. Ti chiamiamo per conferma.','How to order: pick your size, add to bag, enter your address. We call you to confirm.'],
@@ -397,18 +397,18 @@ function nlBlock(){
   const done = store.get('mvshop_nl', null);
   return `<section class="nl"><div><h2>${t('nl_t')}</h2><p>${t('nl_p')}</p></div><div class="nlf">${done ? nlDone(done) : nlForm()}</div></section>`;
 }
-const nlForm = () => `<form onsubmit="subscribe(event)"><input name="email" type="email" placeholder="${t('nl_email')}" autocomplete="email"><input name="ig" placeholder="${t('nl_ig')}" autocomplete="off">
+const nlForm = () => `<form onsubmit="subscribe(event)"><input name="name" placeholder="${t('nl_name')}" autocomplete="name"><input name="phone" type="tel" inputmode="tel" placeholder="${t('nl_phone')}" autocomplete="tel"><input name="email" type="email" placeholder="${t('nl_email')}" autocomplete="email"><input name="ig" placeholder="${t('nl_ig')}" autocomplete="off">
   <label class="cons"><input type="checkbox" name="cons" checked> <span>${t('nl_cons')}</span></label><button>${t('nl_btn')}</button><div class="err" style="color:#ffd3d3" data-err></div></form>`;
 const nlDone = d => `<div class="codebox">${t('nl_ok')}<b>${esc(d.code)}</b><small>${d.used ? t('nl_used') : t('nl_ok2')}</small></div>`;
 async function subscribe(e){
   e.preventDefault(); const f = e.target, err = f.querySelector('[data-err]'); err.textContent = '';
-  const email = f.email.value.trim(), ig = f.ig.value.trim();
-  if (!email && !ig){ err.textContent = t('e_nl_missing'); return; }
+  const name = f.name.value.trim(), phone = f.phone.value.trim(), email = f.email.value.trim(), ig = f.ig.value.trim();
+  if (name.length < 2 || phone.replace(/\D/g, '').length < 6){ err.textContent = t('e_nl_missing'); return; }
   if (!f.cons.checked){ err.textContent = t('e_consent'); return; }
   f.querySelector('button').disabled = true;
-  const {data, error} = await sb.rpc('shop_subscribe', {p_email: email || null, p_instagram: ig || null, p_name: null, p_lang: L});
-  if (error){ const m = String(error.message || ''); const k = ['bad_email','bad_instagram','too_many'].find(x => m.includes(x)); err.textContent = t('e_' + (k || 'generic')); f.querySelector('button').disabled = false; return; }
-  store.set('mvshop_nl', data); store.set('mvshop_popup', 1);
+  const {data, error} = await sb.rpc('shop_subscribe_v2', {p_name: name, p_phone: phone, p_email: email || null, p_instagram: ig || null, p_lang: L});
+  if (error){ const m = String(error.message || ''); const k = ['already_customer','bad_email','bad_instagram','too_many','missing_contact'].find(x => m.includes(x)); if (k === 'missing_contact'){ err.textContent = t('e_nl_missing'); f.querySelector('button').disabled = false; return; } err.textContent = t('e_' + (k || 'generic')); f.querySelector('button').disabled = false; return; }
+  store.set('mvshop_nl', data); store.set('mvshop_popup', 1); const me = store.get('mvshop_me', {}); store.set('mvshop_me', {...me, name: me.name || name, phone: me.phone || phone, instagram: me.instagram || ig});
   if (!data.used){ CODE = data.code; store.set('mvshop_code', CODE); CODEOK = null; }
   document.querySelectorAll('.nlf').forEach(x => x.innerHTML = nlDone(data));
 }
@@ -577,11 +577,11 @@ function renderWish(){
 const findV = id => { for (const p of P){ const v = p.variants.find(x => x.id === id); if (v) return [p, v]; } return []; };
 const cartLines = () => CART.map(c => { const [p, v] = findV(c.v); return p ? {c, p, v} : null; }).filter(Boolean);
 const cartTotal = () => cartLines().reduce((a, l) => a + l.c.q * Number(l.v.price), 0);
-const discAmt = () => CODEOK ? Math.round(cartTotal() * CODEOK.pct) / 100 : 0;
+const discAmt = () => { if (!CODEOK) return 0; const mx = Math.max(0, ...cartLines().map(l => Number(l.v.price))); return Math.round(mx * CODEOK.pct) / 100; };
 function summaryBox(btn, withCode){
   const tot = cartTotal(), d = discAmt();
   return `<aside class="sum" id="sumbox"><h3 style="margin:0 0 10px">${t('summary')}</h3><div class="r"><span>${t('subtotal')}</span><span>${eur(tot)}</span></div>
-    ${d ? `<div class="r" style="color:var(--sale)"><span>${t('disc')} (${esc(CODE)})</span><span>−${eur(d)}</span></div>` : ''}
+    ${d ? `<div class="r" style="color:var(--sale)"><span>${t('disc')} ${CODEOK ? CODEOK.pct : ''}% · ${t('one_item')} (${esc(CODE)})</span><span>−${eur(d)}</span></div>` : ''}
     <div class="r"><span>${t('shipping')}</span><span style="color:var(--muted)">${t('ship_tbd')}</span></div>
     <div class="r t"><span>${t('total')}</span><span>${eur(tot - d)}</span></div>
     ${withCode ? `<label style="margin-top:14px">${t('code')}</label><div style="display:flex;gap:6px"><input id="codein" value="${esc(CODE || '')}" placeholder="MV10-…" style="text-transform:uppercase"><button type="button" onclick="applyCode()">${t('apply')}</button></div><div id="codemsg" style="font-size:12.5px;margin-top:6px;${CODEOK ? 'color:var(--good)' : ''}">${CODEOK ? t('code_ok', CODEOK.pct) : ''}</div>` : ''}
