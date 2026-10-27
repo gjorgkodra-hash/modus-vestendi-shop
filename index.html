@@ -227,6 +227,7 @@ footer a{text-decoration:underline}
     <div class="search"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" autocomplete="off"></div>
     <div class="icons">
       <select class="lang" id="lang" aria-label="language"></select>
+      <a class="ib" href="#/account" aria-label="account" id="accicon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></a>
       <a class="ib" href="#/wish" aria-label="wishlist"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="cnt" id="wcnt" hidden></span></a>
       <a class="ib" href="#/cart" aria-label="cart"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 7h14l-1 13H6z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg><span class="cnt" id="ccnt" hidden></span></a>
     </div>
@@ -287,7 +288,15 @@ const TX = {
   e_too_many:['Shumë porosi në pak kohë. Na shkruani në Instagram.','Troppi ordini in poco tempo. Scrivici su Instagram.','Too many orders in a short time. Please message us on Instagram.'],
   e_generic:['Diçka shkoi keq. Provoni përsëri.','Qualcosa è andato storto. Riprova.','Something went wrong. Please try again.'],
   nl_t:['Merr 10% zbritje','Ricevi il 10% di sconto','Get 10% off'], nl_p:['Regjistrohu dhe merr 10% zbritje për një produkt në blerjen e parë. Vlen për klientët e rinj. Je i pari që mëson për ardhjet e reja.','Registrati e ricevi il 10% di sconto su un prodotto al tuo primo acquisto. Valido per i nuovi clienti. Sarai il primo a scoprire i nuovi arrivi.','Sign up and get 10% off one item on your first purchase. For new customers. Be the first to hear about new arrivals.'],
-  nl_strip:['10% zbritje për klientët e rinj','10% di sconto per i nuovi clienti','10% off for new customers'], nl_cta:['Regjistrohu','Registrati','Sign up'], nl_band:['🎁 Klient i ri? Regjistrohu dhe merr <b>10% zbritje</b> në blerjen e parë','🎁 Nuovo cliente? Registrati e ricevi il <b>10% di sconto</b> sul primo acquisto','🎁 New customer? Sign up and get <b>10% off</b> your first purchase'], nl_name:['Emri dhe mbiemri','Nome e cognome','Full name'], nl_phone:['Telefoni (WhatsApp)','Telefono (WhatsApp)','Phone (WhatsApp)'], nl_email:['Email (opsionale)','Email (facoltativa)','Email (optional)'], nl_ig:['Instagram (opsional, @)','Instagram (facoltativo, @)','Instagram (optional, @)'], e_already_customer:['Ju jeni tashmë klient i Modus Vestendi: zbritja vlen vetëm për klientët e rinj. Na shkruani për ofertat për klientët besnikë!','Risulti già cliente di Modus Vestendi: lo sconto è riservato ai nuovi clienti. Scrivici per le offerte dedicate ai clienti fedeli!','You are already a Modus Vestendi customer: this discount is for new customers. Message us for loyal-customer offers!'], one_item:['1 artikull','1 capo','1 item'], nl_cons:['Pranoj të marr mesazhe nga Modus Vestendi për të rejat dhe ofertat. Mund të çregjistrohem kur të dua.','Accetto di ricevere messaggi da Modus Vestendi su novità e offerte. Posso cancellarmi quando voglio.','I agree to receive messages from Modus Vestendi about new arrivals and offers. I can unsubscribe any time.'],
+  acc:['Llogaria ime','Il mio account','My account'], login:['Hyr','Accedi','Log in'], register:['Krijo llogari','Crea account','Create account'], pw:['Fjalëkalimi (min. 6 shkronja)','Password (min. 6 caratteri)','Password (min. 6 characters)'], pw1:['Fjalëkalimi','Password','Password'],
+  logout:['Dil','Esci','Log out'], hello:['Përshëndetje','Ciao','Hi'], my_orders:['Porositë e mia','I miei ordini','My orders'], no_orders:['Ende asnjë porosi.','Ancora nessun ordine.','No orders yet.'], my_data:['Të dhënat e mia','I miei dati','My details'], save:['Ruaj','Salva','Save'], saved:['U ruajt','Salvato','Saved'],
+  forgot:['Keni harruar fjalëkalimin? Na shkruani në WhatsApp','Password dimenticata? Scrivici su WhatsApp','Forgot your password? Message us on WhatsApp'], forgot_msg:['Përshëndetje! Kam harruar fjalëkalimin e llogarisë në shop. Numri im:','Ciao! Ho dimenticato la password del mio account sullo shop. Il mio numero:','Hi! I forgot my shop account password. My number:'],
+  have_acc:['Keni llogari?','Hai già un account?','Already have an account?'], no_acc:['Klient i ri?','Nuovo cliente?','New customer?'], acc_why:['Me llogari të dhënat dhe adresa ruhen në çdo pajisje dhe shihni porositë tuaja.','Con l\'account i tuoi dati e l\'indirizzo restano salvati su ogni dispositivo e vedi i tuoi ordini.','With an account your details and address are saved on every device and you can see your orders.'],
+  logged_as:['Jeni brenda si','Sei dentro come','Logged in as'], my_code:['Kodi im i zbritjes','Il mio codice sconto','My discount code'], acc_created:['Llogaria u krijua!','Account creato!','Account created!'], acc_no_code:['Zbritja 10% vlen vetëm për klientët e rinj: ju jeni tashmë klient ynë. Faleminderit që jeni me ne!','Lo sconto del 10% è solo per i nuovi clienti: sei già nostro cliente. Grazie di essere con noi!','The 10% discount is for new customers only: you are already our customer. Thank you for being with us!'],
+  e_account_exists:['Ky numër ka tashmë një llogari: hyni me fjalëkalimin tuaj.','Questo numero ha già un account: accedi con la tua password.','This number already has an account: log in with your password.'], e_short_password:['Fjalëkalimi duhet të ketë të paktën 6 shkronja.','La password deve avere almeno 6 caratteri.','Password must be at least 6 characters.'],
+  e_bad_login:['Numri ose fjalëkalimi nuk është i saktë.','Numero o password non corretti.','Wrong phone number or password.'], e_locked:['Shumë përpjekje: provoni pas 15 minutash.','Troppi tentativi: riprova tra 15 minuti.','Too many attempts: try again in 15 minutes.'],
+  st_riservato:['Në pritje të konfirmimit','In attesa di conferma','Awaiting confirmation'], st_confermato:['E konfirmuar','Confermato','Confirmed'], st_spedito:['E dërguar','Spedito','Shipped'], st_consegnato:['E dorëzuar','Consegnato','Delivered'], st_reso:['E kthyer','Reso','Returned'], st_annullato:['E anuluar','Annullato','Cancelled'], st_bozza:['Në pritje','In attesa','Pending'],
+  code_note:['10% zbritje për një produkt në blerjen e parë. Aplikohet vetë në shportë kur jeni brenda në llogari.','10% di sconto su un prodotto al primo acquisto. Si applica da solo nel carrello quando sei nel tuo account.','10% off one item on your first purchase. Applied automatically in your bag when logged in.'], nl_strip:['10% zbritje për klientët e rinj','10% di sconto per i nuovi clienti','10% off for new customers'], nl_cta:['Regjistrohu','Registrati','Sign up'], nl_band:['🎁 Klient i ri? Regjistrohu dhe merr <b>10% zbritje</b> në blerjen e parë','🎁 Nuovo cliente? Registrati e ricevi il <b>10% di sconto</b> sul primo acquisto','🎁 New customer? Sign up and get <b>10% off</b> your first purchase'], nl_name:['Emri dhe mbiemri','Nome e cognome','Full name'], nl_phone:['Telefoni (WhatsApp)','Telefono (WhatsApp)','Phone (WhatsApp)'], nl_email:['Email (opsionale)','Email (facoltativa)','Email (optional)'], nl_ig:['Instagram (opsional, @)','Instagram (facoltativo, @)','Instagram (optional, @)'], e_already_customer:['Ju jeni tashmë klient i Modus Vestendi: zbritja vlen vetëm për klientët e rinj. Na shkruani për ofertat për klientët besnikë!','Risulti già cliente di Modus Vestendi: lo sconto è riservato ai nuovi clienti. Scrivici per le offerte dedicate ai clienti fedeli!','You are already a Modus Vestendi customer: this discount is for new customers. Message us for loyal-customer offers!'], one_item:['1 artikull','1 capo','1 item'], nl_cons:['Pranoj të marr mesazhe nga Modus Vestendi për të rejat dhe ofertat. Mund të çregjistrohem kur të dua.','Accetto di ricevere messaggi da Modus Vestendi su novità e offerte. Posso cancellarmi quando voglio.','I agree to receive messages from Modus Vestendi about new arrivals and offers. I can unsubscribe any time.'],
   nl_btn:['Dua 10% zbritje','Voglio il 10% di sconto','Get my 10% off'], nl_ok:['Kodi juaj i zbritjes','Il tuo codice sconto','Your discount code'], nl_ok2:['Ruajeni: aplikohet automatikisht në shportë në këtë pajisje.','Conservalo: si applica da solo nel carrello su questo dispositivo.','Keep it: it is applied automatically in your bag on this device.'], nl_used:['Ky kod është përdorur tashmë.','Questo codice è già stato usato.','This code has already been used.'],
   e_bad_email:['Email jo e saktë.','Email non valida.','Invalid email.'], e_bad_instagram:['Emri i Instagram jo i saktë.','Nome Instagram non valido.','Invalid Instagram name.'], e_nl_missing:['Shkruani emrin dhe telefonin.','Inserisci nome e telefono.','Enter your name and phone.'], e_consent:['Duhet të pranoni për të marrë kodin.','Devi accettare per ricevere il codice.','Please agree to get the code.'],
   code:['Kodi i zbritjes','Codice sconto','Discount code'], apply:['Apliko','Applica','Apply'], disc:['Zbritje','Sconto','Discount'], code_ok:['Kodi u aplikua: -{n}%','Codice applicato: -{n}%','Code applied: -{n}%'],
@@ -311,7 +320,7 @@ const sizeLbl = z => ['TU','U'].includes(String(z).toUpperCase()) ? t('one') : z
 const HEART = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>';
 const NEW_DAYS = 21;
 
-let CODE = store.get('mvshop_code', null), CODEOK = null;
+let CODE = store.get('mvshop_code', null), CODEOK = null, TOK = store.get('mvshop_tok', null), ME = null;
 let P = [], URLS = {}, CART = store.get('mvshop_cart', []), WISH = store.get('mvshop_wish', []), Q = '', SORT = 'new', F = {size:[], color:[], brand:[], cat:'', min:'', max:'', sale:false, news:false};
 const saveCart = () => { store.set('mvshop_cart', CART); badges(); };
 const saveWish = () => { store.set('mvshop_wish', WISH); badges(); };
@@ -338,7 +347,7 @@ async function load(){
 }
 function chrome(){
   document.documentElement.lang = L;
-  $('#promo').innerHTML = t('promo') + (store.get('mvshop_nl', null) ? '' : ` · <a href="javascript:openSignup()" style="text-decoration:underline;font-weight:700">🎁 ${t('nl_strip')}</a>`);
+  $('#promo').innerHTML = t('promo') + ((store.get('mvshop_nl', null) || ME) ? '' : ` · <a href="javascript:openSignup()" style="text-decoration:underline;font-weight:700">🎁 ${t('nl_strip')}</a>`);
   $('#lang').innerHTML = LANGS.map(l => `<option value="${l}" ${l === L ? 'selected' : ''}>${l.toUpperCase()}</option>`).join('');
   ['#q', '#q2'].forEach(s => { $(s).placeholder = t('search'); $(s).value = Q; });
   const cats = [...new Map(P.filter(p => p.category?.id).map(p => [p.category.id, p.category])).values()];
@@ -371,6 +380,7 @@ function route(){
   else if (h === '#/cart') renderCart();
   else if (h === '#/checkout') renderCheckout();
   else if (h === '#/wish') renderWish();
+  else if (h === '#/account') renderAccount();
   else if (h === '#/brands') renderBrands();
   else renderHome();
   if (!pm) window.scrollTo(0, 0);
@@ -392,24 +402,74 @@ function card(p){
 }
 function toggleWish(id, el){ const i = WISH.indexOf(id); if (i >= 0) WISH.splice(i, 1); else WISH.push(id); saveWish(); document.querySelectorAll(`[data-wish="${id}"]`).forEach(x => x.classList.toggle('on', WISH.includes(id))); if (el) el.classList.toggle('on', WISH.includes(id)); if (location.hash === '#/wish') renderWish(); }
 
+// ---------- account ----------
+async function loadMe(){
+  if (!TOK){ ME = null; return; }
+  const {data} = await sb.rpc('shop_me', {p_token: TOK});
+  ME = data || null;
+  if (!ME){ TOK = null; store.set('mvshop_tok', null); return; }
+  store.set('mvshop_me', {name: ME.name, phone: ME.phone, instagram: ME.instagram || '', country: ME.country || 'AL', city: ME.city || '', address: ME.address || ''});
+  if (ME.code){ store.set('mvshop_nl', ME.code); if (!ME.code.used && !CODE){ CODE = ME.code.code; store.set('mvshop_code', CODE); } }
+}
+function renderAccount(){
+  chrome();
+  if (!ME){
+    $('#view').innerHTML = `<div class="crumbs"><a href="#/">${t('home')}</a> / ${t('acc')}</div>
+    <div class="page" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+      <div><h1>${t('login')}</h1><p style="color:var(--muted)">${t('have_acc')}</p>
+        <form onsubmit="doLogin(event)"><label>${t('phone')}</label><input name="phone" type="tel" inputmode="tel" autocomplete="tel" required><label>${t('pw1')}</label><input name="pw" type="password" autocomplete="current-password" required>
+        <div class="err" id="lerr"></div><button class="primary" style="width:100%;padding:14px;margin-top:14px">${t('login')}</button></form>
+        <p style="font-size:13px;margin-top:14px"><a href="https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(t('forgot_msg'))}" target="_blank" rel="noopener" style="text-decoration:underline">${t('forgot')}</a></p></div>
+      <div><section class="nl" style="margin:0;grid-template-columns:1fr"><div><h2>${t('register')}</h2><p>${t('no_acc')} ${t('acc_why')} ${t('nl_p')}</p></div><div class="nlf">${nlForm()}</div></section></div></div>`;
+    return;
+  }
+  const c = ME.code;
+  $('#view').innerHTML = `<div class="crumbs"><a href="#/">${t('home')}</a> / ${t('acc')}</div>
+  <div class="page"><div><h1>${t('hello')}, ${esc(ME.name.split(' ')[0])}</h1><p style="color:var(--muted);margin-top:0">${t('logged_as')} ${esc(ME.phone)} · <button class="link" onclick="doLogout()">${t('logout')}</button></p>
+    <h3 style="margin-top:26px">${t('my_orders')}</h3>
+    ${ME.orders.length ? ME.orders.map(o => `<div class="line" style="display:block"><div style="display:flex;justify-content:space-between;gap:10px"><b>${esc(o.no)}</b><span class="chip ${o.status === 'consegnato' ? 'on' : ''}">${t('st_' + o.status) || esc(o.status)}</span></div>
+      <div style="color:var(--muted);font-size:13px">${esc(o.date)} · ${eur(o.total)}</div><div style="font-size:13px;margin-top:4px">${(o.items || []).map(esc).join('<br>')}</div></div>`).join('') : `<p style="color:var(--muted)">${t('no_orders')}</p>`}
+    <h3 style="margin-top:28px">${t('my_data')}</h3>
+    <form onsubmit="saveMe(event)"><label>${t('name')}</label><input name="name" value="${esc(ME.name)}"><div class="two"><div><label>Email</label><input name="email" type="email" value="${esc(ME.email || '')}"></div><div><label>Instagram</label><input name="ig" value="${esc(ME.instagram || '')}"></div></div>
+      <div class="two"><div><label>${t('country')}</label><select name="country">${COUNTRIES.map(([k, n]) => `<option value="${k}" ${(ME.country || 'AL') === k ? 'selected' : ''}>${esc(n[LANGS.indexOf(L)])}</option>`).join('')}</select></div><div><label>${t('city')}</label><input name="city" value="${esc(ME.city || '')}"></div></div>
+      <label>${t('address')}</label><input name="address" value="${esc(ME.address || '')}"><button class="primary" style="margin-top:14px;padding:13px 24px">${t('save')}</button></form></div>
+    <aside class="sum">${c ? `<h3 style="margin:0 0 8px">${t('my_code')}</h3><div style="font-size:24px;font-weight:700;letter-spacing:.1em">${esc(c.code)}</div><p class="note">${c.used ? t('nl_used') : t('code_note')}</p>` : `<p class="note" style="margin:0">${t('acc_why')}</p>`}</aside></div>`;
+}
+async function doLogin(e){
+  e.preventDefault(); const f = e.target; $('#lerr').textContent = '';
+  const {data, error} = await sb.rpc('shop_login', {p_phone: f.phone.value, p_password: f.pw.value});
+  if (error){ const m = String(error.message || ''); $('#lerr').textContent = t(m.includes('locked') ? 'e_locked' : 'e_bad_login'); return; }
+  TOK = data.token; store.set('mvshop_tok', TOK); await loadMe(); renderAccount();
+}
+async function doLogout(){ try { await sb.rpc('shop_logout', {p_token: TOK}); } catch (e) {} TOK = null; ME = null; store.set('mvshop_tok', null); store.set('mvshop_me', {}); store.set('mvshop_nl', null); store.set('mvshop_code', null); CODE = null; CODEOK = null; renderAccount(); }
+async function saveMe(e){
+  e.preventDefault(); const f = e.target;
+  const {error} = await sb.rpc('shop_update_me', {p_token: TOK, p_name: f.name.value, p_email: f.email.value, p_instagram: f.ig.value, p_country: f.country.value, p_city: f.city.value, p_address: f.address.value, p_lang: L});
+  if (error){ toast(t('e_generic')); return; } await loadMe(); toast('✓ ' + t('saved'));
+}
+
 // ---------- newsletter ----------
 function nlBlock(){
   const done = store.get('mvshop_nl', null);
   return `<section class="nl"><div><h2>${t('nl_t')}</h2><p>${t('nl_p')}</p></div><div class="nlf">${done ? nlDone(done) : nlForm()}</div></section>`;
 }
-const nlForm = () => `<form onsubmit="subscribe(event)"><input name="name" placeholder="${t('nl_name')}" autocomplete="name"><input name="phone" type="tel" inputmode="tel" placeholder="${t('nl_phone')}" autocomplete="tel"><input name="email" type="email" placeholder="${t('nl_email')}" autocomplete="email"><input name="ig" placeholder="${t('nl_ig')}" autocomplete="off">
-  <label class="cons"><input type="checkbox" name="cons" checked> <span>${t('nl_cons')}</span></label><button>${t('nl_btn')}</button><div class="err" style="color:#ffd3d3" data-err></div></form>`;
-const nlDone = d => `<div class="codebox">${t('nl_ok')}<b>${esc(d.code)}</b><small>${d.used ? t('nl_used') : t('nl_ok2')}</small></div>`;
+const nlForm = () => `<form onsubmit="subscribe(event)"><input name="name" placeholder="${t('nl_name')}" autocomplete="name"><input name="phone" type="tel" inputmode="tel" placeholder="${t('nl_phone')}" autocomplete="tel"><input name="email" type="email" placeholder="${t('nl_email')}" autocomplete="email"><input name="ig" placeholder="${t('nl_ig')}" autocomplete="off"><input name="pw" type="password" placeholder="${t('pw')}" autocomplete="new-password">
+  <label class="cons"><input type="checkbox" name="cons" checked> <span>${t('nl_cons')}</span></label><button>${t('nl_btn')}</button><div class="err" style="color:#ffd3d3" data-err></div>
+  <div style="font-size:12.5px;opacity:.9">${t('have_acc')} <a href="#/account" onclick="document.querySelectorAll('.pop-bg').forEach(x=>x.remove())" style="text-decoration:underline;font-weight:700">${t('login')}</a></div></form>`;
+const nlDone = d => d && d.code ? `<div class="codebox">${t('nl_ok')}<b>${esc(d.code)}</b><small>${d.used ? t('nl_used') : t('nl_ok2')}</small></div>` : `<div class="codebox"><b style="font-size:18px;letter-spacing:0">${t('acc_created')}</b><small>${t('acc_no_code')}</small></div>`;
 async function subscribe(e){
   e.preventDefault(); const f = e.target, err = f.querySelector('[data-err]'); err.textContent = '';
   const name = f.name.value.trim(), phone = f.phone.value.trim(), email = f.email.value.trim(), ig = f.ig.value.trim();
   if (name.length < 2 || phone.replace(/\D/g, '').length < 6){ err.textContent = t('e_nl_missing'); return; }
+  if (f.pw.value.length < 6){ err.textContent = t('e_short_password'); return; }
   if (!f.cons.checked){ err.textContent = t('e_consent'); return; }
   f.querySelector('button').disabled = true;
-  const {data, error} = await sb.rpc('shop_subscribe_v2', {p_name: name, p_phone: phone, p_email: email || null, p_instagram: ig || null, p_lang: L});
-  if (error){ const m = String(error.message || ''); const k = ['already_customer','bad_email','bad_instagram','too_many','missing_contact'].find(x => m.includes(x)); if (k === 'missing_contact'){ err.textContent = t('e_nl_missing'); f.querySelector('button').disabled = false; return; } err.textContent = t('e_' + (k || 'generic')); f.querySelector('button').disabled = false; return; }
+  const {data: reg, error} = await sb.rpc('shop_register', {p_name: name, p_phone: phone, p_email: email || null, p_instagram: ig || null, p_password: f.pw.value, p_lang: L});
+  if (error){ const m = String(error.message || ''); const k = ['account_exists','short_password','bad_email','bad_instagram','too_many','missing_contact'].find(x => m.includes(x)); err.innerHTML = k === 'missing_contact' ? t('e_nl_missing') : k === 'account_exists' ? `${t('e_account_exists')} <a href="#/account" style="text-decoration:underline" onclick="document.querySelectorAll('.pop-bg').forEach(x=>x.remove())">${t('login')}</a>` : t('e_' + (k || 'generic')); f.querySelector('button').disabled = false; return; }
+  TOK = reg.token; store.set('mvshop_tok', TOK); await loadMe();
+  const data = reg.code || {};
   store.set('mvshop_nl', data); store.set('mvshop_popup', 1); const me = store.get('mvshop_me', {}); store.set('mvshop_me', {...me, name: me.name || name, phone: me.phone || phone, instagram: me.instagram || ig});
-  if (!data.used){ CODE = data.code; store.set('mvshop_code', CODE); CODEOK = null; }
+  if (data.code && !data.used){ CODE = data.code; store.set('mvshop_code', CODE); CODEOK = null; }
   document.querySelectorAll('.nlf').forEach(x => x.innerHTML = nlDone(data)); $('#promo').innerHTML = t('promo');
 }
 function openSignup(){
@@ -418,7 +478,7 @@ function openSignup(){
   const bg = document.createElement('div'); bg.className = 'pop-bg'; bg.innerHTML = `<section class="nl pop"><button class="x" aria-label="close">✕</button><div><h2>${t('nl_t')}</h2><p>${t('nl_p')}</p></div><div class="nlf">${done ? nlDone(done) : nlForm()}</div></section>`;
   bg.addEventListener('click', e => { if (e.target === bg || e.target.closest('.x')) bg.remove(); }); document.body.appendChild(bg);
 }
-const nlBand = () => store.get('mvshop_nl', null) ? '' : `<button onclick="openSignup()" style="width:100%;margin:12px 0 0;background:var(--accent);color:#fff;border-color:var(--accent);padding:14px;font-size:14px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap"><span>${t('nl_band')}</span><span style="text-decoration:underline;font-weight:700">${t('nl_cta')} →</span></button>`;
+const nlBand = () => (store.get('mvshop_nl', null) || ME) ? '' : `<button onclick="openSignup()" style="width:100%;margin:12px 0 0;background:var(--accent);color:#fff;border-color:var(--accent);padding:14px;font-size:14px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap"><span>${t('nl_band')}</span><span style="text-decoration:underline;font-weight:700">${t('nl_cta')} →</span></button>`;
 function maybePopup(){
   if (store.get('mvshop_popup', 0) || store.get('mvshop_nl', null)) return;
   setTimeout(() => { if (document.querySelector('.pop-bg') || location.hash === '#/checkout') return; store.set('mvshop_popup', 1);
@@ -627,6 +687,7 @@ function renderCheckout(){
   const me = store.get('mvshop_me', {});
   const f = (n, lbl, type = 'text', extra = '') => `<label for="f_${n}">${t(lbl)}</label><input id="f_${n}" name="${n}" type="${type}" value="${esc(me[n] || '')}" ${extra}>`;
   $('#view').innerHTML = `<div class="page"><div><p><a href="#/cart" style="text-decoration:underline">${t('back_cart')}</a></p><h1>${t('checkout')}</h1>
+    ${ME ? `<p style="font-size:13px;color:var(--muted)">${t('logged_as')} <b>${esc(ME.name)}</b></p>` : `<p style="font-size:13px">${t('have_acc')} <a href="#/account" style="text-decoration:underline;font-weight:600">${t('login')}</a></p>`}
     <form id="co" onsubmit="sendOrder(event)"><h3 style="margin:22px 0 0">${t('your_data')}</h3>
     ${f('name', 'name', 'text', 'required autocomplete="name"')}<div class="two"><div>${f('phone', 'phone', 'tel', 'required autocomplete="tel" inputmode="tel"')}</div><div>${f('instagram', 'ig', 'text', 'autocomplete="off" placeholder="@"')}</div></div>
     <h3 style="margin:26px 0 0">${t('delivery')}</h3>
@@ -644,7 +705,8 @@ async function sendOrder(e){
   const fd = Object.fromEntries(new FormData(e.target).entries());
   store.set('mvshop_me', {name: fd.name, phone: fd.phone, instagram: fd.instagram, country: fd.country, city: fd.city, address: fd.address});
   const b = $('#sendb'); b.disabled = true; $('#err').textContent = '';
-  const {data, error} = await sb.rpc('shop_order_v2', {p_name: fd.name, p_phone: fd.phone, p_instagram: fd.instagram, p_country: fd.country, p_city: fd.city, p_address: fd.address, p_lines: CART.map(c => ({variant_id: c.v, qty: c.q})), p_notes: fd.notes, p_lang: L, p_code: CODEOK ? CODE : null});
+  const {data, error} = await sb.rpc('shop_order_v3', {p_token: TOK, p_name: fd.name, p_phone: fd.phone, p_instagram: fd.instagram, p_country: fd.country, p_city: fd.city, p_address: fd.address, p_lines: CART.map(c => ({variant_id: c.v, qty: c.q})), p_notes: fd.notes, p_lang: L, p_code: CODEOK ? CODE : null});
+  if (!error && TOK) loadMe();
   if (error){
     const m = String(error.message || ''); const k = ['missing_contact','missing_address','not_available','too_many','bad_code','code_used','code_first_only'].find(x => m.includes(x));
     if (['bad_code','code_used','code_first_only'].includes(k)){ CODEOK = null; CODE = null; store.set('mvshop_code', null); }
@@ -656,7 +718,7 @@ async function sendOrder(e){
   $('#view').innerHTML = `<div class="ok"><div class="big">✓</div><h1 style="font-size:24px">${t('ok_t')}</h1><p>${t('ok_p')}: <b>${esc(data)}</b></p><p style="color:var(--muted)">${t('ok_n')}</p><button class="primary" onclick="location.hash='#/';load()">${t('continue')}</button></div>`;
   window.scrollTo(0, 0);
 }
-chrome(); load(); maybePopup();
+chrome(); loadMe().then(() => load()); maybePopup();
 </script>
 </body>
 </html>
