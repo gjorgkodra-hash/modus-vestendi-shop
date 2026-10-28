@@ -55,6 +55,9 @@ header{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid 
 .lang{border:1px solid var(--line);border-radius:999px;padding:5px 8px;width:auto;font-size:12.5px;background:#fff}
 @media(max-width:719px){.hrow .search{display:none}.msearch{display:block!important;padding:0 0 10px}.logo span{font-size:14px;letter-spacing:.12em}}
 .msearch{display:none}
+nav.gens{display:flex;gap:18px;padding:2px 0 0;font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+nav.gens a{padding:8px 0 6px;border-bottom:2px solid transparent;color:#555}
+nav.gens a.on{border-bottom-color:var(--ink);color:var(--ink)}
 nav.cats{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;border-top:1px solid var(--line)}
 nav.cats::-webkit-scrollbar{display:none}
 nav.cats a{white-space:nowrap;padding:12px 12px;font-size:14px;font-weight:500;border-bottom:2px solid transparent;color:#333}
@@ -233,6 +236,7 @@ footer a{text-decoration:underline}
     </div>
   </div>
   <div class="search msearch"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q2" type="search" autocomplete="off"></div>
+  <nav class="gens" id="gens"></nav>
   <nav class="cats" id="cats"></nav>
 </div></header>
 <main class="wrap" id="view"><div class="empty">…</div></main>
@@ -300,7 +304,7 @@ const TX = {
   fg_sent:['Nëse llogaria ekziston, ju dërguam një kod me 6 shifra në email {n}. Kontrolloni edhe Spam. Kodi vlen 15 minuta.','Se l\'account esiste, ti abbiamo mandato un codice di 6 cifre via email {n}. Controlla anche lo spam. Il codice vale 15 minuti.','If the account exists, we emailed you a 6-digit code {n}. Check spam too. The code is valid for 15 minutes.'],
   fg_code:['Kodi nga email-i','Codice ricevuto via email','Code from the email'], fg_new:['Fjalëkalimi i ri (min. 6)','Nuova password (min. 6)','New password (min. 6)'], fg_confirm:['Ruaj fjalëkalimin e ri','Salva la nuova password','Save new password'], fg_again:['Dërgo kodin përsëri','Invia di nuovo il codice','Send the code again'],
   e_rbad_code:['Kodi nuk është i saktë.','Codice non corretto.','Wrong code.'], e_code_expired:['Kodi ka skaduar: kërkoni një të ri.','Codice scaduto: richiedine uno nuovo.','Code expired: request a new one.'], e_email_unavailable:['Rikuperimi me email nuk është ende aktiv. Provoni më vonë.','Il recupero via email non è ancora attivo. Riprova più tardi.','Email recovery is not active yet. Please try later.'], e_missing_email:['Shkruani email-in: shërben për të rikuperuar fjalëkalimin.','Inserisci l\'email: serve per recuperare la password.','Enter your email: it is needed to recover your password.'],
-  code_note:['10% zbritje për një produkt në blerjen e parë. Aplikohet vetë në shportë kur jeni brenda në llogari.','10% di sconto su un prodotto al primo acquisto. Si applica da solo nel carrello quando sei nel tuo account.','10% off one item on your first purchase. Applied automatically in your bag when logged in.'], nl_strip:['10% zbritje për klientët e rinj','10% di sconto per i nuovi clienti','10% off for new customers'], nl_cta:['Regjistrohu','Registrati','Sign up'], nl_band:['🎁 Klient i ri? Regjistrohu dhe merr <b>10% zbritje</b> në blerjen e parë','🎁 Nuovo cliente? Registrati e ricevi il <b>10% di sconto</b> sul primo acquisto','🎁 New customer? Sign up and get <b>10% off</b> your first purchase'], nl_name:['Emri dhe mbiemri','Nome e cognome','Full name'], nl_phone:['Telefoni (WhatsApp)','Telefono (WhatsApp)','Phone (WhatsApp)'], nl_email:['Email (për rikuperimin e fjalëkalimit)','Email (per recuperare la password)','Email (to recover your password)'], nl_ig:['Instagram (opsional, @)','Instagram (facoltativo, @)','Instagram (optional, @)'], e_already_customer:['Ju jeni tashmë klient i Modus Vestendi: zbritja vlen vetëm për klientët e rinj. Na shkruani për ofertat për klientët besnikë!','Risulti già cliente di Modus Vestendi: lo sconto è riservato ai nuovi clienti. Scrivici per le offerte dedicate ai clienti fedeli!','You are already a Modus Vestendi customer: this discount is for new customers. Message us for loyal-customer offers!'], one_item:['1 artikull','1 capo','1 item'], nl_cons:['Pranoj të marr mesazhe nga Modus Vestendi për të rejat dhe ofertat. Mund të çregjistrohem kur të dua.','Accetto di ricevere messaggi da Modus Vestendi su novità e offerte. Posso cancellarmi quando voglio.','I agree to receive messages from Modus Vestendi about new arrivals and offers. I can unsubscribe any time.'],
+  code_note:['10% zbritje për një produkt në blerjen e parë. Aplikohet vetë në shportë kur jeni brenda në llogari.','10% di sconto su un prodotto al primo acquisto. Si applica da solo nel carrello quando sei nel tuo account.','10% off one item on your first purchase. Applied automatically in your bag when logged in.'], g_all:['Të gjitha','Tutti','All'], g_donna:['Femra','Donna','Women'], g_uomo:['Meshkuj','Uomo','Men'], g_bambini:['Fëmijë','Bambini','Kids'], nl_strip:['10% zbritje për klientët e rinj','10% di sconto per i nuovi clienti','10% off for new customers'], nl_cta:['Regjistrohu','Registrati','Sign up'], nl_band:['🎁 Klient i ri? Regjistrohu dhe merr <b>10% zbritje</b> në blerjen e parë','🎁 Nuovo cliente? Registrati e ricevi il <b>10% di sconto</b> sul primo acquisto','🎁 New customer? Sign up and get <b>10% off</b> your first purchase'], nl_name:['Emri dhe mbiemri','Nome e cognome','Full name'], nl_phone:['Telefoni (WhatsApp)','Telefono (WhatsApp)','Phone (WhatsApp)'], nl_email:['Email (për rikuperimin e fjalëkalimit)','Email (per recuperare la password)','Email (to recover your password)'], nl_ig:['Instagram (opsional, @)','Instagram (facoltativo, @)','Instagram (optional, @)'], e_already_customer:['Ju jeni tashmë klient i Modus Vestendi: zbritja vlen vetëm për klientët e rinj. Na shkruani për ofertat për klientët besnikë!','Risulti già cliente di Modus Vestendi: lo sconto è riservato ai nuovi clienti. Scrivici per le offerte dedicate ai clienti fedeli!','You are already a Modus Vestendi customer: this discount is for new customers. Message us for loyal-customer offers!'], one_item:['1 artikull','1 capo','1 item'], nl_cons:['Pranoj të marr mesazhe nga Modus Vestendi për të rejat dhe ofertat. Mund të çregjistrohem kur të dua.','Accetto di ricevere messaggi da Modus Vestendi su novità e offerte. Posso cancellarmi quando voglio.','I agree to receive messages from Modus Vestendi about new arrivals and offers. I can unsubscribe any time.'],
   nl_btn:['Dua 10% zbritje','Voglio il 10% di sconto','Get my 10% off'], nl_ok:['Kodi juaj i zbritjes','Il tuo codice sconto','Your discount code'], nl_ok2:['Ruajeni: aplikohet automatikisht në shportë në këtë pajisje.','Conservalo: si applica da solo nel carrello su questo dispositivo.','Keep it: it is applied automatically in your bag on this device.'], nl_used:['Ky kod është përdorur tashmë.','Questo codice è già stato usato.','This code has already been used.'],
   e_bad_email:['Email jo e saktë.','Email non valida.','Invalid email.'], e_bad_instagram:['Emri i Instagram jo i saktë.','Nome Instagram non valido.','Invalid Instagram name.'], e_nl_missing:['Shkruani emrin dhe telefonin.','Inserisci nome e telefono.','Enter your name and phone.'], e_consent:['Duhet të pranoni për të marrë kodin.','Devi accettare per ricevere il codice.','Please agree to get the code.'],
   code:['Kodi i zbritjes','Codice sconto','Discount code'], apply:['Apliko','Applica','Apply'], disc:['Zbritje','Sconto','Discount'], code_ok:['Kodi u aplikua: -{n}%','Codice applicato: -{n}%','Code applied: -{n}%'],
@@ -325,7 +329,9 @@ const HEART = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" strok
 const NEW_DAYS = 21;
 
 let CODE = store.get('mvshop_code', null), CODEOK = null, TOK = store.get('mvshop_tok', null), ME = null;
-let P = [], URLS = {}, CART = store.get('mvshop_cart', []), WISH = store.get('mvshop_wish', []), Q = '', SORT = 'new', F = {size:[], color:[], brand:[], cat:'', min:'', max:'', sale:false, news:false};
+let G = store.get('mvshop_g', '');
+const gOk = p => !G || p.gender === G || p.gender === 'unisex';
+let P = [], URLS = {}, CART = store.get('mvshop_cart', []), WISH = store.get('mvshop_wish', []), Q = '', SORT = 'new', F = {size:[], color:[], brand:[], cat:'', grp:'', min:'', max:'', sale:false, news:false};
 const saveCart = () => { store.set('mvshop_cart', CART); badges(); };
 const saveWish = () => { store.set('mvshop_wish', WISH); badges(); };
 function toast(m, html){ document.querySelectorAll('.toast').forEach(x => x.remove()); const d = document.createElement('div'); d.className = 'toast'; if (html) d.innerHTML = m; else d.textContent = m; document.body.appendChild(d); setTimeout(() => d.remove(), 2600); }
@@ -354,12 +360,14 @@ function chrome(){
   $('#promo').innerHTML = t('promo') + ((store.get('mvshop_nl', null) || ME) ? '' : ` · <a href="javascript:openSignup()" style="text-decoration:underline;font-weight:700">🎁 ${t('nl_strip')}</a>`);
   $('#lang').innerHTML = LANGS.map(l => `<option value="${l}" ${l === L ? 'selected' : ''}>${l.toUpperCase()}</option>`).join('');
   ['#q', '#q2'].forEach(s => { $(s).placeholder = t('search'); $(s).value = Q; });
-  const cats = [...new Map(P.filter(p => p.category?.id).map(p => [p.category.id, p.category])).values()];
+  const PG = P.filter(gOk);
+  const grps = [...new Map(PG.filter(p => p.group?.id).map(p => [p.group.id, p.group])).values()];
   const r = location.hash;
-  $('#cats').innerHTML = `<a href="#/shop" class="${r === '#/shop' && !F.cat && !F.news && !F.sale ? 'on' : ''}">${t('all')}</a>` +
-    (P.some(isNew) ? `<a href="#/shop?news" class="${F.news ? 'on' : ''}">${t('news')}</a>` : '') +
-    cats.map(c => `<a href="#/shop?cat=${c.id}" class="${String(F.cat) === String(c.id) ? 'on' : ''}">${esc(c[L])}</a>`).join('') +
-    (P.some(isSale) ? `<a href="#/shop?sale" class="hot ${F.sale ? 'on' : ''}">${t('sale')}</a>` : '') +
+  $('#gens').innerHTML = [['', 'g_all'], ['donna', 'g_donna'], ['uomo', 'g_uomo'], ['bambini', 'g_bambini']].map(([k, l]) => `<a href="#/shop?g=${k || 'all'}" class="${G === k ? 'on' : ''}">${t(l)}</a>`).join('');
+  $('#cats').innerHTML = `<a href="#/shop" class="${r.startsWith('#/shop') && !F.cat && !F.grp && !F.news && !F.sale ? 'on' : ''}">${t('all')}</a>` +
+    (PG.some(isNew) ? `<a href="#/shop?news" class="${F.news ? 'on' : ''}">${t('news')}</a>` : '') +
+    grps.map(c => `<a href="#/shop?grp=${c.id}" class="${String(F.grp) === String(c.id) ? 'on' : ''}">${esc(c[L])}</a>`).join('') +
+    (PG.some(isSale) ? `<a href="#/shop?sale" class="hot ${F.sale ? 'on' : ''}">${t('sale')}</a>` : '') +
     `<a href="#/brands">${t('brands')}</a>`;
   $('#foot').innerHTML = `<div><h4>${t('f_about')}</h4><p>${t('f_about_t')}</p></div>
     <div><h4>${t('f_help')}</h4><p>${t('f_how')}</p></div>
@@ -379,7 +387,7 @@ function route(){
   $('#sbuy').classList.remove('show');
   const legacy = h.match(/^#p\/(\d+)/); if (legacy) { location.replace('#/p/' + legacy[1]); return; }
   const pm = h.match(/^#\/p\/(\d+)/);
-  if (h.startsWith('#/shop')){ const qs = new URLSearchParams(h.split('?')[1] || ''); F.cat = qs.get('cat') || ''; F.news = qs.has('news'); F.sale = qs.has('sale'); const b = qs.get('brand'); F.brand = b ? [b] : (qs.has('keep') ? F.brand : []); chrome(); renderShop(); }
+  if (h.startsWith('#/shop')){ const qs = new URLSearchParams(h.split('?')[1] || ''); if (qs.has('g')){ G = qs.get('g') === 'all' ? '' : qs.get('g'); store.set('mvshop_g', G); } F.cat = qs.get('cat') || ''; F.grp = qs.get('grp') || ''; F.news = qs.has('news'); F.sale = qs.has('sale'); const b = qs.get('brand'); F.brand = b ? [b] : (qs.has('keep') ? F.brand : []); chrome(); renderShop(); }
   else if (pm) renderProduct(Number(pm[1]));
   else if (h === '#/cart') renderCart();
   else if (h === '#/checkout') renderCheckout();
@@ -522,7 +530,8 @@ function renderHome(){
   chrome();
   if (!P.length){ $('#view').innerHTML = `<div class="empty">${t('soon')}</div>`; return; }
   const heroP = P.find(p => p.photos.length) || P[0];
-  const fresh = [...P].sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, 8);
+  const PG = P.filter(gOk);
+  const fresh = [...PG].sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, 8);
   const brands = [...new Set(P.map(p => p.brand).filter(Boolean))].sort();
   $('#view').innerHTML = `
   <section class="hero"><div class="txt"><h1>${t('hero_t')}</h1><p>${t('hero_p')}</p><button class="primary" onclick="location.hash='#/shop'">${t('hero_b')} →</button></div>
@@ -530,10 +539,10 @@ function renderHome(){
   ${nlBand()}
   <div class="usp"><div>${t('usp1')}</div><div>${t('usp2')}</div><div>${t('usp3')}</div></div>
   <h2 class="sec">${t('new_in')}<a href="#/shop">${t('see_all')}</a></h2>
-  <div class="row-scroll">${fresh.map(card).join('')}</div>
+  ${fresh.length ? `<div class="row-scroll">${fresh.map(card).join('')}</div>` : `<div class="empty" style="padding:30px 0">${t('soon')}</div>`}
   ${brands.length > 1 ? `<h2 class="sec">${t('brands')}</h2><div class="brands">${brands.map(b => `<a href="#/shop?brand=${encodeURIComponent(b)}">${esc(b)}</a>`).join('')}</div>` : ''}
   <h2 class="sec">${t('all')}<a href="#/shop">${t('see_all')}</a></h2>
-  <div class="grid" style="padding-bottom:0">${P.slice(0, 12).map(card).join('')}</div>
+  ${PG.length ? `<div class="grid" style="padding-bottom:0">${PG.slice(0, 12).map(card).join('')}</div>` : ''}
   ${nlBlock()}`;
 }
 function renderBrands(){
@@ -547,6 +556,8 @@ function renderBrands(){
 function filtered(){
   const q = norm(Q);
   let list = P.filter(p => {
+    if (!gOk(p)) return false;
+    if (F.grp && String(p.group?.id) !== String(F.grp)) return false;
     if (F.cat && String(p.category?.id) !== String(F.cat)) return false;
     if (F.news && !isNew(p)) return false;
     if (F.sale && !isSale(p)) return false;
@@ -564,7 +575,9 @@ function filtered(){
 }
 function renderShop(onlyGrid){
   const list = filtered();
-  const title = F.cat ? (P.find(p => String(p.category?.id) === String(F.cat))?.category?.[L] || '') : F.news ? t('news') : F.sale ? t('sale') : F.brand.length === 1 ? F.brand[0] : t('all');
+  const gname = G ? t('g_' + G) + ' · ' : '';
+  const subs = F.grp ? [...new Map(P.filter(p => gOk(p) && String(p.group?.id) === String(F.grp) && p.category?.id !== p.group?.id).map(p => [p.category.id, p.category])).values()] : [];
+  const title = gname + (F.cat ? (P.find(p => String(p.category?.id) === String(F.cat))?.category?.[L] || '') : F.grp ? (P.find(p => String(p.group?.id) === String(F.grp))?.group?.[L] || '') : F.news ? t('news') : F.sale ? t('sale') : F.brand.length === 1 ? F.brand[0] : t('all'));
   const active = [...F.size.map(s => ['size', s, sizeLbl(s)]), ...F.color.map(c => ['color', c, (P.flatMap(p => p.variants).find(v => norm(v.color) === c) || {}).color || c]), ...F.brand.map(b => ['brand', b, b]),
     ...(F.min !== '' ? [['min', F.min, '≥ ' + eur(F.min)]] : []), ...(F.max !== '' ? [['max', F.max, '≤ ' + eur(F.max)]] : [])];
   const nF = active.length;
@@ -575,6 +588,7 @@ function renderShop(onlyGrid){
     <button class="fbtn ${nF ? 'on' : ''}" onclick="openFilters()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>${t('filters')}${nF ? ' (' + nF + ')' : ''}</button>
     <select onchange="SORT=this.value;renderShop(true)" aria-label="${t('sort')}"><option value="new" ${SORT === 'new' ? 'selected' : ''}>${t('s_new')}</option><option value="low" ${SORT === 'low' ? 'selected' : ''}>${t('s_low')}</option><option value="high" ${SORT === 'high' ? 'selected' : ''}>${t('s_high')}</option></select></div>
   ${nF ? `<div class="chips">${active.map(([k, v, l]) => `<span class="chip x" onclick="rmF('${k}',${esc(JSON.stringify(v))})">${esc(l)} ✕</span>`).join('')}<span class="chip x" onclick="clearF()">${t('clear')}</span></div>` : ''}
+  ${subs.length > 1 ? `<div class="chips"><a class="chip ${F.cat ? '' : 'on'}" href="#/shop?grp=${F.grp}">${t('all')}</a>${subs.map(c => `<a class="chip ${String(F.cat) === String(c.id) ? 'on' : ''}" href="#/shop?grp=${F.grp}&cat=${c.id}">${esc(c[L])}</a>`).join('')}</div>` : ''}
   ${nlBand()}<div class="grid" id="grid" style="margin-top:14px">${gridHtml}</div>`;
 }
 function rmF(k, v){ if (k === 'min' || k === 'max') F[k] = ''; else F[k] = F[k].filter(x => x !== v); renderShop(); }
