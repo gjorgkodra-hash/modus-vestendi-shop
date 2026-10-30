@@ -272,7 +272,10 @@ const TX = {
   sort:['Rendit','Ordina','Sort'], s_new:['Më të rejat','Più recenti','Newest'], s_low:['Çmimi: nga më i ulëti','Prezzo crescente','Price: low to high'], s_high:['Çmimi: nga më i larti','Prezzo decrescente','Price: high to low'],
   filters:['Filtro','Filtri','Filters'], f_size:['Masa','Taglia','Size'], f_color:['Ngjyra','Colore','Colour'], f_brand:['Marka','Brand','Brand'], f_cat:['Kategoria','Categoria','Category'], f_price:['Çmimi (€)','Prezzo (€)','Price (€)'],
   min:['Min','Min','Min'], max:['Max','Max','Max'], clear:['Pastro','Azzera','Clear'], show:['Shfaq','Mostra','Show'],
-  b_new:['E re','Novità','New'], b_last:['E fundit','Ultimo pezzo','Last one'],
+  wa_title:['Njoftime','Avvisi','Alerts'], wa_label:['Më njoftoni me email kur një produkt te të preferuarat ulet në çmim ose shitet.','Avvisami via email quando un prodotto nei preferiti scende di prezzo o si esaurisce.','Email me when a product in my favourites drops in price or sells out.'],
+  wa_on:['Do t\'ju njoftojmë me email nëse këto produkte ulen në çmim ose shiten.','Ti avviseremo via email se questi prodotti scendono di prezzo o si esauriscono.','We\'ll email you if these products drop in price or sell out.'],
+  wa_off:['Njoftimet me email janë të çaktivizuara.','Gli avvisi via email sono disattivati.','Email alerts are turned off.'], wa_on_link:['Aktivizoji','Attivali','Turn on'],
+  wa_guest:['Doni të dini kur ulet çmimi?','Vuoi sapere quando scende il prezzo?','Want to know when the price drops?'], wa_reg:['Regjistrohuni dhe ju njoftojmë me email','Registrati e ti avvisiamo via email','Sign up and we\'ll email you'], b_last:['E fundit','Ultimo pezzo','Last one'],
   home:['Kryefaqja','Home','Home'], color:['Ngjyra','Colore','Colour'], size:['Masa','Taglia','Size'], choose_size:['Zgjidh masën','Scegli la taglia','Select size'],
   add:['Shto në shportë','Aggiungi al carrello','Add to bag'], added:['U shtua në shportë','Aggiunto al carrello','Added to bag'], go_cart:['Shko te shporta','Vai al carrello','Go to bag'],
   only_left:['Vetëm {n} copë e mbetur','Solo {n} pezzo rimasto','Only {n} left'], one:['Masë e vetme','Taglia unica','One size'],
@@ -381,7 +384,6 @@ function chrome(){
   const r = location.hash;
   $('#gens').innerHTML = [['', 'g_all'], ['donna', 'g_donna'], ['uomo', 'g_uomo'], ['bambini', 'g_bambini']].map(([k, l]) => `<a href="#/shop?g=${k || 'all'}" class="${G === k ? 'on' : ''}">${t(l)}</a>`).join('');
   $('#cats').innerHTML = `<a href="#/shop" class="${r.startsWith('#/shop') && !F.cat && !F.grp && !F.news && !F.sale ? 'on' : ''}">${t('all')}</a>` +
-    (PG.some(isNew) ? `<a href="#/shop?news" class="${F.news ? 'on' : ''}">${t('news')}</a>` : '') +
     grps.map(c => `<a href="#/shop?grp=${c.id}" class="${String(F.grp) === String(c.id) ? 'on' : ''}">${esc(c[L])}</a>`).join('') +
     (PG.some(isSale) ? `<a href="#/shop?sale" class="hot ${F.sale ? 'on' : ''}">${t('sale')}</a>` : '') +
     `<a href="#/brands">${t('brands')}</a>`;
@@ -427,13 +429,13 @@ function card(p){
   const a = URLS[p.photos[0]], b = URLS[p.photos[1]], sale = isSale(p), cols = colorsOf(p);
   return `<a class="card" href="#/p/${p.id}"><div class="ph">${a ? `<img src="${esc(a)}" alt="${esc(p.brand + ' ' + p.name)}" loading="lazy">` : '<div class="noimg">MV</div>'}${b ? `<img class="b" src="${esc(b)}" alt="" loading="lazy">` : ''}
     <button class="heart ${WISH.includes(p.id) ? 'on' : ''}" onclick="event.preventDefault();toggleWish(${p.id},this)" aria-label="wishlist">${HEART}</button>
-    <div class="badges">${sale ? `<span class="bdg sale">-${pct(p)}%</span>` : ''}${isNew(p) ? `<span class="bdg new">${t('b_new')}</span>` : ''}${pieces(p) === 1 ? `<span class="bdg">${t('b_last')}</span>` : ''}</div></div>
+    <div class="badges">${sale ? `<span class="bdg sale">-${pct(p)}%</span>` : ''}${pieces(p) === 1 ? `<span class="bdg">${t('b_last')}</span>` : ''}</div></div>
     <div class="meta"><div class="br">${esc(p.brand || '')}</div><div class="nm">${esc(p.name)}</div>
     <div class="pr ${sale ? 'sale' : ''}"><span class="now">${eur(price(p))}</span>${sale ? `<span class="old">${eur(p.list_price)}</span>` : ''}</div>
     <div class="sz">${sizesOf(p).map(sizeLbl).map(esc).join(' · ')}</div>
     ${cols.some(v => v.color) && cols.length > 1 ? `<div class="dots">${cols.map(v => `<span class="dot" title="${esc(v.color)}" style="background:${hexOf(v.color, v.color_hex) || RAINBOW}"></span>`).join('')}</div>` : ''}</div></a>`;
 }
-function toggleWish(id, el){ const i = WISH.indexOf(id); if (i >= 0) WISH.splice(i, 1); else WISH.push(id); saveWish(); document.querySelectorAll(`[data-wish="${id}"]`).forEach(x => x.classList.toggle('on', WISH.includes(id))); if (el) el.classList.toggle('on', WISH.includes(id)); if (location.hash === '#/wish') renderWish(); }
+function toggleWish(id, el){ const i = WISH.indexOf(id); if (i >= 0) WISH.splice(i, 1); else WISH.push(id); saveWish(); if (TOK) sb.rpc('shop_wish_set', {p_token: TOK, p_model: id, p_on: WISH.includes(id)}).then(() => {}, () => {}); document.querySelectorAll(`[data-wish="${id}"]`).forEach(x => x.classList.toggle('on', WISH.includes(id))); if (el) el.classList.toggle('on', WISH.includes(id)); if (location.hash === '#/wish') renderWish(); }
 
 // ---------- account ----------
 async function loadMe(){
@@ -443,6 +445,7 @@ async function loadMe(){
   if (!ME){ TOK = null; store.set('mvshop_tok', null); return; }
   store.set('mvshop_me', {name: ME.name, phone: ME.phone, instagram: ME.instagram || '', country: ME.country || 'AL', city: ME.city || '', address: ME.address || ''});
   if (ME.code){ store.set('mvshop_nl', ME.code); if (!ME.code.used && !CODE){ CODE = ME.code.code; store.set('mvshop_code', CODE); } }
+  try { const {data: w} = await sb.rpc('shop_wish_merge', {p_token: TOK, p_ids: WISH}); if (w){ ME.wish_alerts = w.alerts; WISH = [...new Set([...WISH, ...(w.ids || [])])]; store.set('mvshop_wish', WISH); } } catch (e) {}
 }
 function renderAccount(){
   chrome();
@@ -466,6 +469,7 @@ function renderAccount(){
     <form onsubmit="saveMe(event)"><label>${t('name')}</label><input name="name" value="${esc(ME.name)}"><div class="two"><div><label>Email ${ME.verified ? `<span style="color:var(--good);font-weight:600">✓ ${t('su_verified').toLowerCase()}</span>` : ''}</label><input name="email" type="email" value="${esc(ME.email || '')}" ${ME.verified ? 'readonly style="background:var(--soft)"' : ''}></div><div><label>Instagram</label><input name="ig" value="${esc(ME.instagram || '')}"></div></div>
       <div class="two"><div><label>${t('country')}</label><select name="country">${COUNTRIES.map(([k, n]) => `<option value="${k}" ${(ME.country || 'AL') === k ? 'selected' : ''}>${esc(n[LANGS.indexOf(L)])}</option>`).join('')}</select></div><div><label>${t('city')}</label><input name="city" value="${esc(ME.city || '')}"></div></div>
       <label>${t('address')}</label><input name="address" value="${esc(ME.address || '')}"><button class="primary" style="margin-top:14px;padding:13px 24px">${t('save')}</button></form>
+    <h3 style="margin-top:28px">${t('wa_title')}</h3><label style="display:flex;gap:10px;align-items:flex-start;font-weight:normal;margin:0"><input type="checkbox" style="width:auto;margin-top:3px" ${ME.wish_alerts !== false ? 'checked' : ''} onchange="setWishAlerts(this.checked)"><span style="font-size:14px">${t('wa_label')}</span></label>
     <button onclick="doLogout()" style="margin-top:28px;width:100%;padding:13px;border-color:var(--line);display:flex;justify-content:center;gap:8px;align-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/></svg>${t('logout_full')}</button></div>
     <aside class="sum">${c ? `<h3 style="margin:0 0 8px">${t('my_code')}</h3><div style="font-size:24px;font-weight:700;letter-spacing:.1em">${esc(c.code)}</div><p class="note">${c.used ? t('nl_used') : t('code_note')}</p>` : `<p class="note" style="margin:0">${t('acc_why')}</p>`}</aside></div>`;
 }
@@ -476,6 +480,7 @@ async function doLogin(e){
   TOK = data.token; store.set('mvshop_tok', TOK); await loadMe(); renderAccount();
 }
 async function doLogout(){ try { await sb.rpc('shop_logout', {p_token: TOK}); } catch (e) {} TOK = null; ME = null; store.set('mvshop_tok', null); store.set('mvshop_me', {}); store.set('mvshop_nl', null); store.set('mvshop_code', null); CODE = null; CODEOK = null; renderAccount(); }
+async function setWishAlerts(on){ const {error} = await sb.rpc('shop_set_wish_alerts', {p_token: TOK, p_on: on}); if (!error && ME) ME.wish_alerts = on; toast(t(error ? 'e_generic' : 'saved')); }
 async function saveMe(e){
   e.preventDefault(); const f = e.target;
   const {error} = await sb.rpc('shop_update_me', {p_token: TOK, p_name: f.name.value, p_email: f.email.value, p_instagram: f.ig.value, p_country: f.country.value, p_city: f.city.value, p_address: f.address.value, p_lang: L});
@@ -736,7 +741,7 @@ function renderProduct(id){
   <div class="pd"><div class="gal"><div class="thumbs">${photos.map((u, i) => `<img src="${esc(u)}" alt="" class="${i ? '' : 'on'}" onclick="goSlide(${i})">`).join('')}</div>
     <div class="main"><div class="slides" id="slides" onscroll="slideDots()">${photos.length ? photos.map(u => `<img src="${esc(u)}" alt="${esc(p.brand + ' ' + p.name)}">`).join('') : '<div class="ph" style="flex:0 0 100%"><div class="noimg">MV</div></div>'}</div>
     ${photos.length > 1 ? `<div class="gdots" id="gdots">${photos.map((_, i) => `<span class="${i ? '' : 'on'}"></span>`).join('')}</div>` : ''}
-    <div class="badges" style="bottom:14px">${sale ? `<span class="bdg sale">-${pct(p)}%</span>` : ''}${isNew(p) ? `<span class="bdg new">${t('b_new')}</span>` : ''}</div></div></div>
+    <div class="badges" style="bottom:14px">${sale ? `<span class="bdg sale">-${pct(p)}%</span>` : ''}</div></div></div>
   <div class="info"><a class="brl" href="#/shop?brand=${encodeURIComponent(p.brand || '')}">${esc(p.brand || '')}</a><h1>${esc(p.name)}</h1>
     <div class="price ${sale ? 'sale' : ''}" id="price"></div>
     <div id="opts"></div><div class="low" id="low"></div>
@@ -811,6 +816,7 @@ function renderWish(){
   chrome();
   const list = WISH.map(id => P.find(p => p.id === id)).filter(Boolean);
   $('#view').innerHTML = `<div class="crumbs"><a href="#/">${t('home')}</a> / ${t('wish')}</div><h1 style="font-size:24px">${t('wish')}</h1>
+    <p style="font-size:13.5px;color:var(--muted);margin:-4px 0 14px">🔔 ${ME ? (ME.wish_alerts === false ? `${t('wa_off')} <a href="#/account" style="text-decoration:underline">${t('wa_on_link')}</a>` : t('wa_on')) : `${t('wa_guest')} <a href="#/account" style="text-decoration:underline;font-weight:600">${t('wa_reg')}</a>`}</p>
     ${list.length ? `<div class="grid">${list.map(card).join('')}</div>` : `<div class="empty">${t('wish_empty')}<p><button onclick="location.hash='#/shop'">${t('continue')}</button></p></div>`}`;
 }
 
