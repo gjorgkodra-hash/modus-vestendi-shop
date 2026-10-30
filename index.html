@@ -277,7 +277,7 @@ const TX = {
   add:['Shto në shportë','Aggiungi al carrello','Add to bag'], added:['U shtua në shportë','Aggiunto al carrello','Added to bag'], go_cart:['Shko te shporta','Vai al carrello','Go to bag'],
   only_left:['Vetëm {n} copë e mbetur','Solo {n} pezzo rimasto','Only {n} left'], one:['Masë e vetme','Taglia unica','One size'],
   d1:['Pagesë në dorëzim','Pagamento alla consegna','Pay on delivery'], d1s:['Paguani me para në dorë kur merrni porosinë.','Paghi in contanti quando ricevi l\'ordine.','Pay cash when you receive your order.'],
-  d2:['Dërgesë','Spedizione','Shipping'], d2s:['Në Shqipëri, Kosovë dhe Maqedoni të Veriut. Kostoja konfirmohet me telefon.','In Albania, Kosovo e Macedonia del Nord. Il costo viene confermato al telefono.','To Albania, Kosovo and North Macedonia. Cost confirmed by phone.'],
+  d2:['Dërgesë','Spedizione','Shipping'], d2s:['Falas për porositë mbi 100 €. Nën 100 €: Shqipëri 3 €, Kosovë dhe Maqedoni e Veriut 5 €.','Gratuita per ordini da 100 €. Sotto i 100 €: Albania 3 €, Kosovo e Macedonia del Nord 5 €.','Free on orders from €100. Under €100: Albania €3, Kosovo and North Macedonia €5.'],
   d3:['Kthime dhe ndërrime të garantuara','Resi e cambi garantiti','Guaranteed returns and exchanges'], d3s:['Nuk ju rri mirë? Na shkruani: e ndërrojmë ose e ktheni.','Non ti sta bene? Scrivici: la cambiamo o fai il reso.','Doesn\'t fit? Message us: we swap it or you return it.'],
   desc:['Përshkrimi','Descrizione','Description'], fit:['Masat dhe përshtatja','Taglie e vestibilità','Size & fit'], fit_def:['Masat janë italiane. Nëse nuk jeni të sigurt, na shkruani gjatësinë dhe peshën tuaj dhe ju këshillojmë masën.','Le taglie sono italiane. Se hai dubbi, scrivici altezza e peso e ti consigliamo la taglia.','Sizes are Italian. Not sure? Send us your height and weight and we\'ll suggest your size.'],
   ship:['Dërgesa dhe pagesa','Spedizione e pagamento','Shipping & payment'], ship_t:['Pas porosisë ju telefonojmë për konfirmim. Artikujt rezervohen për ju 48 orë. Pagesa bëhet në dorëzim.','Dopo l\'ordine ti chiamiamo per confermare. I capi restano riservati per te 48 ore. Paghi alla consegna.','After you order we call you to confirm. Items are reserved for you for 48 hours. You pay on delivery.'],
@@ -287,7 +287,7 @@ const TX = {
   like:['Mund t\'ju pëlqejnë edhe','Potrebbe piacerti anche','You may also like'],
   wish:['Të preferuarat','Preferiti','Wishlist'], wish_empty:['Ende asnjë produkt i preferuar. Prekni ♡ te produktet.','Ancora nessun preferito. Tocca ♡ sui prodotti.','No favourites yet. Tap ♡ on items.'],
   cart:['Shporta','Carrello','Bag'], cart_empty:['Shporta juaj është bosh.','Il tuo carrello è vuoto.','Your bag is empty.'], continue:['Vazhdo blerjet','Continua lo shopping','Continue shopping'],
-  remove:['Hiq','Rimuovi','Remove'], summary:['Përmbledhje','Riepilogo','Summary'], subtotal:['Nëntotali','Subtotale','Subtotal'], shipping:['Dërgesa','Spedizione','Shipping'], ship_tbd:['Konfirmohet me telefon','Confermata al telefono','Confirmed by phone'],
+  remove:['Hiq','Rimuovi','Remove'], summary:['Përmbledhje','Riepilogo','Summary'], subtotal:['Nëntotali','Subtotale','Subtotal'], shipping:['Dërgesa','Spedizione','Shipping'], ship_tbd:['Konfirmohet me telefon','Confermata al telefono','Confirmed by phone'], ship_free:['Falas','Gratuita','Free'], ship_from:['nga 3 €','da 3 €','from €3'], ship_more:['Edhe {n} për dërgesë falas','Ancora {n} per la spedizione gratuita','{n} more for free shipping'], ship_note:['Dërgesa llogaritet sipas shtetit në arkë.','La spedizione si calcola in base al paese nella cassa.','Shipping is calculated by country at checkout.'],
   total:['Totali','Totale','Total'], checkout:['Vazhdo te porosia','Procedi all\'ordine','Checkout'], pay_cod:['Pagesë në dorëzim (para në dorë)','Pagamento alla consegna (contanti)','Cash on delivery'],
   your_data:['Të dhënat tuaja','I tuoi dati','Your details'], delivery:['Adresa e dërgesës','Indirizzo di consegna','Delivery address'],
   name:['Emri dhe mbiemri','Nome e cognome','Full name'], phone:['Telefoni (WhatsApp)','Telefono (WhatsApp)','Phone (WhatsApp)'], ig:['Instagram (opsional)','Instagram (facoltativo)','Instagram (optional)'],
@@ -818,13 +818,20 @@ function renderWish(){
 const findV = id => { for (const p of P){ const v = p.variants.find(x => x.id === id); if (v) return [p, v]; } return []; };
 const cartLines = () => CART.map(c => { const [p, v] = findV(c.v); return p ? {c, p, v} : null; }).filter(Boolean);
 const cartTotal = () => cartLines().reduce((a, l) => a + l.c.q * Number(l.v.price), 0);
+const SHIP = {AL:3, XK:5, MK:5}, FREE_SHIP = 100;
+const shipCountry = () => { const el = document.getElementById('f_country'); return el ? el.value : null; };
+const shipFee = c => { if (!(c in SHIP)) return null; return cartTotal() - discAmt() >= FREE_SHIP ? 0 : SHIP[c]; };
+const grand = () => { const f = shipFee(shipCountry()); return cartTotal() - discAmt() + (f || 0); };
 const discAmt = () => { if (!CODEOK) return 0; const mx = Math.max(0, ...cartLines().map(l => Number(l.v.price))); return Math.round(mx * CODEOK.pct) / 100; };
 function summaryBox(btn, withCode){
   const tot = cartTotal(), d = discAmt();
   return `<aside class="sum" id="sumbox"><h3 style="margin:0 0 10px">${t('summary')}</h3><div class="r"><span>${t('subtotal')}</span><span>${eur(tot)}</span></div>
     ${d ? `<div class="r" style="color:var(--sale)"><span>${t('disc')} ${CODEOK ? CODEOK.pct : ''}% · ${t('one_item')} (${esc(CODE)})</span><span>−${eur(d)}</span></div>` : ''}
-    <div class="r"><span>${t('shipping')}</span><span style="color:var(--muted)">${t('ship_tbd')}</span></div>
-    <div class="r t"><span>${t('total')}</span><span>${eur(tot - d)}</span></div>
+    ${(() => { const c = shipCountry(), net = tot - d;
+      if (c === null) return `<div class="r"><span>${t('shipping')}</span><span${net >= FREE_SHIP ? ' style="color:var(--good)"' : ''}>${net >= FREE_SHIP ? t('ship_free') : t('ship_from')}</span></div>${net < FREE_SHIP ? `<div style="font-size:12.5px;color:var(--muted);margin:-2px 0 6px">${t('ship_more', eur(FREE_SHIP - net))} · ${t('ship_note')}</div>` : ''}`;
+      const f = shipFee(c);
+      return `<div class="r"><span>${t('shipping')}</span><span${f === 0 ? ' style="color:var(--good)"' : f == null ? ' style="color:var(--muted)"' : ''}>${f == null ? t('ship_tbd') : f === 0 ? t('ship_free') : eur(f)}</span></div>${f ? `<div style="font-size:12.5px;color:var(--muted);margin:-2px 0 6px">${t('ship_more', eur(FREE_SHIP - net))}</div>` : ''}`; })()}
+    <div class="r t"><span>${t('total')}</span><span>${eur(grand())}</span></div>
     ${withCode ? `<label style="margin-top:14px">${t('code')}</label><div style="display:flex;gap:6px"><input id="codein" value="${esc(CODE || '')}" placeholder="MV10-…" style="text-transform:uppercase"><button type="button" onclick="applyCode()">${t('apply')}</button></div><div id="codemsg" style="font-size:12.5px;margin-top:6px;${CODEOK ? 'color:var(--good)' : ''}">${CODEOK ? t('code_ok', CODEOK.pct) : ''}</div>` : ''}
     ${btn || ''}<div class="note">💶 ${t('pay_cod')}</div></aside>`;
 }
@@ -836,7 +843,7 @@ async function applyCode(silent){
   else { CODEOK = null; if (!silent){ const m = $('#codemsg'); if (m){ m.style.color = 'var(--sale)'; m.textContent = data?.used ? t('e_code_used') : t('e_bad_code'); } return; } }
   refreshSum();
 }
-function refreshSum(){ if (location.hash === '#/cart') renderCart(); else if (location.hash === '#/checkout'){ const b = $('#sendb'); const old = $('#sumbox'); if (old){ const tmp = document.createElement('div'); tmp.innerHTML = checkoutSummary(); old.replaceWith(tmp.firstElementChild); } if (b) b.textContent = `${t('send')} · ${eur(cartTotal() - discAmt())}`; } }
+function refreshSum(){ if (location.hash === '#/cart') renderCart(); else if (location.hash === '#/checkout'){ const b = $('#sendb'); const old = $('#sumbox'); if (old){ const tmp = document.createElement('div'); tmp.innerHTML = checkoutSummary(); old.replaceWith(tmp.firstElementChild); } if (b) b.textContent = `${t('send')} · ${eur(grand())}`; } }
 function renderCart(){
   chrome();
   const lines = cartLines();
@@ -869,6 +876,7 @@ function renderCheckout(){
     <p style="font-size:12.5px;color:var(--muted);margin-top:14px">${t('terms')}</p><div class="err" id="err"></div>
     <button class="primary" id="sendb" style="width:100%;padding:15px;margin-top:6px;font-size:15px">${t('send')} · ${eur(cartTotal() - discAmt())}</button></form></div>
     ${checkoutSummary()}</div>`;
+  $('#f_country').onchange = refreshSum; refreshSum();
   if (CODE && !CODEOK) applyCode(true);
 }
 const checkoutSummary = () => summaryBox(`<div style="margin-top:12px">${cartLines().map(l => `<div style="display:flex;gap:10px;align-items:center;padding:6px 0;font-size:13px">${URLS[l.p.photos[0]] ? `<img src="${esc(URLS[l.p.photos[0]])}" style="width:44px;aspect-ratio:3/4;object-fit:cover;border-radius:3px" alt="">` : ''}<div style="flex:1;min-width:0"><b>${esc(l.p.brand || '')}</b> ${esc(l.p.name)}<div style="color:var(--muted)">${esc(sizeLbl(l.v.size))}${l.v.color ? ' · ' + esc(l.v.color) : ''} · ${l.c.q}×</div></div><span>${eur(l.c.q * l.v.price)}</span></div>`).join('')}</div>`, true);
