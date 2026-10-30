@@ -715,8 +715,8 @@ const MAT_TX = {lana:['wool','lesh'],cotone:['cotton','pambuk'],seta:['silk','m�
 
 const LIX = () => ({it:0, en:1, sq:2})[L];
 const trMat = txt => L === 'it' ? txt : String(txt).replace(/[A-Za-zÀ-ÿ]+/g, w => { const m = MAT_TX[w.toLowerCase()]; return m ? m[L === 'en' ? 0 : 1] : w; });
-const detVal = (k, v) => DET_OPTS[k] ? (DET_OPTS[k][v]?.[LIX()] || v) : (['composition','lining','padding','upper','sole'].includes(k) ? trMat(v) : v);
-function detRows(d, keys){ return keys.filter(k => d && d[k]).map(k => `<div style="display:flex;gap:10px;padding:3px 0"><b style="min-width:42%;font-weight:600">${esc(DET_LABELS[k][LIX()])}:</b><span>${esc(detVal(k, d[k]))}</span></div>`).join(''); }
+const detVal = (k, v, d) => DET_OPTS[k] ? (DET_OPTS[k][v]?.[LIX()] || v) : (L !== 'it' && d && d[k + '_' + L]) ? d[k + '_' + L] : (['composition','lining','padding','upper','sole'].includes(k) ? trMat(v) : v);
+function detRows(d, keys){ return keys.filter(k => d && d[k]).map(k => `<div style="display:flex;gap:10px;padding:3px 0"><b style="min-width:42%;font-weight:600">${esc(DET_LABELS[k][LIX()])}:</b><span>${esc(detVal(k, d[k], d))}</span></div>`).join(''); }
 
 // ---------- product ----------
 let SEL = {};
