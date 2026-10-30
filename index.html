@@ -224,6 +224,12 @@ footer a{text-decoration:underline}
 .su-ok{background:rgba(255,255,255,.15);border-radius:4px;padding:8px 10px;font-size:13px}
 .avatar{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:11.5px;font-weight:700;letter-spacing:.02em;position:relative}
 .avatar::after{content:'';position:absolute;right:-1px;bottom:-1px;width:9px;height:9px;border-radius:50%;background:#2fa35a;border:2px solid #fff}
+.sharebtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;border-color:var(--line);font-weight:500}
+.sharebox{background:#fff;border-radius:8px;padding:22px 20px;max-width:420px;width:100%;position:relative}
+.sharebox .x{position:absolute;right:10px;top:10px;border:0;background:none;font-size:18px;padding:4px 8px}
+.sharegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 8px}
+.sharegrid a{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12.5px;text-align:center}
+.sharegrid span{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:18px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:var(--r);z-index:90;font-size:14px;box-shadow:0 6px 24px rgba(0,0,0,.2)}
 </style>
 </head>
@@ -314,7 +320,7 @@ const TX = {
   su_sent:['Ju dërguam një kod me 6 shifra në <b>{n}</b>. Shkruajeni këtu ose prekni butonin në email. Kontrolloni edhe Spam.','Ti abbiamo inviato un codice di 6 cifre a <b>{n}</b>. Scrivilo qui oppure tocca il pulsante nell\'email. Controlla anche lo spam.','We sent a 6-digit code to <b>{n}</b>. Type it here or tap the button in the email. Check spam too.'],
   su_code:['Kodi me 6 shifra','Codice di 6 cifre','6-digit code'], su_check:['Konfirmo email-in','Conferma email','Confirm email'], su_other:['Email tjetër','Altra email','Different email'], su_resent:['Kodi u dërgua përsëri','Codice inviato di nuovo','Code sent again'],
   su_verified:['Email-i u konfirmua','Email confermata','Email confirmed'], su_finish:['Përfundo regjistrimin','Completa la registrazione','Finish sign-up'], e_ticket_expired:['Koha skadoi: konfirmoni përsëri email-in.','Tempo scaduto: conferma di nuovo l\'email.','Time expired: confirm your email again.'],
-  d_comp:['Përbërja dhe larja','Composizione e lavaggio','Composition & care'], d_det:['Detajet e produktit','Dettagli prodotto','Product details'], nl_strip:['10% zbritje për klientët e rinj','10% di sconto per i nuovi clienti','10% off for new customers'], nl_cta:['Regjistrohu','Registrati','Sign up'], nl_band:['🎁 Klient i ri? Regjistrohu dhe merr <b>10% zbritje</b> në blerjen e parë','🎁 Nuovo cliente? Registrati e ricevi il <b>10% di sconto</b> sul primo acquisto','🎁 New customer? Sign up and get <b>10% off</b> your first purchase'], nl_name:['Emri dhe mbiemri','Nome e cognome','Full name'], nl_phone:['Telefoni (WhatsApp)','Telefono (WhatsApp)','Phone (WhatsApp)'], nl_email:['Email (për rikuperimin e fjalëkalimit)','Email (per recuperare la password)','Email (to recover your password)'], nl_ig:['Instagram (opsional, @)','Instagram (facoltativo, @)','Instagram (optional, @)'], e_already_customer:['Ju jeni tashmë klient i Modus Vestendi: zbritja vlen vetëm për klientët e rinj. Na shkruani për ofertat për klientët besnikë!','Risulti già cliente di Modus Vestendi: lo sconto è riservato ai nuovi clienti. Scrivici per le offerte dedicate ai clienti fedeli!','You are already a Modus Vestendi customer: this discount is for new customers. Message us for loyal-customer offers!'], one_item:['1 artikull','1 capo','1 item'], nl_cons:['Pranoj të marr mesazhe nga Modus Vestendi për të rejat dhe ofertat. Mund të çregjistrohem kur të dua.','Accetto di ricevere messaggi da Modus Vestendi su novità e offerte. Posso cancellarmi quando voglio.','I agree to receive messages from Modus Vestendi about new arrivals and offers. I can unsubscribe any time.'],
+  d_comp:['Përbërja dhe larja','Composizione e lavaggio','Composition & care'], d_det:['Detajet e produktit','Dettagli prodotto','Product details'], share:['Ndaje','Condividi','Share'], copy_link:['Kopjo linkun','Copia link','Copy link'], link_copied:['Linku u kopjua','Link copiato','Link copied'], nl_strip:['10% zbritje për klientët e rinj','10% di sconto per i nuovi clienti','10% off for new customers'], nl_cta:['Regjistrohu','Registrati','Sign up'], nl_band:['🎁 Klient i ri? Regjistrohu dhe merr <b>10% zbritje</b> në blerjen e parë','🎁 Nuovo cliente? Registrati e ricevi il <b>10% di sconto</b> sul primo acquisto','🎁 New customer? Sign up and get <b>10% off</b> your first purchase'], nl_name:['Emri dhe mbiemri','Nome e cognome','Full name'], nl_phone:['Telefoni (WhatsApp)','Telefono (WhatsApp)','Phone (WhatsApp)'], nl_email:['Email (për rikuperimin e fjalëkalimit)','Email (per recuperare la password)','Email (to recover your password)'], nl_ig:['Instagram (opsional, @)','Instagram (facoltativo, @)','Instagram (optional, @)'], e_already_customer:['Ju jeni tashmë klient i Modus Vestendi: zbritja vlen vetëm për klientët e rinj. Na shkruani për ofertat për klientët besnikë!','Risulti già cliente di Modus Vestendi: lo sconto è riservato ai nuovi clienti. Scrivici per le offerte dedicate ai clienti fedeli!','You are already a Modus Vestendi customer: this discount is for new customers. Message us for loyal-customer offers!'], one_item:['1 artikull','1 capo','1 item'], nl_cons:['Pranoj të marr mesazhe nga Modus Vestendi për të rejat dhe ofertat. Mund të çregjistrohem kur të dua.','Accetto di ricevere messaggi da Modus Vestendi su novità e offerte. Posso cancellarmi quando voglio.','I agree to receive messages from Modus Vestendi about new arrivals and offers. I can unsubscribe any time.'],
   nl_btn:['Dua 10% zbritje','Voglio il 10% di sconto','Get my 10% off'], nl_ok:['Kodi juaj i zbritjes','Il tuo codice sconto','Your discount code'], nl_ok2:['Ruajeni: aplikohet automatikisht në shportë në këtë pajisje.','Conservalo: si applica da solo nel carrello su questo dispositivo.','Keep it: it is applied automatically in your bag on this device.'], nl_used:['Ky kod është përdorur tashmë.','Questo codice è già stato usato.','This code has already been used.'],
   e_bad_email:['Email jo e saktë.','Email non valida.','Invalid email.'], e_bad_instagram:['Emri i Instagram jo i saktë.','Nome Instagram non valido.','Invalid Instagram name.'], e_nl_missing:['Shkruani emrin dhe telefonin.','Inserisci nome e telefono.','Enter your name and phone.'], e_consent:['Duhet të pranoni për të marrë kodin.','Devi accettare per ricevere il codice.','Please agree to get the code.'],
   code:['Kodi i zbritjes','Codice sconto','Discount code'], apply:['Apliko','Applica','Apply'], disc:['Zbritje','Sconto','Discount'], code_ok:['Kodi u aplikua: -{n}%','Codice applicato: -{n}%','Code applied: -{n}%'],
@@ -733,6 +739,7 @@ function renderProduct(id){
     <div class="price ${sale ? 'sale' : ''}" id="price"></div>
     <div id="opts"></div><div class="low" id="low"></div>
     <div class="cta"><button class="primary" id="addb" onclick="addToCart()">${t('add')}</button><button class="hbig ${WISH.includes(p.id) ? 'on' : ''}" data-wish="${p.id}" onclick="toggleWish(${p.id})" aria-label="wishlist">${HEART}</button></div>
+    <button class="sharebtn" onclick="shareProduct(${p.id})"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg><span>${t('share')}</span></button>
     ${nlBand()}
     <div class="box"><div class="l">💶<div><b>${t('d1')}</b>${t('d1s')}</div></div><div class="l">🚚<div><b>${t('d2')}</b>${t('d2s')}</div></div><div class="l">🔁<div><b>${t('d3')}</b>${t('d3s')}</div></div></div>
     <div style="margin-top:18px;font-size:13px;font-weight:600">${t('ask')}</div>
@@ -774,6 +781,27 @@ function addToCart(){
 }
 function askText(id){ const p = P.find(x => x.id === id); const v = SEL.p?.id === id ? SEL.v : null; return `${pUrl(id)}\n${t('ask_msg')} ${p ? p.brand + ' · ' + p.name : ''}${v ? ' (' + [v.color, sizeLbl(v.size)].filter(Boolean).join(' · ') + ')' : ''}\n`; }
 async function askIG(id){ const txt = askText(id); try { await navigator.clipboard.writeText(txt); toast(t('ask_copied')); } catch (e) {} setTimeout(() => window.open('https://ig.me/m/' + IG_USER, '_blank', 'noopener'), 900); }
+async function shareProduct(id){
+  const p = P.find(x => x.id === id); if (!p) return;
+  const url = pUrl(id), title = `${p.brand || ''} ${p.name}`.trim(), text = `${title} · ${eur(price(p))} · Modus Vestendi`;
+  if (navigator.share){ try { await navigator.share({title, text, url}); return; } catch (e) { if (e.name === 'AbortError') return; } }
+  const enc = encodeURIComponent, msg = enc(text + '\n' + url);
+  const bg = document.createElement('div'); bg.className = 'pop-bg';
+  bg.innerHTML = `<div class="sharebox"><button class="x" aria-label="close">✕</button><h3 style="margin:0 0 4px">${t('share')}</h3><div style="color:var(--muted);font-size:13px;margin-bottom:14px">${esc(title)}</div>
+    <div class="sharegrid">
+      <a href="https://wa.me/?text=${msg}" target="_blank" rel="noopener"><span style="background:#25d366">W</span>WhatsApp</a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=${enc(url)}" target="_blank" rel="noopener"><span style="background:#1877f2">f</span>Facebook</a>
+      <a href="https://t.me/share/url?url=${enc(url)}&text=${enc(text)}" target="_blank" rel="noopener"><span style="background:#29a9eb">✈</span>Telegram</a>
+      <a href="viber://forward?text=${msg}"><span style="background:#7360f2">V</span>Viber</a>
+      <a href="mailto:?subject=${enc(title)}&body=${msg}"><span style="background:#6b6b6b">@</span>Email</a>
+      <a href="#" data-copy><span style="background:var(--ink)">⧉</span>${t('copy_link')}</a>
+    </div><input readonly value="${esc(url)}" style="margin-top:14px;font-size:13px"></div>`;
+  bg.addEventListener('click', async e => {
+    if (e.target === bg || e.target.closest('.x')) return bg.remove();
+    if (e.target.closest('[data-copy]')){ e.preventDefault(); try { await navigator.clipboard.writeText(url); toast('✓ ' + t('link_copied')); } catch (x) { bg.querySelector('input').select(); } }
+  });
+  document.body.appendChild(bg);
+}
 function askWA(id){ window.open('https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(askText(id)), '_blank', 'noopener'); }
 
 // ---------- wishlist ----------
