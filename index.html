@@ -358,7 +358,7 @@ const isNew = p => (Date.now() - new Date(p.created_at).getTime()) < NEW_DAYS * 
 const pieces = p => p.variants.reduce((a, v) => a + v.available, 0);
 const sizesOf = p => [...new Set(p.variants.map(v => v.size))].sort((a, b) => sRank(a) - sRank(b));
 const colorsOf = p => [...new Map(p.variants.map(v => [norm(v.color), v])).values()];
-const pUrl = id => location.origin + location.pathname.replace(/preview\.html$/, '') + '#/p/' + id;
+const pUrl = id => (location.protocol === 'file:' ? location.href.split('#')[0] + '#/p/' + id : location.origin + '/p/' + id + '/');
 
 async function load(){
   const {data, error} = await sb.rpc('shop_catalog');
