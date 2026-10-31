@@ -341,6 +341,27 @@ const RAINBOW = 'conic-gradient(#e8a3b5,#e8c33d,#7fb3e0,#2e6b3f,#e8a3b5)';
 const CMAP = {nero:'#1f1b1b',zeze:'#1f1b1b',black:'#1f1b1b',bianco:'#f7f5f0',bardhe:'#f7f5f0',white:'#f7f5f0',panna:'#efe6d2',crema:'#efe6d2',cream:'#efe6d2',bordo:'#6d1a2a',bordeaux:'#6d1a2a',burgundy:'#6d1a2a',rosso:'#c0272d',red:'#c0272d',kuqe:'#c0272d',rosa:'#e8a3b5',pink:'#e8a3b5',roze:'#e8a3b5',blu:'#1f3c88',blue:'#1f3c88',navy:'#1b2a4a',azzurro:'#7fb3e0',celeste:'#a7cdea',verde:'#2e6b3f',green:'#2e6b3f',beige:'#d9c3a5',bezhe:'#d9c3a5',cammello:'#b8875a',camel:'#b8875a',marrone:'#6b4430',brown:'#6b4430',kafe:'#6b4430',grigio:'#8c8c8c',grey:'#8c8c8c',gray:'#8c8c8c',gri:'#8c8c8c',giallo:'#e8c33d',yellow:'#e8c33d',viola:'#6a3d8f',purple:'#6a3d8f',oro:'#c9a54b',gold:'#c9a54b',argento:'#c0c0c0',silver:'#c0c0c0',kaki:'#8a8455',khaki:'#8a8455'};
 const norm = c => String(c || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z ]/g, '').trim();
 const hexOf = (c, h) => h || CMAP[norm(c)] || CMAP[norm(c).split(' ')[0]] || CMAP[norm(c).split(' ').pop()] || null;
+// colour names in the visitor's language: [it, en, sq, ...other spellings]
+const COL_TX = [['Nero','Black','E zezë','zeze','zi'],['Bianco','White','E bardhë','bardhe'],['Panna','Cream','Krem','crema','ivory','avorio','off white','offwhite'],
+  ['Bordeaux','Burgundy','Bordo','bordo','vinaccia','wine'],['Rosso','Red','E kuqe','kuqe'],['Rosa','Pink','Rozë','roze','rosa antico'],['Fucsia','Fuchsia','Fuksia'],
+  ['Blu','Blue','Blu'],['Blu navy','Navy','Blu e errët','navy blue','blu notte','dark blue','blu scuro'],['Azzurro','Light blue','Blu e çelët','celeste','sky blue','baby blue','blu chiaro'],
+  ['Verde','Green','E gjelbër','jeshile','gjelber'],['Verde scuro','Dark green','E gjelbër e errët','bottle green','verde bottiglia'],['Kaki','Khaki','Kaki','khaki'],['Verde militare','Olive','Ulliri','olive green','verde oliva','military green'],
+  ['Beige','Beige','Bezhë','bezhe','sabbia','sand','nude'],['Cammello','Camel','Kamel','camel','cammello'],['Marrone','Brown','Kafe','kafe','testa di moro'],['Cioccolato','Chocolate','Çokollatë'],['Tortora','Taupe','Taupe','dove grey'],
+  ['Grigio','Grey','Gri','gray','grigio chiaro','light grey'],['Antracite','Charcoal','Antracit','dark grey','grigio scuro'],['Giallo','Yellow','E verdhë','verdhe'],['Senape','Mustard','Mustardë'],['Arancione','Orange','Portokalli'],
+  ['Viola','Purple','Vjollcë','vjollce'],['Lilla','Lilac','Lejla'],['Oro','Gold','Ari','golden'],['Argento','Silver','Argjend'],['Multicolore','Multicolour','Shumëngjyrëshe','multicolor','multi'],
+  ['Fantasia','Pattern','Me motive','print','stampato'],['Quadri','Check','Kuadrate','checked','scacco','scacchi','tartan'],['Righe','Stripes','Me vija','striped','rigato'],['Leopardato','Leopard','Leopard','animalier']];
+const COL_IX = {}; COL_TX.forEach((r, i) => r.forEach(n => { COL_IX[norm(n)] = i; }));
+const ckey = c => { const k = norm(c); return k in COL_IX ? 'c' + COL_IX[k] : k; };
+const cap = x => x ? x.charAt(0).toUpperCase() + x.slice(1) : x;
+function colName(c){
+  if (!c) return c; const k = norm(c), li = ['it','en','sq'].indexOf(L);
+  if (k in COL_IX) return COL_TX[COL_IX[k]][li];
+  let m = k.match(/^(light|dark) (.+)$/), base, lt;
+  if (m){ lt = m[1] === 'light'; base = m[2]; } else if ((m = k.match(/^(.+) (chiaro|scuro)$/))){ lt = m[2] === 'chiaro'; base = m[1]; }
+  if (base && base in COL_IX){ const b = COL_TX[COL_IX[base]];
+    return L === 'en' ? (lt ? 'Light ' : 'Dark ') + b[1].toLowerCase() : L === 'it' ? b[0] + (lt ? ' chiaro' : ' scuro') : b[2] + (lt ? ' e çelët' : ' e errët'); }
+  return cap(String(c).trim());
+}
 const SIZE_ORDER = ['XXS','XS','S','M','L','XL','XXL','XXXL','TU','U'];
 const sRank = z => { const u = String(z || '').toUpperCase(); const i = SIZE_ORDER.indexOf(u); return i >= 0 ? i : (isNaN(Number(u)) ? 100 : 200 + Number(u)); };
 const sizeLbl = z => ['TU','U'].includes(String(z).toUpperCase()) ? t('one') : z;
@@ -360,7 +381,7 @@ const pct = p => Math.round((1 - price(p) / Number(p.list_price)) * 100);
 const isNew = p => (Date.now() - new Date(p.created_at).getTime()) < NEW_DAYS * 864e5;
 const pieces = p => p.variants.reduce((a, v) => a + v.available, 0);
 const sizesOf = p => [...new Set(p.variants.map(v => v.size))].sort((a, b) => sRank(a) - sRank(b));
-const colorsOf = p => [...new Map(p.variants.map(v => [norm(v.color), v])).values()];
+const colorsOf = p => [...new Map(p.variants.map(v => [ckey(v.color), v])).values()];
 const pUrl = id => (location.protocol === 'file:' ? location.href.split('#')[0] + '#/p/' + id : location.origin + '/p/' + id + '/');
 
 async function load(){
@@ -433,7 +454,7 @@ function card(p){
     <div class="meta"><div class="br">${esc(p.brand || '')}</div><div class="nm">${esc(p.name)}</div>
     <div class="pr ${sale ? 'sale' : ''}"><span class="now">${eur(price(p))}</span>${sale ? `<span class="old">${eur(p.list_price)}</span>` : ''}</div>
     <div class="sz">${sizesOf(p).map(sizeLbl).map(esc).join(' · ')}</div>
-    ${cols.some(v => v.color) && cols.length > 1 ? `<div class="dots">${cols.map(v => `<span class="dot" title="${esc(v.color)}" style="background:${hexOf(v.color, v.color_hex) || RAINBOW}"></span>`).join('')}</div>` : ''}</div></a>`;
+    ${cols.some(v => v.color) && cols.length > 1 ? `<div class="dots">${cols.map(v => `<span class="dot" title="${esc(colName(v.color))}" style="background:${hexOf(v.color, v.color_hex) || RAINBOW}"></span>`).join('')}</div>` : ''}</div></a>`;
 }
 function toggleWish(id, el){ const i = WISH.indexOf(id); if (i >= 0) WISH.splice(i, 1); else WISH.push(id); saveWish(); if (TOK) sb.rpc('shop_wish_set', {p_token: TOK, p_model: id, p_on: WISH.includes(id)}).then(() => {}, () => {}); document.querySelectorAll(`[data-wish="${id}"]`).forEach(x => x.classList.toggle('on', WISH.includes(id))); if (el) el.classList.toggle('on', WISH.includes(id)); if (location.hash === '#/wish') renderWish(); }
 
@@ -646,10 +667,10 @@ function filtered(){
     if (F.sale && !isSale(p)) return false;
     if (F.brand.length && !F.brand.includes(p.brand)) return false;
     if (F.size.length && !p.variants.some(v => F.size.includes(v.size))) return false;
-    if (F.color.length && !p.variants.some(v => F.color.includes(norm(v.color)))) return false;
+    if (F.color.length && !p.variants.some(v => F.color.includes(ckey(v.color)))) return false;
     if (F.min !== '' && price(p) < Number(F.min)) return false;
     if (F.max !== '' && price(p) > Number(F.max)) return false;
-    if (q){ const hay = norm([p.brand, p.name, p.category?.it, p.category?.en, p.category?.sq, ...p.variants.map(v => v.color)].join(' ')); if (!q.split(' ').every(w => hay.includes(w))) return false; }
+    if (q){ const hay = norm([p.brand, p.name, p.category?.it, p.category?.en, p.category?.sq, ...p.variants.flatMap(v => [v.color, ...(ckey(v.color).startsWith('c') ? COL_TX[+ckey(v.color).slice(1)] : [])])].join(' ')); if (!q.split(' ').every(w => hay.includes(w))) return false; }
     return true; });
   if (SORT === 'low') list.sort((a, b) => price(a) - price(b));
   else if (SORT === 'high') list.sort((a, b) => price(b) - price(a));
@@ -661,7 +682,7 @@ function renderShop(onlyGrid){
   const gname = G ? t('g_' + G) + ' · ' : '';
   const subs = F.grp ? [...new Map(P.filter(p => gOk(p) && String(p.group?.id) === String(F.grp) && p.category?.id !== p.group?.id).map(p => [p.category.id, p.category])).values()] : [];
   const title = gname + (F.cat ? (P.find(p => String(p.category?.id) === String(F.cat))?.category?.[L] || '') : F.grp ? (P.find(p => String(p.group?.id) === String(F.grp))?.group?.[L] || '') : F.news ? t('news') : F.sale ? t('sale') : F.brand.length === 1 ? F.brand[0] : t('all'));
-  const active = [...F.size.map(s => ['size', s, sizeLbl(s)]), ...F.color.map(c => ['color', c, (P.flatMap(p => p.variants).find(v => norm(v.color) === c) || {}).color || c]), ...F.brand.map(b => ['brand', b, b]),
+  const active = [...F.size.map(s => ['size', s, sizeLbl(s)]), ...F.color.map(c => ['color', c, colName((P.flatMap(p => p.variants).find(v => ckey(v.color) === c) || {}).color || c)]), ...F.brand.map(b => ['brand', b, b]),
     ...(F.min !== '' ? [['min', F.min, '≥ ' + eur(F.min)]] : []), ...(F.max !== '' ? [['max', F.max, '≤ ' + eur(F.max)]] : [])];
   const nF = active.length;
   const gridHtml = list.length ? list.map(card).join('') : `<div class="empty" style="grid-column:1/-1">${t('none')}</div>`;
@@ -679,14 +700,14 @@ function clearF(){ F.size = []; F.color = []; F.brand = []; F.min = ''; F.max = 
 function openFilters(){
   const all = P.flatMap(p => p.variants);
   const sizes = [...new Set(all.map(v => v.size))].sort((a, b) => sRank(a) - sRank(b));
-  const colors = [...new Map(all.filter(v => v.color).map(v => [norm(v.color), v])).entries()];
+  const colors = [...new Map(all.filter(v => v.color).map(v => [ckey(v.color), v])).entries()];
   const brands = [...new Set(P.map(p => p.brand).filter(Boolean))].sort();
   const tmp = {size:[...F.size], color:[...F.color], brand:[...F.brand]};
   const bg = document.createElement('div'); bg.className = 'sheet-bg';
   const sec = (k, title, items) => `<h4>${title}</h4><div class="chips">${items.map(([v, l, extra]) => `<span class="chip x ${tmp[k].includes(v) ? 'on' : ''}" data-k="${k}" data-v="${esc(v)}">${extra || ''}${esc(l)}</span>`).join('')}</div>`;
   bg.innerHTML = `<div class="sheet"><div class="hd">${t('filters')}<button class="ib" data-close aria-label="close">✕</button></div><div class="bd">
     ${sec('size', t('f_size'), sizes.map(s => [s, sizeLbl(s)]))}
-    ${colors.length ? sec('color', t('f_color'), colors.map(([k, v]) => [k, v.color, `<span class="dot" style="background:${hexOf(v.color, v.color_hex) || RAINBOW}"></span>`])) : ''}
+    ${colors.length ? sec('color', t('f_color'), colors.map(([k, v]) => [k, colName(v.color), `<span class="dot" style="background:${hexOf(v.color, v.color_hex) || RAINBOW}"></span>`])) : ''}
     ${brands.length > 1 ? sec('brand', t('f_brand'), brands.map(b => [b, b])) : ''}
     <h4>${t('f_price')}</h4><div class="two"><input id="fmin" type="number" inputmode="numeric" placeholder="${t('min')}" value="${F.min}"><input id="fmax" type="number" inputmode="numeric" placeholder="${t('max')}" value="${F.max}"></div>
   </div><div class="ft"><button data-clear>${t('clear')}</button><button class="primary" data-apply>${t('show')}</button></div></div>`;
@@ -729,7 +750,7 @@ function renderProduct(id){
   chrome();
   const p = P.find(x => x.id === id);
   if (!p){ $('#view').innerHTML = P.length ? `<div class="empty">${t('none')}</div>` : `<div class="empty">…</div>`; return; }
-  const groups = {}; p.variants.forEach(v => { const k = norm(v.color); (groups[k] = groups[k] || {name: v.color, hex: hexOf(v.color, v.color_hex), list: []}).list.push(v); });
+  const groups = {}; p.variants.forEach(v => { const k = ckey(v.color); (groups[k] = groups[k] || {name: colName(v.color), hex: hexOf(v.color, v.color_hex), list: []}).list.push(v); });
   Object.values(groups).forEach(g => g.list.sort((a, b) => sRank(a.size) - sRank(b.size)));
   SEL = {p, groups, col: SEL.p?.id === id && groups[SEL.col] ? SEL.col : Object.keys(groups)[0], v: null};
   if (groups[SEL.col].list.length === 1) SEL.v = groups[SEL.col].list[0];
@@ -786,7 +807,7 @@ function addToCart(){
   if (ex) ex.q = Math.min(SEL.v.available, ex.q + 1); else CART.push({v: SEL.v.id, q: 1});
   saveCart(); toast(`✓ ${t('added')} · <a href="#/cart" style="text-decoration:underline">${t('go_cart')}</a>`, true);
 }
-function askText(id){ const p = P.find(x => x.id === id); const v = SEL.p?.id === id ? SEL.v : null; return `${pUrl(id)}\n${t('ask_msg')} ${p ? p.brand + ' · ' + p.name : ''}${v ? ' (' + [v.color, sizeLbl(v.size)].filter(Boolean).join(' · ') + ')' : ''}\n`; }
+function askText(id){ const p = P.find(x => x.id === id); const v = SEL.p?.id === id ? SEL.v : null; return `${pUrl(id)}\n${t('ask_msg')} ${p ? p.brand + ' · ' + p.name : ''}${v ? ' (' + [colName(v.color), sizeLbl(v.size)].filter(Boolean).join(' · ') + ')' : ''}\n`; }
 async function askIG(id){ const txt = askText(id); try { await navigator.clipboard.writeText(txt); toast(t('ask_copied')); } catch (e) {} setTimeout(() => window.open('https://ig.me/m/' + IG_USER, '_blank', 'noopener'), 900); }
 async function shareProduct(id){
   const p = P.find(x => x.id === id); if (!p) return;
@@ -856,7 +877,7 @@ function renderCart(){
   if (!lines.length){ $('#view').innerHTML = `<div class="ok"><h1 style="font-size:22px">${t('cart')}</h1><p class="empty" style="padding:20px 0">${t('cart_empty')}</p><button class="primary" onclick="location.hash='#/shop'">${t('continue')}</button></div>`; return; }
   $('#view').innerHTML = `<div class="page"><div><h1>${t('cart')} <span style="font-weight:400;color:var(--muted);font-size:16px">(${CART.reduce((a, c) => a + c.q, 0)})</span></h1>
     ${lines.map(l => `<div class="line"><a href="#/p/${l.p.id}">${URLS[l.p.photos[0]] ? `<img src="${esc(URLS[l.p.photos[0]])}" alt="">` : '<div class="ni"></div>'}</a>
-      <div class="d"><div class="br">${esc(l.p.brand || '')}</div><div>${esc(l.p.name)}</div><div style="color:var(--muted);margin-top:4px">${esc([l.v.color, t('size') + ': ' + sizeLbl(l.v.size)].filter(Boolean).join(' · '))}</div>
+      <div class="d"><div class="br">${esc(l.p.brand || '')}</div><div>${esc(l.p.name)}</div><div style="color:var(--muted);margin-top:4px">${esc([colName(l.v.color), t('size') + ': ' + sizeLbl(l.v.size)].filter(Boolean).join(' · '))}</div>
       <div class="qty"><button onclick="chq(${l.v.id},-1)" aria-label="-">−</button><b>${l.c.q}</b><button onclick="chq(${l.v.id},1)" aria-label="+" ${l.c.q >= l.v.available ? 'disabled' : ''}>+</button></div>
       <div style="margin-top:8px"><button class="link" onclick="rmCart(${l.v.id})">${t('remove')}</button></div></div>
       <div style="font-weight:700">${eur(l.c.q * l.v.price)}</div></div>`).join('')}
@@ -885,7 +906,7 @@ function renderCheckout(){
   $('#f_country').onchange = refreshSum; refreshSum();
   if (CODE && !CODEOK) applyCode(true);
 }
-const checkoutSummary = () => summaryBox(`<div style="margin-top:12px">${cartLines().map(l => `<div style="display:flex;gap:10px;align-items:center;padding:6px 0;font-size:13px">${URLS[l.p.photos[0]] ? `<img src="${esc(URLS[l.p.photos[0]])}" style="width:44px;aspect-ratio:3/4;object-fit:cover;border-radius:3px" alt="">` : ''}<div style="flex:1;min-width:0"><b>${esc(l.p.brand || '')}</b> ${esc(l.p.name)}<div style="color:var(--muted)">${esc(sizeLbl(l.v.size))}${l.v.color ? ' · ' + esc(l.v.color) : ''} · ${l.c.q}×</div></div><span>${eur(l.c.q * l.v.price)}</span></div>`).join('')}</div>`, true);
+const checkoutSummary = () => summaryBox(`<div style="margin-top:12px">${cartLines().map(l => `<div style="display:flex;gap:10px;align-items:center;padding:6px 0;font-size:13px">${URLS[l.p.photos[0]] ? `<img src="${esc(URLS[l.p.photos[0]])}" style="width:44px;aspect-ratio:3/4;object-fit:cover;border-radius:3px" alt="">` : ''}<div style="flex:1;min-width:0"><b>${esc(l.p.brand || '')}</b> ${esc(l.p.name)}<div style="color:var(--muted)">${esc(sizeLbl(l.v.size))}${l.v.color ? ' · ' + esc(colName(l.v.color)) : ''} · ${l.c.q}×</div></div><span>${eur(l.c.q * l.v.price)}</span></div>`).join('')}</div>`, true);
 async function sendOrder(e){
   e.preventDefault();
   const fd = Object.fromEntries(new FormData(e.target).entries());
