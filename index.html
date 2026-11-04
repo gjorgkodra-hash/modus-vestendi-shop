@@ -68,6 +68,7 @@ nav.cats a.hot{color:var(--sale)}
 @media(min-width:760px){.hero{grid-template-columns:1.1fr 1fr;min-height:400px}}
 .hero .txt{padding:28px 24px;display:flex;flex-direction:column;justify-content:center;gap:12px}
 @media(min-width:760px){.hero .txt{padding:48px}}
+.save{font-size:13px;color:var(--good);font-weight:600;margin-top:4px}.fittip{font-size:13px;color:var(--muted);margin:8px 0 2px;line-height:1.45}.shipbar{font-size:13px;margin:10px 0 2px;color:var(--ink)}.shipbar .bar{height:6px;border-radius:3px;background:var(--line,#e6ddd5);margin-top:6px;overflow:hidden}.shipbar .bar span{display:block;height:100%;background:var(--good,#2f7d4f);border-radius:3px}
 .hero h1{font-family:Jost,sans-serif;font-weight:400;font-size:clamp(28px,4.4vw,48px);line-height:1.08;margin:0;letter-spacing:.01em}
 .hero p{margin:0;color:#444;max-width:420px}
 .hero .img{background:var(--tan) center/cover no-repeat;min-height:240px}
@@ -261,7 +262,7 @@ const LANGS = ['sq','it','en'];
 const store = {get(k, d){ try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }};
 let L = (() => { try { const q = new URLSearchParams(location.search).get('lang') || store.get('mvshop_lang2', null); return LANGS.includes(q) ? q : 'sq'; } catch (e) { return 'sq'; } })();
 const TX = {
-  promo:['<b>Pagesë në dorëzim</b> · Dërgesë në Shqipëri, Kosovë dhe Maqedoni · Kthime dhe Ndërrime të garantuara','<b>Pagamento alla consegna</b> · Spedizione in Albania, Kosovo e Macedonia · Resi e cambi garantiti','<b>Pay on delivery</b> · Shipping to Albania, Kosovo and North Macedonia · Guaranteed returns and exchanges'],
+  promo:['<b>Pagesë në dorëzim</b> · Dërgesë falas nga 2 artikuj · Ndërrim ose kthim brenda 48 orëve','<b>Pagamento alla consegna</b> · Spedizione gratis da 2 capi · Cambio o reso entro 48 ore','<b>Pay on delivery</b> · Free shipping from 2 items · Exchange or return within 48 hours'],
   search:['Kërko marka, produkte…','Cerca brand, prodotti…','Search brands, items…'],
   hero_t:['Moda italiane,<br>e zgjedhur për ju','Moda italiana,<br>scelta per te','Italian fashion,<br>picked for you'],
   hero_p:['Copë origjinale nga markat më të mira italiane dhe spanjolle. Sasi të kufizuara.','Capi originali dei migliori brand italiani e spagnoli. Quantità limitate.','Original pieces from the best Italian and Spanish brands. Limited quantities.'],
@@ -278,12 +279,18 @@ const TX = {
   wa_guest:['Doni të dini kur ulet çmimi?','Vuoi sapere quando scende il prezzo?','Want to know when the price drops?'], wa_reg:['Regjistrohuni dhe ju njoftojmë me email','Registrati e ti avvisiamo via email','Sign up and we\'ll email you'], b_last:['E fundit','Ultimo pezzo','Last one'],
   home:['Kryefaqja','Home','Home'], color:['Ngjyra','Colore','Colour'], size:['Masa','Taglia','Size'], choose_size:['Zgjidh masën','Scegli la taglia','Select size'],
   add:['Shto në shportë','Aggiungi al carrello','Add to bag'], added:['U shtua në shportë','Aggiunto al carrello','Added to bag'], go_cart:['Shko te shporta','Vai al carrello','Go to bag'],
+  ship_more2:['Edhe {p} artikull ose {n} për dërgesë falas','Ancora {p} capo o {n} per la spedizione gratuita','{p} more item or {n} more for free shipping'], ship_free_ok:['Dërgesa është falas','La spedizione è gratuita','Shipping is free'],
+  you_save:['Kurseni {n}','Risparmi {n}','You save {n}'], boutique:['në butik','in boutique','in boutique'],
+  fit_tip_aderente:['Vesh ngushtë: nëse jeni mes dy masave, merrni më të madhen.','Veste aderente: se sei tra due taglie, prendi la più grande.','Fits close: if you are between sizes, take the larger one.'],
+  fit_tip_regular:['Vesh normal: merrni masën tuaj të zakonshme.','Veste regolare: prendi la tua taglia solita.','True to size: take your usual size.'],
+  fit_tip_loose:['Vesh i gjerë: nëse jeni mes dy masave, merrni më të voglën.','Veste morbido: se sei tra due taglie, prendi la più piccola.','Relaxed fit: if you are between sizes, take the smaller one.'],
+  fit_help:['Nuk jeni të sigurt? Na shkruani gjatësinë dhe peshën.','Non sei sicura? Scrivici altezza e peso.','Not sure? Send us your height and weight.'],
   only_left:['Vetëm {n} copë e mbetur','Solo {n} pezzo rimasto','Only {n} left'], one:['Masë e vetme','Taglia unica','One size'],
   d1:['Pagesë në dorëzim','Pagamento alla consegna','Pay on delivery'], d1s:['Paguani me para në dorë kur merrni porosinë.','Paghi in contanti quando ricevi l\'ordine.','Pay cash when you receive your order.'],
-  d2:['Dërgesë','Spedizione','Shipping'], d2s:['Falas për porositë mbi 100 €. Nën 100 €: Shqipëri 3 €, Kosovë dhe Maqedoni e Veriut 5 €.','Gratuita per ordini da 100 €. Sotto i 100 €: Albania 3 €, Kosovo e Macedonia del Nord 5 €.','Free on orders from €100. Under €100: Albania €3, Kosovo and North Macedonia €5.'],
-  d3:['Kthime dhe ndërrime të garantuara','Resi e cambi garantiti','Guaranteed returns and exchanges'], d3s:['Nuk ju rri mirë? Na shkruani: e ndërrojmë ose e ktheni.','Non ti sta bene? Scrivici: la cambiamo o fai il reso.','Doesn\'t fit? Message us: we swap it or you return it.'],
+  d2:['Dërgesë','Spedizione','Shipping'], d2s:['Falas nga 2 artikuj ose nga 100 €. Përndryshe: Shqipëri 3 €, Kosovë dhe Maqedoni e Veriut 5 €.','Gratuita da 2 capi o da 100 €. Altrimenti: Albania 3 €, Kosovo e Macedonia del Nord 5 €.','Free from 2 items or from €100. Otherwise: Albania €3, Kosovo and North Macedonia €5.'],
+  d3:['Ndërrim ose kthim brenda 48 orëve','Cambio o reso entro 48 ore','Exchange or return within 48 hours'], d3s:['Nuk ju rri mirë? Na shkruani brenda 48 orëve nga dorëzimi: e ndërrojmë ose e ktheni.','Non ti sta bene? Scrivici entro 48 ore dalla consegna: la cambiamo o fai il reso.','Doesn\'t fit? Message us within 48 hours of delivery: we swap it or you return it.'],
   desc:['Përshkrimi','Descrizione','Description'], fit:['Masat dhe përshtatja','Taglie e vestibilità','Size & fit'], fit_def:['Masat janë italiane. Nëse nuk jeni të sigurt, na shkruani gjatësinë dhe peshën tuaj dhe ju këshillojmë masën.','Le taglie sono italiane. Se hai dubbi, scrivici altezza e peso e ti consigliamo la taglia.','Sizes are Italian. Not sure? Send us your height and weight and we\'ll suggest your size.'],
-  ship:['Dërgesa dhe pagesa','Spedizione e pagamento','Shipping & payment'], ship_t:['Pas porosisë ju telefonojmë për konfirmim. Artikujt rezervohen për ju 48 orë. Pagesa bëhet në dorëzim.','Dopo l\'ordine ti chiamiamo per confermare. I capi restano riservati per te 48 ore. Paghi alla consegna.','After you order we call you to confirm. Items are reserved for you for 48 hours. You pay on delivery.'],
+  ship:['Dërgesa dhe pagesa','Spedizione e pagamento','Shipping & payment'], ship_t:['Pas porosisë ju telefonojmë për konfirmim. Artikujt rezervohen për ju 48 orë. Pagesa bëhet në dorëzim.\n\nDërgesa falas nga 2 artikuj ose nga 100 €; përndryshe Shqipëri 3 €, Kosovë dhe Maqedoni e Veriut 5 €.\nNdërrim ose kthim brenda 48 orëve nga dorëzimi: na shkruani në Instagram ose WhatsApp.','Dopo l\'ordine ti chiamiamo per confermare. I capi restano riservati per te 48 ore. Paghi alla consegna.\n\nSpedizione gratuita da 2 capi o da 100 €; altrimenti Albania 3 €, Kosovo e Macedonia del Nord 5 €.\nCambio o reso entro 48 ore dalla consegna: scrivici su Instagram o WhatsApp.','After you order we call you to confirm. Items are reserved for you for 48 hours. You pay on delivery.\n\nFree shipping from 2 items or from €100; otherwise Albania €3, Kosovo and North Macedonia €5.\nExchange or return within 48 hours of delivery: message us on Instagram or WhatsApp.'],
   ask:['Keni pyetje për këtë produkt?','Hai domande su questo capo?','Questions about this item?'], ask_ig:['Instagram','Instagram','Instagram'], ask_wa:['WhatsApp','WhatsApp','WhatsApp'],
   ask_msg:['Përshëndetje! Kam një pyetje për këtë produkt:','Ciao! Ho una domanda su questo capo:','Hi! I have a question about this item:'],
   ask_copied:['Mesazhi me linkun u kopjua: ngjite në chat-in e Instagram.','Messaggio con il link copiato: incollalo nella chat di Instagram.','Message with the link copied: paste it in the Instagram chat.'],
@@ -397,6 +404,7 @@ async function load(){
 }
 function chrome(){
   document.documentElement.lang = L;
+  if (!location.hash.startsWith('#/p/')) document.getElementById('sbuy')?.classList.remove('show');
   $('#promo').innerHTML = t('promo') + ((store.get('mvshop_nl', null) || ME) ? '' : ` · <a href="javascript:openSignup()" style="text-decoration:underline;font-weight:700">🎁 ${t('nl_strip')}</a>`);
   $('#lang').innerHTML = LANGS.map(l => `<option value="${l}" ${l === L ? 'selected' : ''}>${l.toUpperCase()}</option>`).join('');
   ['#q', '#q2'].forEach(s => { $(s).placeholder = t('search'); $(s).value = Q; });
@@ -765,7 +773,7 @@ function renderProduct(id){
     <div class="badges" style="bottom:14px">${sale ? `<span class="bdg sale">-${pct(p)}%</span>` : ''}</div></div></div>
   <div class="info"><a class="brl" href="#/shop?brand=${encodeURIComponent(p.brand || '')}">${esc(p.brand || '')}</a><h1>${esc(p.name)}</h1>
     <div class="price ${sale ? 'sale' : ''}" id="price"></div>
-    <div id="opts"></div><div class="low" id="low"></div>
+    <div id="opts"></div><div class="fittip" id="fittip"></div><div class="low" id="low"></div><div class="shipbar" id="shipbar"></div>
     <div class="cta"><button class="primary" id="addb" onclick="addToCart()">${t('add')}</button><button class="hbig ${WISH.includes(p.id) ? 'on' : ''}" data-wish="${p.id}" onclick="toggleWish(${p.id})" aria-label="wishlist">${HEART}</button></div>
     <button class="sharebtn" onclick="shareProduct(${p.id})"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg><span>${t('share')}</span></button>
     ${nlBand()}
@@ -777,12 +785,19 @@ function renderProduct(id){
       return (comp ? `<details class="acc" open><summary>${t('d_comp')}</summary><div class="c" style="white-space:normal">${comp}</div></details>` : '') +
         (det ? `<details class="acc"><summary>${t('d_det')}</summary><div class="c" style="white-space:normal">${det}</div></details>` : '') +
         `<details class="acc"><summary>${t('fit')}</summary><div class="c" style="white-space:normal">${fit}${fit ? '<div style="margin-top:10px"></div>' : ''}<div style="white-space:pre-line">${esc(p.size_guide || t('fit_def'))}</div></div></details>`; })()}
-    <details class="acc"><summary>${t('ship')}</summary><div class="c">${t('ship_t')}</div></details></div></div></div>
+    <details class="acc"><summary>${t('ship')}</summary><div class="c" style="white-space:pre-line">${t('ship_t')}</div></details></div></div></div>
   ${related.length ? `<h2 class="sec">${t('like')}</h2><div class="row-scroll" style="padding-bottom:30px">${related.map(card).join('')}</div>` : ''}`;
   $('#sbuy').innerHTML = `<div class="p"><b>${esc(p.brand || '')}</b><div>${esc(p.name)}</div></div><button class="primary" onclick="sbuyClick()" id="sbuyb">${t('add')}</button>`;
   drawOpts(); window.scrollTo(0, 0);
   const io = new IntersectionObserver(es => es.forEach(e => $('#sbuy').classList.toggle('show', !e.isIntersecting && location.hash.startsWith('#/p/'))));
   io.observe($('#addb'));
+}
+function drawShipBar(){
+  const el = document.getElementById('shipbar'); if (!el) return;
+  const net = cartTotal() - discAmt(), pcs = cartPieces();
+  if (!pcs){ el.innerHTML = `🚚 ${t('d2s')}`; return; }
+  const pr = Math.min(1, Math.max(pcs / FREE_PCS, net / FREE_SHIP));
+  el.innerHTML = isFreeShip(net) ? `✓ ${t('ship_free_ok')}` : `🚚 ${shipLeft(net)}<div class="bar"><span style="width:${Math.round(pr * 100)}%"></span></div>`;
 }
 function sbuyClick(){ if (!SEL.v){ $('#opts').scrollIntoView({behavior:'smooth', block:'center'}); toast(t('choose_size')); } else addToCart(); }
 function goSlide(i){ const s = $('#slides'); s.scrollTo({left: i * s.clientWidth, behavior:'smooth'}); }
@@ -794,10 +809,13 @@ function drawOpts(){
   const pr = v ? Number(v.price) : Math.min(...g.list.map(x => Number(x.price)));
   const sale = Number(p.list_price) > pr + 0.5;
   $('#price').className = 'price' + (sale ? ' sale' : '');
-  $('#price').innerHTML = `<span class="now">${eur(pr)}</span>${sale ? `<span class="old">${eur(p.list_price)}</span>` : ''}`;
+  $('#price').innerHTML = `<span class="now">${eur(pr)}</span>${sale ? `<span class="old">${eur(p.list_price)}</span><div class="save">${t('you_save').replace('{n}', eur(Number(p.list_price) - pr))} · ${t('boutique')} ${eur(p.list_price)}</div>` : ''}`;
+  const fit = (p.details || {}).fit, tip = fit === 'aderente' ? 'fit_tip_aderente' : fit === 'regular' ? 'fit_tip_regular' : ['loose', 'oversize'].includes(fit) ? 'fit_tip_loose' : null;
+  const fe = document.getElementById('fittip'); if (fe) fe.innerHTML = `📏 ${tip ? t(tip) + ' ' : ''}<a href="#" onclick="askWA(${p.id});return false" style="text-decoration:underline">${t('fit_help')}</a>`;
   $('#low').textContent = v && v.available <= 2 ? t('only_left', v.available) : '';
   $('#addb').textContent = v ? t('add') : t('choose_size');
   const sb2 = $('#sbuyb'); if (sb2) sb2.textContent = v ? `${t('add')} · ${eur(pr)}` : t('choose_size');
+  drawShipBar();
 }
 function pickCol(k){ SEL.col = k; const g = SEL.groups[k]; SEL.v = g.list.length === 1 ? g.list[0] : null; drawOpts(); }
 function pickV(id){ SEL.v = SEL.groups[SEL.col].list.find(x => x.id === id); drawOpts(); }
@@ -805,7 +823,7 @@ function addToCart(){
   if (!SEL.v){ toast(t('choose_size')); $('#opts').scrollIntoView({behavior:'smooth', block:'center'}); return; }
   const ex = CART.find(c => c.v === SEL.v.id);
   if (ex) ex.q = Math.min(SEL.v.available, ex.q + 1); else CART.push({v: SEL.v.id, q: 1});
-  saveCart(); toast(`✓ ${t('added')} · <a href="#/cart" style="text-decoration:underline">${t('go_cart')}</a>`, true);
+  saveCart(); drawShipBar(); toast(`✓ ${t('added')} · <a href="#/cart" style="text-decoration:underline">${t('go_cart')}</a>`, true);
 }
 function askText(id){ const p = P.find(x => x.id === id); const v = SEL.p?.id === id ? SEL.v : null; return `${pUrl(id)}\n${t('ask_msg')} ${p ? p.brand + ' · ' + p.name : ''}${v ? ' (' + [colName(v.color), sizeLbl(v.size)].filter(Boolean).join(' · ') + ')' : ''}\n`; }
 async function askIG(id){ const txt = askText(id); try { await navigator.clipboard.writeText(txt); toast(t('ask_copied')); } catch (e) {} setTimeout(() => window.open('https://ig.me/m/' + IG_USER, '_blank', 'noopener'), 900); }
@@ -845,9 +863,13 @@ function renderWish(){
 const findV = id => { for (const p of P){ const v = p.variants.find(x => x.id === id); if (v) return [p, v]; } return []; };
 const cartLines = () => CART.map(c => { const [p, v] = findV(c.v); return p ? {c, p, v} : null; }).filter(Boolean);
 const cartTotal = () => cartLines().reduce((a, l) => a + l.c.q * Number(l.v.price), 0);
-const SHIP = {AL:3, XK:5, MK:5}, FREE_SHIP = 100;
+const SHIP = {AL:3, XK:5, MK:5}, FREE_SHIP = 100, FREE_PCS = 2;
+const cartPieces = () => cartLines().reduce((a, l) => a + l.c.q, 0);
+const isFreeShip = net => net >= FREE_SHIP || cartPieces() >= FREE_PCS;
+// progress towards free shipping: '1 more item or €23 more'
+const shipLeft = net => { const pcs = Math.max(0, FREE_PCS - cartPieces()), amt = Math.max(0, FREE_SHIP - net); return t('ship_more2').replace('{p}', pcs).replace('{n}', eur(amt)); };
 const shipCountry = () => { const el = document.getElementById('f_country'); return el ? el.value : null; };
-const shipFee = c => { if (!(c in SHIP)) return null; return cartTotal() - discAmt() >= FREE_SHIP ? 0 : SHIP[c]; };
+const shipFee = c => { if (!(c in SHIP)) return null; return isFreeShip(cartTotal() - discAmt()) ? 0 : SHIP[c]; };
 const grand = () => { const f = shipFee(shipCountry()); return cartTotal() - discAmt() + (f || 0); };
 const discAmt = () => { if (!CODEOK) return 0; const mx = Math.max(0, ...cartLines().map(l => Number(l.v.price))); return Math.round(mx * CODEOK.pct) / 100; };
 function summaryBox(btn, withCode){
@@ -855,9 +877,9 @@ function summaryBox(btn, withCode){
   return `<aside class="sum" id="sumbox"><h3 style="margin:0 0 10px">${t('summary')}</h3><div class="r"><span>${t('subtotal')}</span><span>${eur(tot)}</span></div>
     ${d ? `<div class="r" style="color:var(--sale)"><span>${t('disc')} ${CODEOK ? CODEOK.pct : ''}% · ${t('one_item')} (${esc(CODE)})</span><span>−${eur(d)}</span></div>` : ''}
     ${(() => { const c = shipCountry(), net = tot - d;
-      if (c === null) return `<div class="r"><span>${t('shipping')}</span><span${net >= FREE_SHIP ? ' style="color:var(--good)"' : ''}>${net >= FREE_SHIP ? t('ship_free') : t('ship_from')}</span></div>${net < FREE_SHIP ? `<div style="font-size:12.5px;color:var(--muted);margin:-2px 0 6px">${t('ship_more', eur(FREE_SHIP - net))} · ${t('ship_note')}</div>` : ''}`;
+      if (c === null) return `<div class="r"><span>${t('shipping')}</span><span${isFreeShip(net) ? ' style="color:var(--good)"' : ''}>${isFreeShip(net) ? t('ship_free') : t('ship_from')}</span></div>${isFreeShip(net) ? '' : `<div style="font-size:12.5px;color:var(--muted);margin:-2px 0 6px">${shipLeft(net)} · ${t('ship_note')}</div>`}`;
       const f = shipFee(c);
-      return `<div class="r"><span>${t('shipping')}</span><span${f === 0 ? ' style="color:var(--good)"' : f == null ? ' style="color:var(--muted)"' : ''}>${f == null ? t('ship_tbd') : f === 0 ? t('ship_free') : eur(f)}</span></div>${f ? `<div style="font-size:12.5px;color:var(--muted);margin:-2px 0 6px">${t('ship_more', eur(FREE_SHIP - net))}</div>` : ''}`; })()}
+      return `<div class="r"><span>${t('shipping')}</span><span${f === 0 ? ' style="color:var(--good)"' : f == null ? ' style="color:var(--muted)"' : ''}>${f == null ? t('ship_tbd') : f === 0 ? t('ship_free') : eur(f)}</span></div>${f ? `<div style="font-size:12.5px;color:var(--muted);margin:-2px 0 6px">${shipLeft(net)}</div>` : ''}`; })()}
     <div class="r t"><span>${t('total')}</span><span>${eur(grand())}</span></div>
     ${withCode ? `<label style="margin-top:14px">${t('code')}</label><div style="display:flex;gap:6px"><input id="codein" value="${esc(CODE || '')}" placeholder="MV10-…" style="text-transform:uppercase"><button type="button" onclick="applyCode()">${t('apply')}</button></div><div id="codemsg" style="font-size:12.5px;margin-top:6px;${CODEOK ? 'color:var(--good)' : ''}">${CODEOK ? t('code_ok', CODEOK.pct) : ''}</div>` : ''}
     ${btn || ''}<div class="note">💶 ${t('pay_cod')}</div></aside>`;
