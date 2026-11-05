@@ -110,6 +110,9 @@ h2.sec a{font-size:13px;font-weight:500;text-decoration:underline}
 .badges{position:absolute;left:0;bottom:10px;display:flex;flex-direction:column;gap:4px;align-items:flex-start}
 .bdg{background:#fff;font-size:11px;font-weight:700;padding:3px 8px;letter-spacing:.04em;text-transform:uppercase}
 .bdg.sale{background:var(--sale);color:#fff}
+.bdg.out{background:#6b6b6b;color:#fff}.card.out .ph img{opacity:.55;filter:grayscale(.35)}
+.sbtn.out{color:#9a9a9a;text-decoration:line-through;background:#faf8f6}.sbtn.out .bell{text-decoration:none;display:inline-block;font-size:11px;margin-left:2px}.sbtn.out.on{color:var(--ink)}
+.outhint{font-size:12.5px;color:var(--muted);margin:6px 0 0}.outmsg{color:var(--ink);font-weight:600}button.primary.notify{background:#fff;color:var(--ink);border:1.5px solid var(--ink)}
 .bdg.new{background:var(--ink);color:#fff}
 .meta{padding:10px 2px 0}
 .br{font-weight:700;font-size:13.5px}
@@ -279,6 +282,17 @@ const TX = {
   wa_guest:['Doni të dini kur ulet çmimi?','Vuoi sapere quando scende il prezzo?','Want to know when the price drops?'], wa_reg:['Regjistrohuni dhe ju njoftojmë me email','Registrati e ti avvisiamo via email','Sign up and we\'ll email you'], b_last:['E fundit','Ultimo pezzo','Last one'],
   home:['Kryefaqja','Home','Home'], color:['Ngjyra','Colore','Colour'], size:['Masa','Taglia','Size'], choose_size:['Zgjidh masën','Scegli la taglia','Select size'],
   add:['Shto në shportë','Aggiungi al carrello','Add to bag'], added:['U shtua në shportë','Aggiunto al carrello','Added to bag'], go_cart:['Shko te shporta','Vai al carrello','Go to bag'],
+  b_out:['E shitur','Esaurito','Sold out'], notify_short:['Më njofto kur kthehet','Avvisami quando torna','Notify me when back'],
+  size_out:['Masa e shitur: prekeni për njoftim','Taglia esaurita: tocca per essere avvisata','Sold out: tap to be notified'],
+  out_hint:['🔔 Masat e vizatuara janë të shitura: zgjidhni një dhe ju njoftojmë kur kthehet.','🔔 Le taglie barrate sono esaurite: sceglila e ti avvisiamo quando torna.','🔔 Crossed-out sizes are sold out: pick one and we\'ll tell you when it\'s back.'],
+  size_out_sel:['Masa {s} është e shitur','La taglia {s} è esaurita','Size {s} is sold out'], all_out:['E shitur: zgjidhni masën dhe ju njoftojmë kur kthehet.','Esaurito: scegli la taglia e ti avvisiamo quando torna.','Sold out: pick your size and we\'ll tell you when it\'s back.'],
+  notify_btn:['Më njofto kur kthehet','Avvisami quando torna','Notify me when it\'s back'], notify_title:['Më njofto kur kthehet','Avvisami quando torna','Notify me when it\'s back'],
+  notify_text:['Lini emailin ose telefonin: kur kjo masë të jetë sërish në dispozicion ju shkruajmë ne.','Lasciaci email o telefono: quando questa taglia torna disponibile ti scriviamo noi.','Leave your email or phone: when this size is back we\'ll get in touch.'],
+  notify_one:['Mjafton njëri: email ose telefon.','Basta uno dei due: email o telefono.','One is enough: email or phone.'], notify_send:['Më njofto','Avvisami','Notify me'],
+  notify_privacy:['I përdorim vetëm për t\'ju njoftuar për këtë masë.','Li usiamo solo per avvisarti di questa taglia.','We only use them to tell you about this size.'],
+  notify_done:['U regjistrua!','Fatto!','Done!'], notify_done_short:['do t\'ju njoftojmë','ti avviseremo','we\'ll notify you'],
+  notify_done_txt:['Ju njoftojmë kur {s} të jetë sërish në dispozicion.','Ti avvisiamo appena {s} torna disponibile.','We\'ll let you know as soon as {s} is back.'],
+  ne_missing_contact:['Shkruani emailin ose telefonin.','Inserisci email o telefono.','Enter your email or phone.'], ne_bad_email:['Email jo i saktë.','Email non valida.','Invalid email.'], ne_bad_phone:['Telefon jo i saktë.','Telefono non valido.','Invalid phone.'], ne_too_many:['Shumë kërkesa: provoni nesër.','Troppe richieste: riprova domani.','Too many requests: try again tomorrow.'],
   ship_more2:['Edhe {p} artikull ose {n} për dërgesë falas','Ancora {p} capo o {n} per la spedizione gratuita','{p} more item or {n} more for free shipping'], ship_free_ok:['Dërgesa është falas','La spedizione è gratuita','Shipping is free'],
   you_save:['Kurseni {n}','Risparmi {n}','You save {n}'], boutique:['në butik','in boutique','in boutique'],
   fit_tip_aderente:['Vesh ngushtë: nëse jeni mes dy masave, merrni më të madhen.','Veste aderente: se sei tra due taglie, prendi la più grande.','Fits close: if you are between sizes, take the larger one.'],
@@ -382,12 +396,16 @@ let P = [], URLS = {}, CART = store.get('mvshop_cart', []), WISH = store.get('mv
 const saveCart = () => { store.set('mvshop_cart', CART); badges(); };
 const saveWish = () => { store.set('mvshop_wish', WISH); badges(); };
 function toast(m, html){ document.querySelectorAll('.toast').forEach(x => x.remove()); const d = document.createElement('div'); d.className = 'toast'; if (html) d.innerHTML = m; else d.textContent = m; document.body.appendChild(d); setTimeout(() => d.remove(), 2600); }
-const price = p => { const ps = p.variants.map(v => Number(v.price)); return Math.min(...ps); };
+const avV = p => p.variants.filter(v => v.available > 0);
+const soldOut = p => !avV(p).length;
+const availFirst = list => [...list.filter(p => !soldOut(p)), ...list.filter(soldOut)];
+let NOTIFIED = store.get('mvshop_notify', []);
+const price = p => { const vs = avV(p).length ? avV(p) : p.variants; return Math.min(...vs.map(v => Number(v.price))); };
 const isSale = p => Number(p.list_price) > price(p) + 0.5;
 const pct = p => Math.round((1 - price(p) / Number(p.list_price)) * 100);
 const isNew = p => (Date.now() - new Date(p.created_at).getTime()) < NEW_DAYS * 864e5;
 const pieces = p => p.variants.reduce((a, v) => a + v.available, 0);
-const sizesOf = p => [...new Set(p.variants.map(v => v.size))].sort((a, b) => sRank(a) - sRank(b));
+const sizesOf = p => [...new Set((avV(p).length ? avV(p) : p.variants).map(v => v.size))].sort((a, b) => sRank(a) - sRank(b));
 const colorsOf = p => [...new Map(p.variants.map(v => [ckey(v.color), v])).values()];
 const pUrl = id => (location.protocol === 'file:' ? location.href.split('#')[0] + '#/p/' + id : location.origin + '/p/' + id + '/');
 
@@ -456,12 +474,13 @@ window.addEventListener('resize', setHH);
 // ---------- cards ----------
 function card(p){
   const a = URLS[p.photos[0]], b = URLS[p.photos[1]], sale = isSale(p), cols = colorsOf(p);
-  return `<a class="card" href="#/p/${p.id}"><div class="ph">${a ? `<img src="${esc(a)}" alt="${esc(p.brand + ' ' + p.name)}" loading="lazy">` : '<div class="noimg">MV</div>'}${b ? `<img class="b" src="${esc(b)}" alt="" loading="lazy">` : ''}
+  const out = soldOut(p);
+  return `<a class="card${out ? ' out' : ''}" href="#/p/${p.id}"><div class="ph">${a ? `<img src="${esc(a)}" alt="${esc(p.brand + ' ' + p.name)}" loading="lazy">` : '<div class="noimg">MV</div>'}${b ? `<img class="b" src="${esc(b)}" alt="" loading="lazy">` : ''}
     <button class="heart ${WISH.includes(p.id) ? 'on' : ''}" onclick="event.preventDefault();toggleWish(${p.id},this)" aria-label="wishlist">${HEART}</button>
-    <div class="badges">${sale ? `<span class="bdg sale">-${pct(p)}%</span>` : ''}${pieces(p) === 1 ? `<span class="bdg">${t('b_last')}</span>` : ''}</div></div>
+    <div class="badges">${out ? `<span class="bdg out">${t('b_out')}</span>` : `${sale ? `<span class="bdg sale">-${pct(p)}%</span>` : ''}${pieces(p) === 1 ? `<span class="bdg">${t('b_last')}</span>` : ''}`}</div></div>
     <div class="meta"><div class="br">${esc(p.brand || '')}</div><div class="nm">${esc(p.name)}</div>
     <div class="pr ${sale ? 'sale' : ''}"><span class="now">${eur(price(p))}</span>${sale ? `<span class="old">${eur(p.list_price)}</span>` : ''}</div>
-    <div class="sz">${sizesOf(p).map(sizeLbl).map(esc).join(' · ')}</div>
+    <div class="sz">${out ? `🔔 ${t('notify_short')}` : sizesOf(p).map(sizeLbl).map(esc).join(' · ')}</div>
     ${cols.some(v => v.color) && cols.length > 1 ? `<div class="dots">${cols.map(v => `<span class="dot" title="${esc(colName(v.color))}" style="background:${hexOf(v.color, v.color_hex) || RAINBOW}"></span>`).join('')}</div>` : ''}</div></a>`;
 }
 function toggleWish(id, el){ const i = WISH.indexOf(id); if (i >= 0) WISH.splice(i, 1); else WISH.push(id); saveWish(); if (TOK) sb.rpc('shop_wish_set', {p_token: TOK, p_model: id, p_on: WISH.includes(id)}).then(() => {}, () => {}); document.querySelectorAll(`[data-wish="${id}"]`).forEach(x => x.classList.toggle('on', WISH.includes(id))); if (el) el.classList.toggle('on', WISH.includes(id)); if (location.hash === '#/wish') renderWish(); }
@@ -643,7 +662,7 @@ function renderHome(){
   if (!P.length){ $('#view').innerHTML = `<div class="empty">${t('soon')}</div>`; return; }
   const heroP = P.find(p => p.photos.length) || P[0];
   const PG = P.filter(gOk);
-  const fresh = [...PG].sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, 8);
+  const fresh = availFirst([...PG].sort((a, b) => b.created_at.localeCompare(a.created_at))).slice(0, 8);
   const brands = [...new Set(P.map(p => p.brand).filter(Boolean))].sort();
   $('#view').innerHTML = `
   <section class="hero"><div class="txt"><h1>${t('hero_t')}</h1><p>${t('hero_p')}</p><button class="primary" onclick="location.hash='#/shop'">${t('hero_b')} →</button></div>
@@ -654,7 +673,7 @@ function renderHome(){
   ${fresh.length ? `<div class="row-scroll">${fresh.map(card).join('')}</div>` : `<div class="empty" style="padding:30px 0">${t('soon')}</div>`}
   ${brands.length > 1 ? `<h2 class="sec">${t('brands')}</h2><div class="brands">${brands.map(b => `<a href="#/shop?brand=${encodeURIComponent(b)}">${esc(b)}</a>`).join('')}</div>` : ''}
   <h2 class="sec">${t('all')}<a href="#/shop">${t('see_all')}</a></h2>
-  ${PG.length ? `<div class="grid" style="padding-bottom:0">${PG.slice(0, 12).map(card).join('')}</div>` : ''}
+  ${PG.length ? `<div class="grid" style="padding-bottom:0">${availFirst(PG).slice(0, 12).map(card).join('')}</div>` : ''}
   ${nlBlock()}`;
 }
 function renderBrands(){
@@ -674,7 +693,7 @@ function filtered(){
     if (F.news && !isNew(p)) return false;
     if (F.sale && !isSale(p)) return false;
     if (F.brand.length && !F.brand.includes(p.brand)) return false;
-    if (F.size.length && !p.variants.some(v => F.size.includes(v.size))) return false;
+    if (F.size.length && !avV(p).some(v => F.size.includes(v.size))) return false;
     if (F.color.length && !p.variants.some(v => F.color.includes(ckey(v.color)))) return false;
     if (F.min !== '' && price(p) < Number(F.min)) return false;
     if (F.max !== '' && price(p) > Number(F.max)) return false;
@@ -683,7 +702,7 @@ function filtered(){
   if (SORT === 'low') list.sort((a, b) => price(a) - price(b));
   else if (SORT === 'high') list.sort((a, b) => price(b) - price(a));
   else list.sort((a, b) => b.created_at.localeCompare(a.created_at));
-  return list;
+  return availFirst(list);
 }
 function renderShop(onlyGrid){
   const list = filtered();
@@ -760,7 +779,7 @@ function renderProduct(id){
   if (!p){ $('#view').innerHTML = P.length ? `<div class="empty">${t('none')}</div>` : `<div class="empty">…</div>`; return; }
   const groups = {}; p.variants.forEach(v => { const k = ckey(v.color); (groups[k] = groups[k] || {name: colName(v.color), hex: hexOf(v.color, v.color_hex), list: []}).list.push(v); });
   Object.values(groups).forEach(g => g.list.sort((a, b) => sRank(a.size) - sRank(b.size)));
-  SEL = {p, groups, col: SEL.p?.id === id && groups[SEL.col] ? SEL.col : Object.keys(groups)[0], v: null};
+  SEL = {p, groups, col: SEL.p?.id === id && groups[SEL.col] ? SEL.col : (Object.keys(groups).find(k => groups[k].list.some(v => v.available > 0)) || Object.keys(groups)[0]), v: null};
   if (groups[SEL.col].list.length === 1) SEL.v = groups[SEL.col].list[0];
   const photos = p.photos.map(x => URLS[x]).filter(Boolean);
   const desc = (L === 'en' && p.description_en) || (L === 'sq' && p.description_sq) || p.description || '';
@@ -799,27 +818,58 @@ function drawShipBar(){
   const pr = Math.min(1, Math.max(pcs / FREE_PCS, net / FREE_SHIP));
   el.innerHTML = isFreeShip(net) ? `✓ ${t('ship_free_ok')}` : `🚚 ${shipLeft(net)}<div class="bar"><span style="width:${Math.round(pr * 100)}%"></span></div>`;
 }
-function sbuyClick(){ if (!SEL.v){ $('#opts').scrollIntoView({behavior:'smooth', block:'center'}); toast(t('choose_size')); } else addToCart(); }
+function openNotify(){
+  const {p, v} = SEL; if (!p || !v) return;
+  const bg = document.createElement('div'); bg.className = 'pop-bg';
+  const lbl = [p.brand, p.name].filter(Boolean).join(' · '), sz = [colName(v.color), sizeLbl(v.size)].filter(Boolean).join(' · ');
+  bg.innerHTML = `<form class="sharebox" id="nform"><button type="button" class="x" aria-label="close">✕</button><h3 style="margin:0 0 4px">🔔 ${t('notify_title')}</h3>
+    <div style="color:var(--muted);font-size:13px;margin-bottom:12px">${esc(lbl)}<br><b style="color:var(--ink)">${esc(sz)}</b></div>
+    <p style="font-size:13.5px;margin:0 0 12px">${t('notify_text')}</p>
+    <label>${t('name')}</label><input name="name" autocomplete="name" value="${esc(ME?.name || '')}">
+    <label>Email</label><input name="email" type="email" autocomplete="email" value="${esc(ME?.email || '')}" placeholder="nome@email.com">
+    <label>${t('phone')}</label><input name="phone" type="tel" autocomplete="tel" value="${esc(ME?.phone || '')}" placeholder="+355 6…">
+    <div style="font-size:12px;color:var(--muted);margin:6px 0 12px">${t('notify_one')}</div>
+    <div id="nerr" style="color:var(--sale);font-size:13px;min-height:16px"></div>
+    <button class="primary" style="width:100%;margin-top:6px">${t('notify_send')}</button>
+    <div style="font-size:11.5px;color:var(--muted);margin-top:10px">${t('notify_privacy')}</div></form>`;
+  bg.addEventListener('click', e => { if (e.target === bg || e.target.closest('.x')) bg.remove(); });
+  bg.querySelector('#nform').addEventListener('submit', async e => {
+    e.preventDefault(); const f = e.target, btn = f.querySelector('button.primary');
+    btn.disabled = true;
+    const {data, error} = await sb.rpc('shop_restock_request', {p_variant: v.id, p_name: f.name.value, p_email: f.email.value, p_phone: f.phone.value, p_lang: L, p_token: TOK || null});
+    btn.disabled = false;
+    if (error){ const m = String(error.message || ''); const k = ['missing_contact','bad_email','bad_phone','too_many'].find(x => m.includes(x)); $('#nerr').textContent = t(k ? 'ne_' + k : 'e_generic'); return; }
+    if (!NOTIFIED.includes(v.id)){ NOTIFIED.push(v.id); store.set('mvshop_notify', NOTIFIED); }
+    f.innerHTML = `<h3 style="margin:0 0 8px">✓ ${t('notify_done')}</h3><p style="font-size:14px">${t('notify_done_txt').replace('{s}', esc(sz))}</p><button type="button" class="primary" style="width:100%" onclick="this.closest('.pop-bg').remove()">OK</button>`;
+    drawOpts();
+  });
+  document.body.appendChild(bg); setTimeout(() => bg.querySelector(ME?.email ? 'button.primary' : 'input[name=email]')?.focus(), 50);
+}
+function sbuyClick(){ if (SEL.v && SEL.v.available <= 0) return openNotify(); if (!SEL.v){ $('#opts').scrollIntoView({behavior:'smooth', block:'center'}); toast(t('choose_size')); } else addToCart(); }
 function goSlide(i){ const s = $('#slides'); s.scrollTo({left: i * s.clientWidth, behavior:'smooth'}); }
 function slideDots(){ const s = $('#slides'); const i = Math.round(s.scrollLeft / s.clientWidth); document.querySelectorAll('#gdots span').forEach((x, j) => x.classList.toggle('on', i === j)); document.querySelectorAll('.thumbs img').forEach((x, j) => x.classList.toggle('on', i === j)); }
 function drawOpts(){
   const {groups, col, v, p} = SEL; const keys = Object.keys(groups); const g = groups[col];
   $('#opts').innerHTML = `${keys.length > 1 || g.name ? `<label>${t('color')}: <span style="font-weight:400">${esc(g.name || '')}</span></label><div class="opt">${keys.map(k => `<button class="cbtn ${k === col ? 'on' : ''}" onclick="pickCol('${esc(k)}')"><span class="dot" style="background:${groups[k].hex || RAINBOW}"></span>${esc(groups[k].name || '—')}</button>`).join('')}</div>` : ''}
-  <label>${t('size')}</label><div class="opt">${g.list.map(x => `<button class="sbtn ${v?.id === x.id ? 'on' : ''}" onclick="pickV(${x.id})">${esc(sizeLbl(x.size))}</button>`).join('')}</div>`;
+  <label>${t('size')}</label><div class="opt">${g.list.map(x => `<button class="sbtn ${v?.id === x.id ? 'on' : ''} ${x.available > 0 ? '' : 'out'}" title="${x.available > 0 ? '' : esc(t('size_out'))}" onclick="pickV(${x.id})">${esc(sizeLbl(x.size))}${x.available > 0 ? '' : ' <span class="bell">🔔</span>'}</button>`).join('')}</div>
+  ${g.list.some(x => x.available <= 0) ? `<div class="outhint">${t('out_hint')}</div>` : ''}`;
   const pr = v ? Number(v.price) : Math.min(...g.list.map(x => Number(x.price)));
   const sale = Number(p.list_price) > pr + 0.5;
   $('#price').className = 'price' + (sale ? ' sale' : '');
   $('#price').innerHTML = `<span class="now">${eur(pr)}</span>${sale ? `<span class="old">${eur(p.list_price)}</span><div class="save">${t('you_save').replace('{n}', eur(Number(p.list_price) - pr))} · ${t('boutique')} ${eur(p.list_price)}</div>` : ''}`;
   const fit = (p.details || {}).fit, tip = fit === 'aderente' ? 'fit_tip_aderente' : fit === 'regular' ? 'fit_tip_regular' : ['loose', 'oversize'].includes(fit) ? 'fit_tip_loose' : null;
   const fe = document.getElementById('fittip'); if (fe) fe.innerHTML = `📏 ${tip ? t(tip) + ' ' : ''}<a href="#" onclick="askWA(${p.id});return false" style="text-decoration:underline">${t('fit_help')}</a>`;
-  $('#low').textContent = v && v.available <= 2 ? t('only_left', v.available) : '';
-  $('#addb').textContent = v ? t('add') : t('choose_size');
-  const sb2 = $('#sbuyb'); if (sb2) sb2.textContent = v ? `${t('add')} · ${eur(pr)}` : t('choose_size');
+  const vOut = v && v.available <= 0, done = v && NOTIFIED.includes(v.id);
+  $('#low').innerHTML = vOut ? `<span class="outmsg">${t('size_out_sel').replace('{s}', esc(sizeLbl(v.size)))}${done ? ` · ✓ ${t('notify_done_short')}` : ''}</span>` : v && v.available <= 2 ? esc(t('only_left', v.available)) : soldOut(p) ? `<span class="outmsg">${t('all_out')}</span>` : '';
+  $('#addb').textContent = vOut ? (done ? '✓ ' + t('notify_done_short') : '🔔 ' + t('notify_btn')) : v ? t('add') : t('choose_size');
+  $('#addb').classList.toggle('notify', !!vOut);
+  const sb2 = $('#sbuyb'); if (sb2) sb2.textContent = vOut ? '🔔 ' + t('notify_btn') : v ? `${t('add')} · ${eur(pr)}` : t('choose_size');
   drawShipBar();
 }
 function pickCol(k){ SEL.col = k; const g = SEL.groups[k]; SEL.v = g.list.length === 1 ? g.list[0] : null; drawOpts(); }
 function pickV(id){ SEL.v = SEL.groups[SEL.col].list.find(x => x.id === id); drawOpts(); }
 function addToCart(){
+  if (SEL.v && SEL.v.available <= 0) return openNotify();
   if (!SEL.v){ toast(t('choose_size')); $('#opts').scrollIntoView({behavior:'smooth', block:'center'}); return; }
   const ex = CART.find(c => c.v === SEL.v.id);
   if (ex) ex.q = Math.min(SEL.v.available, ex.q + 1); else CART.push({v: SEL.v.id, q: 1});
