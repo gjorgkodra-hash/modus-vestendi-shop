@@ -110,7 +110,7 @@ h2.sec a{font-size:13px;font-weight:500;text-decoration:underline}
 .badges{position:absolute;left:0;bottom:10px;display:flex;flex-direction:column;gap:4px;align-items:flex-start}
 .bdg{background:#fff;font-size:11px;font-weight:700;padding:3px 8px;letter-spacing:.04em;text-transform:uppercase}
 .bdg.sale{background:var(--sale);color:#fff}
-.bdg.out{background:#6b6b6b;color:#fff}.card.out .ph img{opacity:.55;filter:grayscale(.35)}
+.bdg.out{background:#6b6b6b;color:#fff}.card.out .ph img{opacity:.6;filter:grayscale(.6) blur(1.5px)}.card.out .ph img.b{display:none}.pd.out .slides img,.pd.out .thumbs img{filter:grayscale(.6);opacity:.65}.outbox{background:#f4f1ee;border-radius:var(--r);padding:12px 14px;font-size:14px;margin:6px 0 4px}.outbox b{display:block;font-size:15px;margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}a.outask{display:inline-block;font-size:13px;color:var(--ink);text-decoration:underline;margin-top:8px}.nfrow{display:flex;gap:8px}.nfrow>div{flex:1}.nfopt{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}.nfopt .sbtn{min-width:44px}
 .sbtn.out{color:#9a9a9a;text-decoration:line-through;background:#faf8f6}.sbtn.out .bell{text-decoration:none;display:inline-block;font-size:11px;margin-left:2px}.sbtn.out.on{color:var(--ink)}
 .outhint{font-size:12.5px;color:var(--muted);margin:6px 0 0}.outmsg{color:var(--ink);font-weight:600}button.primary.notify{background:#fff;color:var(--ink);border:1.5px solid var(--ink)}
 .bdg.new{background:var(--ink);color:#fff}
@@ -287,9 +287,14 @@ const TX = {
   out_hint:['🔔 Masat e vizatuara janë të shitura: zgjidhni një dhe ju njoftojmë kur kthehet.','🔔 Le taglie barrate sono esaurite: sceglila e ti avvisiamo quando torna.','🔔 Crossed-out sizes are sold out: pick one and we\'ll tell you when it\'s back.'],
   size_out_sel:['Masa {s} është e shitur','La taglia {s} è esaurita','Size {s} is sold out'], all_out:['E shitur: zgjidhni masën dhe ju njoftojmë kur kthehet.','Esaurito: scegli la taglia e ti avvisiamo quando torna.','Sold out: pick your size and we\'ll tell you when it\'s back.'],
   notify_btn:['Më njofto kur kthehet','Avvisami quando torna','Notify me when it\'s back'], notify_title:['Më njofto kur kthehet','Avvisami quando torna','Notify me when it\'s back'],
-  notify_text:['Lini emailin ose telefonin: kur kjo masë të jetë sërish në dispozicion ju shkruajmë ne.','Lasciaci email o telefono: quando questa taglia torna disponibile ti scriviamo noi.','Leave your email or phone: when this size is back we\'ll get in touch.'],
+  notify_text:['Lini emailin ose telefonin: kur të jetë sërish në dispozicion ju shkruajmë ne.','Lasciaci email o telefono: quando torna disponibile ti scriviamo noi.','Leave your email or phone: when it\'s back we\'ll get in touch.'],
   notify_one:['Mjafton njëri: email ose telefon.','Basta uno dei due: email o telefono.','One is enough: email or phone.'], notify_send:['Më njofto','Avvisami','Notify me'],
-  notify_privacy:['I përdorim vetëm për t\'ju njoftuar për këtë masë.','Li usiamo solo per avvisarti di questa taglia.','We only use them to tell you about this size.'],
+  notify_privacy:['I përdorim vetëm për t\'ju njoftuar për këtë artikull.','Li usiamo solo per avvisarti di questo articolo.','We only use them to notify you about this item.'],
+  out_txt:['Ky artikull është i shitur. Na tregoni masën tuaj (ose gjatësinë dhe peshën) dhe ju njoftojmë nëse kthehet.','Questo capo è esaurito. Dicci la tua taglia (o altezza e peso) e ti avvisiamo se torna disponibile.','This item is sold out. Tell us your size (or height and weight) and we\'ll let you know if it comes back.'],
+  out_ask:['Nuk e gjeni masën tuaj? Na njoftoni','Non trovi la tua taglia? Avvisami','Can\'t find your size? Let us know'], nf_size:['Masa juaj','La tua taglia','Your size'], nf_unsure:['Nuk jam e sigurt','Non sono sicura','Not sure'],
+  nf_hw:['Gjatësia dhe pesha (opsionale, na ndihmojnë t\'ju këshillojmë masën)','Altezza e peso (facoltativi, ci aiutano a consigliarti la taglia)','Height and weight (optional, they help us advise you on size)'], nf_hw_req:['Gjatësia dhe pesha (për t\'ju këshilluar masën)','Altezza e peso (per consigliarti la taglia)','Height and weight (so we can advise you on size)'],
+  nf_h:['Gjatësia (cm)','Altezza (cm)','Height (cm)'], nf_w:['Pesha (kg)','Peso (kg)','Weight (kg)'], nf_color:['Ngjyra','Colore','Colour'],
+  ne_missing_size:['Zgjidhni masën ose shkruani gjatësinë dhe peshën.','Scegli la taglia oppure indica altezza e peso.','Pick your size or enter your height and weight.'],
   notify_done:['U regjistrua!','Fatto!','Done!'], notify_done_short:['do t\'ju njoftojmë','ti avviseremo','we\'ll notify you'],
   notify_done_txt:['Ju njoftojmë kur {s} të jetë sërish në dispozicion.','Ti avvisiamo appena {s} torna disponibile.','We\'ll let you know as soon as {s} is back.'],
   ne_missing_contact:['Shkruani emailin ose telefonin.','Inserisci email o telefono.','Enter your email or phone.'], ne_bad_email:['Email jo i saktë.','Email non valida.','Invalid email.'], ne_bad_phone:['Telefon jo i saktë.','Telefono non valido.','Invalid phone.'], ne_too_many:['Shumë kërkesa: provoni nesër.','Troppe richieste: riprova domani.','Too many requests: try again tomorrow.'],
@@ -475,7 +480,7 @@ window.addEventListener('resize', setHH);
 function card(p){
   const a = URLS[p.photos[0]], b = URLS[p.photos[1]], sale = isSale(p), cols = colorsOf(p);
   const out = soldOut(p);
-  return `<a class="card${out ? ' out' : ''}" href="#/p/${p.id}"><div class="ph">${a ? `<img src="${esc(a)}" alt="${esc(p.brand + ' ' + p.name)}" loading="lazy">` : '<div class="noimg">MV</div>'}${b ? `<img class="b" src="${esc(b)}" alt="" loading="lazy">` : ''}
+  return `<a class="card${out ? ' out' : ''}" href="#/p/${p.id}"><div class="ph">${a ? `<img src="${esc(a)}" alt="${esc(p.brand + ' ' + p.name)}" loading="lazy">` : '<div class="noimg">MV</div>'}${b && !out ? `<img class="b" src="${esc(b)}" alt="" loading="lazy">` : ''}
     <button class="heart ${WISH.includes(p.id) ? 'on' : ''}" onclick="event.preventDefault();toggleWish(${p.id},this)" aria-label="wishlist">${HEART}</button>
     <div class="badges">${out ? `<span class="bdg out">${t('b_out')}</span>` : `${sale ? `<span class="bdg sale">-${pct(p)}%</span>` : ''}${pieces(p) === 1 ? `<span class="bdg">${t('b_last')}</span>` : ''}`}</div></div>
     <div class="meta"><div class="br">${esc(p.brand || '')}</div><div class="nm">${esc(p.name)}</div>
@@ -780,13 +785,13 @@ function renderProduct(id){
   const groups = {}; p.variants.forEach(v => { const k = ckey(v.color); (groups[k] = groups[k] || {name: colName(v.color), hex: hexOf(v.color, v.color_hex), list: []}).list.push(v); });
   Object.values(groups).forEach(g => g.list.sort((a, b) => sRank(a.size) - sRank(b.size)));
   SEL = {p, groups, col: SEL.p?.id === id && groups[SEL.col] ? SEL.col : (Object.keys(groups).find(k => groups[k].list.some(v => v.available > 0)) || Object.keys(groups)[0]), v: null};
-  if (groups[SEL.col].list.length === 1) SEL.v = groups[SEL.col].list[0];
+  if (groups[SEL.col].list.length === 1 && groups[SEL.col].list[0].available > 0) SEL.v = groups[SEL.col].list[0];
   const photos = p.photos.map(x => URLS[x]).filter(Boolean);
   const desc = (L === 'en' && p.description_en) || (L === 'sq' && p.description_sq) || p.description || '';
   const sale = isSale(p);
   const related = P.filter(x => x.id !== p.id && (x.category?.id === p.category?.id || x.brand === p.brand)).slice(0, 8);
   $('#view').innerHTML = `<div class="crumbs"><a href="#/">${t('home')}</a> / ${p.category?.id ? `<a href="#/shop?cat=${p.category.id}">${esc(p.category[L])}</a> / ` : ''}${esc(p.name)}</div>
-  <div class="pd"><div class="gal"><div class="thumbs">${photos.map((u, i) => `<img src="${esc(u)}" alt="" class="${i ? '' : 'on'}" onclick="goSlide(${i})">`).join('')}</div>
+  <div class="pd${soldOut(p) ? ' out' : ''}"><div class="gal"><div class="thumbs">${photos.map((u, i) => `<img src="${esc(u)}" alt="" class="${i ? '' : 'on'}" onclick="goSlide(${i})">`).join('')}</div>
     <div class="main"><div class="slides" id="slides" onscroll="slideDots()">${photos.length ? photos.map(u => `<img src="${esc(u)}" alt="${esc(p.brand + ' ' + p.name)}">`).join('') : '<div class="ph" style="flex:0 0 100%"><div class="noimg">MV</div></div>'}</div>
     ${photos.length > 1 ? `<div class="gdots" id="gdots">${photos.map((_, i) => `<span class="${i ? '' : 'on'}"></span>`).join('')}</div>` : ''}
     <div class="badges" style="bottom:14px">${sale ? `<span class="bdg sale">-${pct(p)}%</span>` : ''}</div></div></div>
@@ -818,13 +823,31 @@ function drawShipBar(){
   const pr = Math.min(1, Math.max(pcs / FREE_PCS, net / FREE_SHIP));
   el.innerHTML = isFreeShip(net) ? `✓ ${t('ship_free_ok')}` : `🚚 ${shipLeft(net)}<div class="bar"><span style="width:${Math.round(pr * 100)}%"></span></div>`;
 }
+function nfSizes(p, color){
+  const have = [...new Set(p.variants.map(v => String(v.size || '').trim().toUpperCase()).filter(Boolean))];
+  if (!have.length || have.every(z => ['TU','U','UNICA','OS'].includes(z))) return [];
+  const nums = have.filter(z => /^\d+(\.5)?$/.test(z)).map(Number);
+  let list;
+  if (nums.length === have.length){
+    const shoe = /scarp|stival|sandal|sneaker|mocass|ballerin|décollet|decollet|shoe|boot|këpuc/i.test([p.category?.it, p.category?.en, p.name].join(' ')) || nums.some(n => n % 2);
+    list = shoe ? [35,36,37,38,39,40,41,42] : Math.max(...nums) <= 34 ? [24,25,26,27,28,29,30,31,32,33,34] : [36,38,40,42,44,46,48,50,52];
+    list = [...new Set([...list, ...nums])].sort((a, b) => a - b).map(String);
+  } else list = [...new Set(['XS','S','M','L','XL','XXL', ...have])].sort((a, b) => sRank(a) - sRank(b));
+  const avail = new Set(p.variants.filter(v => v.available > 0 && (color == null || ckey(v.color) === color)).map(v => String(v.size || '').trim().toUpperCase()));
+  return list.filter(z => !avail.has(z));
+}
 function openNotify(){
-  const {p, v} = SEL; if (!p || !v) return;
+  const {p, groups} = SEL; if (!p) return;
+  const out = soldOut(p), keys = Object.keys(groups), multi = keys.length > 1 && keys.some(k => groups[k].name);
+  const st = {col: multi ? SEL.col : null, size: null, unsure: false};
   const bg = document.createElement('div'); bg.className = 'pop-bg';
-  const lbl = [p.brand, p.name].filter(Boolean).join(' · '), sz = [colName(v.color), sizeLbl(v.size)].filter(Boolean).join(' · ');
-  bg.innerHTML = `<form class="sharebox" id="nform"><button type="button" class="x" aria-label="close">✕</button><h3 style="margin:0 0 4px">🔔 ${t('notify_title')}</h3>
-    <div style="color:var(--muted);font-size:13px;margin-bottom:12px">${esc(lbl)}<br><b style="color:var(--ink)">${esc(sz)}</b></div>
-    <p style="font-size:13.5px;margin:0 0 12px">${t('notify_text')}</p>
+  const lbl = [p.brand, p.name].filter(Boolean).join(' · ');
+  bg.innerHTML = `<form class="sharebox" id="nform" style="max-height:92vh;overflow:auto"><button type="button" class="x" aria-label="close">✕</button><h3 style="margin:0 0 4px">🔔 ${t('notify_title')}</h3>
+    <div style="color:var(--muted);font-size:13px;margin-bottom:10px">${esc(lbl)}</div>
+    ${multi ? `<label>${t('nf_color')}</label><div class="nfopt" id="nfcol">${keys.map(k => `<button type="button" class="cbtn ${k === st.col ? 'on' : ''}" data-k="${esc(k)}"><span class="dot" style="background:${groups[k].hex || RAINBOW}"></span>${esc(groups[k].name || '—')}</button>`).join('')}</div>` : ''}
+    <div id="nfsz"></div>
+    <label id="nfhwl">${t('nf_hw')}</label><div class="nfrow"><div><input name="h" type="number" inputmode="numeric" min="100" max="220" placeholder="${t('nf_h')}"></div><div><input name="w" type="number" inputmode="decimal" min="30" max="200" placeholder="${t('nf_w')}"></div></div>
+    <p style="font-size:13.5px;margin:12px 0 8px">${t('notify_text')}</p>
     <label>${t('name')}</label><input name="name" autocomplete="name" value="${esc(ME?.name || '')}">
     <label>Email</label><input name="email" type="email" autocomplete="email" value="${esc(ME?.email || '')}" placeholder="nome@email.com">
     <label>${t('phone')}</label><input name="phone" type="tel" autocomplete="tel" value="${esc(ME?.phone || '')}" placeholder="+355 6…">
@@ -832,44 +855,65 @@ function openNotify(){
     <div id="nerr" style="color:var(--sale);font-size:13px;min-height:16px"></div>
     <button class="primary" style="width:100%;margin-top:6px">${t('notify_send')}</button>
     <div style="font-size:11.5px;color:var(--muted);margin-top:10px">${t('notify_privacy')}</div></form>`;
+  const f = bg.querySelector('#nform');
+  const drawSz = () => {
+    const list = nfSizes(p, st.col);
+    if (st.size && !list.includes(st.size)) st.size = null;
+    f.querySelector('#nfsz').innerHTML = list.length ? `<label>${t('nf_size')}</label><div class="nfopt">${list.map(z => `<button type="button" class="sbtn ${st.size === z ? 'on' : ''}" data-z="${esc(z)}">${esc(sizeLbl(z))}</button>`).join('')}${out ? `<button type="button" class="sbtn ${st.unsure ? 'on' : ''}" data-z="?">${t('nf_unsure')}</button>` : ''}</div>` : '';
+    f.querySelector('#nfhwl').textContent = st.unsure || !list.length ? t('nf_hw_req') : t('nf_hw');
+  };
+  drawSz();
+  f.addEventListener('click', e => {
+    if (e.target.closest('.sbtn,.cbtn')) $('#nerr').textContent = '';
+    const c = e.target.closest('#nfcol .cbtn'); if (c){ st.col = c.dataset.k; f.querySelectorAll('#nfcol .cbtn').forEach(x => x.classList.toggle('on', x === c)); drawSz(); return; }
+    const z = e.target.closest('#nfsz .sbtn'); if (z){ if (z.dataset.z === '?'){ st.unsure = !st.unsure; st.size = null; } else { st.size = st.size === z.dataset.z ? null : z.dataset.z; st.unsure = false; } drawSz(); if (st.unsure) f.h.focus(); }
+  });
   bg.addEventListener('click', e => { if (e.target === bg || e.target.closest('.x')) bg.remove(); });
-  bg.querySelector('#nform').addEventListener('submit', async e => {
-    e.preventDefault(); const f = e.target, btn = f.querySelector('button.primary');
+  f.addEventListener('submit', async e => {
+    e.preventDefault(); const btn = f.querySelector('button.primary');
+    const h = parseInt(f.h.value) || null, w = parseFloat(String(f.w.value).replace(',', '.')) || null;
+    const noSizes = !nfSizes(p, st.col).length;
+    const size = st.size || (noSizes ? (p.variants[0]?.size || null) : null);
+    if (!size && !(h && w)){ $('#nerr').textContent = t('ne_missing_size'); return; }
+    const color = st.col ? (groups[st.col].list[0]?.color || null) : (keys.length === 1 ? (groups[keys[0]].list[0]?.color || null) : null);
     btn.disabled = true;
-    const {data, error} = await sb.rpc('shop_restock_request', {p_variant: v.id, p_name: f.name.value, p_email: f.email.value, p_phone: f.phone.value, p_lang: L, p_token: TOK || null});
+    const {error} = await sb.rpc('shop_restock_request2', {p_model: p.id, p_size: size, p_color: color, p_height: h, p_weight: w, p_name: f.name.value, p_email: f.email.value, p_phone: f.phone.value, p_lang: L, p_token: TOK || null});
     btn.disabled = false;
-    if (error){ const m = String(error.message || ''); const k = ['missing_contact','bad_email','bad_phone','too_many'].find(x => m.includes(x)); $('#nerr').textContent = t(k ? 'ne_' + k : 'e_generic'); return; }
-    if (!NOTIFIED.includes(v.id)){ NOTIFIED.push(v.id); store.set('mvshop_notify', NOTIFIED); }
+    if (error){ const m = String(error.message || ''); const k = ['missing_contact','bad_email','bad_phone','too_many','missing_size'].find(x => m.includes(x)); $('#nerr').textContent = t(k ? 'ne_' + k : 'e_generic'); return; }
+    if (!NOTIFIED.includes('m' + p.id)){ NOTIFIED.push('m' + p.id); store.set('mvshop_notify', NOTIFIED); }
+    const sz = [st.col ? groups[st.col].name : '', size ? sizeLbl(size) : ''].filter(Boolean).join(' · ') || lbl;
     f.innerHTML = `<h3 style="margin:0 0 8px">✓ ${t('notify_done')}</h3><p style="font-size:14px">${t('notify_done_txt').replace('{s}', esc(sz))}</p><button type="button" class="primary" style="width:100%" onclick="this.closest('.pop-bg').remove()">OK</button>`;
     drawOpts();
   });
-  document.body.appendChild(bg); setTimeout(() => bg.querySelector(ME?.email ? 'button.primary' : 'input[name=email]')?.focus(), 50);
+  document.body.appendChild(bg);
 }
-function sbuyClick(){ if (SEL.v && SEL.v.available <= 0) return openNotify(); if (!SEL.v){ $('#opts').scrollIntoView({behavior:'smooth', block:'center'}); toast(t('choose_size')); } else addToCart(); }
+function sbuyClick(){ if (soldOut(SEL.p)) return openNotify(); if (!SEL.v){ $('#opts').scrollIntoView({behavior:'smooth', block:'center'}); toast(t('choose_size')); } else addToCart(); }
 function goSlide(i){ const s = $('#slides'); s.scrollTo({left: i * s.clientWidth, behavior:'smooth'}); }
 function slideDots(){ const s = $('#slides'); const i = Math.round(s.scrollLeft / s.clientWidth); document.querySelectorAll('#gdots span').forEach((x, j) => x.classList.toggle('on', i === j)); document.querySelectorAll('.thumbs img').forEach((x, j) => x.classList.toggle('on', i === j)); }
 function drawOpts(){
-  const {groups, col, v, p} = SEL; const keys = Object.keys(groups); const g = groups[col];
-  $('#opts').innerHTML = `${keys.length > 1 || g.name ? `<label>${t('color')}: <span style="font-weight:400">${esc(g.name || '')}</span></label><div class="opt">${keys.map(k => `<button class="cbtn ${k === col ? 'on' : ''}" onclick="pickCol('${esc(k)}')"><span class="dot" style="background:${groups[k].hex || RAINBOW}"></span>${esc(groups[k].name || '—')}</button>`).join('')}</div>` : ''}
-  <label>${t('size')}</label><div class="opt">${g.list.map(x => `<button class="sbtn ${v?.id === x.id ? 'on' : ''} ${x.available > 0 ? '' : 'out'}" title="${x.available > 0 ? '' : esc(t('size_out'))}" onclick="pickV(${x.id})">${esc(sizeLbl(x.size))}${x.available > 0 ? '' : ' <span class="bell">🔔</span>'}</button>`).join('')}</div>
-  ${g.list.some(x => x.available <= 0) ? `<div class="outhint">${t('out_hint')}</div>` : ''}`;
+  const {groups, col, v, p} = SEL; const out = soldOut(p), done = NOTIFIED.includes('m' + p.id);
+  const keys = Object.keys(groups).filter(k => groups[k].list.some(x => x.available > 0)); const g = groups[col];
+  const avail = g.list.filter(x => x.available > 0);
+  $('#opts').innerHTML = out ? `<div class="outbox"><b>${t('b_out')}</b>${t('out_txt')}${done ? `<div style="margin-top:6px;font-weight:600">✓ ${t('notify_done_short')}</div>` : ''}</div>`
+  : `${keys.length > 1 || g.name ? `<label>${t('color')}: <span style="font-weight:400">${esc(g.name || '')}</span></label><div class="opt">${keys.map(k => `<button class="cbtn ${k === col ? 'on' : ''}" onclick="pickCol('${esc(k)}')"><span class="dot" style="background:${groups[k].hex || RAINBOW}"></span>${esc(groups[k].name || '—')}</button>`).join('')}</div>` : ''}
+  <label>${t('size')}</label><div class="opt">${avail.map(x => `<button class="sbtn ${v?.id === x.id ? 'on' : ''}" onclick="pickV(${x.id})">${esc(sizeLbl(x.size))}</button>`).join('')}</div>
+  ${nfSizes(p, col).length ? `<a href="#" class="outask" onclick="openNotify();return false">🔔 ${t('out_ask')}</a>${done ? ` <span style="font-size:12.5px;color:var(--muted)">· ✓ ${t('notify_done_short')}</span>` : ''}` : ''}`;
   const pr = v ? Number(v.price) : Math.min(...g.list.map(x => Number(x.price)));
   const sale = Number(p.list_price) > pr + 0.5;
   $('#price').className = 'price' + (sale ? ' sale' : '');
   $('#price').innerHTML = `<span class="now">${eur(pr)}</span>${sale ? `<span class="old">${eur(p.list_price)}</span><div class="save">${t('you_save').replace('{n}', eur(Number(p.list_price) - pr))} · ${t('boutique')} ${eur(p.list_price)}</div>` : ''}`;
   const fit = (p.details || {}).fit, tip = fit === 'aderente' ? 'fit_tip_aderente' : fit === 'regular' ? 'fit_tip_regular' : ['loose', 'oversize'].includes(fit) ? 'fit_tip_loose' : null;
-  const fe = document.getElementById('fittip'); if (fe) fe.innerHTML = `📏 ${tip ? t(tip) + ' ' : ''}<a href="#" onclick="askWA(${p.id});return false" style="text-decoration:underline">${t('fit_help')}</a>`;
-  const vOut = v && v.available <= 0, done = v && NOTIFIED.includes(v.id);
-  $('#low').innerHTML = vOut ? `<span class="outmsg">${t('size_out_sel').replace('{s}', esc(sizeLbl(v.size)))}${done ? ` · ✓ ${t('notify_done_short')}` : ''}</span>` : v && v.available <= 2 ? esc(t('only_left', v.available)) : soldOut(p) ? `<span class="outmsg">${t('all_out')}</span>` : '';
-  $('#addb').textContent = vOut ? (done ? '✓ ' + t('notify_done_short') : '🔔 ' + t('notify_btn')) : v ? t('add') : t('choose_size');
-  $('#addb').classList.toggle('notify', !!vOut);
-  const sb2 = $('#sbuyb'); if (sb2) sb2.textContent = vOut ? '🔔 ' + t('notify_btn') : v ? `${t('add')} · ${eur(pr)}` : t('choose_size');
+  const fe = document.getElementById('fittip'); if (fe) fe.innerHTML = out ? '' : `📏 ${tip ? t(tip) + ' ' : ''}<a href="#" onclick="askWA(${p.id});return false" style="text-decoration:underline">${t('fit_help')}</a>`;
+  $('#low').innerHTML = !out && v && v.available <= 2 ? esc(t('only_left', v.available)) : '';
+  $('#addb').textContent = out ? (done ? '✓ ' + t('notify_done_short') : '🔔 ' + t('notify_btn')) : v ? t('add') : t('choose_size');
+  $('#addb').classList.toggle('notify', out);
+  const sb2 = $('#sbuyb'); if (sb2) sb2.textContent = out ? '🔔 ' + t('notify_btn') : v ? `${t('add')} · ${eur(pr)}` : t('choose_size');
   drawShipBar();
 }
-function pickCol(k){ SEL.col = k; const g = SEL.groups[k]; SEL.v = g.list.length === 1 ? g.list[0] : null; drawOpts(); }
+function pickCol(k){ SEL.col = k; const a = SEL.groups[k].list.filter(x => x.available > 0); SEL.v = a.length === 1 ? a[0] : null; drawOpts(); }
 function pickV(id){ SEL.v = SEL.groups[SEL.col].list.find(x => x.id === id); drawOpts(); }
 function addToCart(){
-  if (SEL.v && SEL.v.available <= 0) return openNotify();
+  if (soldOut(SEL.p)) return openNotify();
   if (!SEL.v){ toast(t('choose_size')); $('#opts').scrollIntoView({behavior:'smooth', block:'center'}); return; }
   const ex = CART.find(c => c.v === SEL.v.id);
   if (ex) ex.q = Math.min(SEL.v.available, ex.q + 1); else CART.push({v: SEL.v.id, q: 1});
