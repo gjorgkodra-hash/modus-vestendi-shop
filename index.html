@@ -313,7 +313,7 @@ const LANGS = ['sq','it','en'];
 const store = {get(k, d){ try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }};
 let L = (() => { try { const q = new URLSearchParams(location.search).get('lang') || store.get('mvshop_lang2', null); return LANGS.includes(q) ? q : 'sq'; } catch (e) { return 'sq'; } })();
 const TX = {
-  promo:['<b>Pagesë në dorëzim</b> · Dërgesë falas nga 2 artikuj · Ndërrim ose kthim brenda 48 orëve','<b>Pagamento alla consegna</b> · Spedizione gratis da 2 capi · Cambio o reso entro 48 ore','<b>Pay on delivery</b> · Free shipping from 2 items · Exchange or return within 48 hours'],
+  promo:['<b>Pagesë në dorëzim</b> · Dërgesë falas nga 2 artikuj ose mbi 100 € · Ndërrim ose kthim brenda 48 orëve','<b>Pagamento alla consegna</b> · Spedizione gratis da 2 capi o oltre 100 € · Cambio o reso entro 48 ore','<b>Pay on delivery</b> · Free shipping from 2 items or over €100 · Exchange or return within 48 hours'],
   search:['Kërko marka, produkte…','Cerca brand, prodotti…','Search brands, items…'],
   hero_t:['Moda italiane,<br>e zgjedhur për ju','Moda italiana,<br>scelta per te','Italian fashion,<br>picked for you'],
   hero_p:['Copë origjinale nga markat më të mira italiane dhe spanjolle. Sasi të kufizuara.','Capi originali dei migliori brand italiani e spagnoli. Quantità limitate.','Original pieces from the best Italian and Spanish brands. Limited quantities.'],
