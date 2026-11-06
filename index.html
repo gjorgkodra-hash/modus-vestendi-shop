@@ -39,8 +39,13 @@ label{display:block;font-size:13px;font-weight:600;margin:14px 0 6px}
 @media(min-width:900px){.wrap{padding:0 28px}}
 /* promo strip */
 .promo{background:var(--ink);color:#fff;font-size:12.5px;text-align:center;padding:0 12px;letter-spacing:.02em;position:relative;height:34px;overflow:hidden}
-.promo .pm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 12px;opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.promo .pm.on{opacity:1;transform:none}
+.promo{padding:0}
+.promo .tk{position:absolute;left:0;top:0;height:100%;display:flex;align-items:center;white-space:nowrap;width:max-content;animation:mvtk var(--tkd,30s) linear infinite;will-change:transform}
+.promo .tk span{padding:0 28px;position:relative}
+.promo .tk span::after{content:'✦';position:absolute;right:-6px;opacity:.55;font-size:10px;top:50%;transform:translateY(-50%)}
+@media(hover:hover) and (pointer:fine){.promo:hover .tk{animation-play-state:paused}}
+@keyframes mvtk{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.promo .tk{animation:none;position:static;justify-content:center;width:auto;flex-wrap:wrap}}
 /* story circles */
 .stories{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;padding:16px 2px 4px}
 .stories::-webkit-scrollbar{display:none}
@@ -477,16 +482,15 @@ async function load(){
   WISH = WISH.filter(id => P.some(p => p.id === id)); saveWish();
   HOT = new Set(P.filter(p => !soldOut(p) && p.hot >= 4).sort((a, b) => b.hot - a.hot).slice(0, 6).map(p => p.id));
   REC = REC.filter(id => P.some(p => p.id === id));
-  try { const r = await sb.rpc('shop_ig_feed'); IGF = (r.data || []).filter(x => x.img && P.some(p => p.id === x.model_id)); } catch (e) { IGF = []; }
   chrome(); route();
 }
-let PMI = 0;
-setInterval(() => { const a = document.querySelectorAll('#promo .pm'); if (a.length < 2) return; PMI = (PMI + 1) % a.length; a.forEach((x, i) => x.classList.toggle('on', i === PMI)); }, 3800);
 function chrome(){
   document.documentElement.lang = L;
   if (!location.hash.startsWith('#/p/')) document.getElementById('sbuy')?.classList.remove('show');
   const pms = [...t('promo').split(' · '), ...((store.get('mvshop_nl', null) || ME) ? [] : [`<a href="javascript:openSignup()" style="text-decoration:underline;font-weight:700">🎁 ${t('nl_strip')}</a>`])];
-  $('#promo').innerHTML = pms.map((m, i) => `<div class="pm ${i === PMI % pms.length ? 'on' : ''}">${m}</div>`).join('');
+  // ticker sliding right to left: the list is repeated so the loop has no gap
+  const one = pms.map(m => `<span>${m}</span>`).join(''), txt = pms.join(' ').replace(/<[^>]+>/g, '');
+  const pe = $('#promo'); if (pe.dataset.k !== one){ pe.dataset.k = one; pe.innerHTML = `<div class="tk" style="--tkd:${Math.max(16, Math.round(txt.length * 0.26))}s">${one.repeat(2)}${one.repeat(2)}</div>`; } // rebuilt only when the text changes, so it keeps sliding between pages
   $('#lang').innerHTML = LANGS.map(l => `<option value="${l}" ${l === L ? 'selected' : ''}>${l.toUpperCase()}</option>`).join('');
   ['#q', '#q2'].forEach(s => { $(s).placeholder = t('search'); $(s).value = Q; });
   const PG = P.filter(gOk);
@@ -822,7 +826,6 @@ function renderHome(){
   <h2 class="sec">${t('new_in')}<a href="#/shop">${t('see_all')}</a></h2>
   ${fresh.length ? `<div class="row-scroll">${fresh.map(card).join('')}</div>` : `<div class="empty" style="padding:30px 0">${t('soon')}</div>`}
   ${tilesHtml(PG)}
-  ${igHtml()}
   ${brands.length > 1 ? `<h2 class="sec">${t('brands')}</h2><div class="brands">${brands.map(b => `<a href="#/shop?brand=${encodeURIComponent(b)}">${esc(b)}</a>`).join('')}</div>` : ''}
   <h2 class="sec">${t('all')}<a href="#/shop">${t('see_all')}</a></h2>
   ${PG.length ? `<div class="grid" style="padding-bottom:0">${availFirst(PG).slice(0, 12).map(card).join('')}</div>` : ''}
