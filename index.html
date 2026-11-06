@@ -38,7 +38,51 @@ label{display:block;font-size:13px;font-weight:600;margin:14px 0 6px}
 .wrap{max-width:1280px;margin:0 auto;padding:0 16px}
 @media(min-width:900px){.wrap{padding:0 28px}}
 /* promo strip */
-.promo{background:var(--ink);color:#fff;font-size:12.5px;text-align:center;padding:8px 12px;letter-spacing:.02em}
+.promo{background:var(--ink);color:#fff;font-size:12.5px;text-align:center;padding:0 12px;letter-spacing:.02em;position:relative;height:34px;overflow:hidden}
+.promo .pm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 12px;opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.promo .pm.on{opacity:1;transform:none}
+/* story circles */
+.stories{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;padding:16px 2px 4px}
+.stories::-webkit-scrollbar{display:none}
+.stories a{flex:none;width:72px;text-align:center;font-size:11.5px;line-height:1.25;color:#333}
+.stories .ring{width:68px;height:68px;border-radius:50%;padding:2.5px;background:conic-gradient(from 200deg,#deb598,#c8102e,#4c2f2a,#deb598);margin:0 auto 6px}
+.stories .ring span{display:block;width:100%;height:100%;border-radius:50%;border:2.5px solid #fff;background:var(--soft) center/cover no-repeat;font-size:24px;display:grid;place-items:center}
+.stories a:active .ring{transform:scale(.95)}
+/* category tiles */
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(min-width:760px){.tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.tile{position:relative;aspect-ratio:4/5;border-radius:var(--r);overflow:hidden;background:var(--soft2) center/cover no-repeat}
+.tile::after{content:'';position:absolute;inset:0;background:linear-gradient(transparent 45%,rgba(0,0,0,.55))}
+.tile div{position:absolute;left:12px;right:12px;bottom:10px;color:#fff;z-index:1}
+.tile b{display:block;font-size:15px}.tile small{font-size:12px;opacity:.9}
+/* card photo swipe */
+.ph .cs{position:absolute;inset:0;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.ph .cs::-webkit-scrollbar{display:none}
+.ph .cs img{position:static;flex:0 0 100%;width:100%;height:100%;object-fit:cover;scroll-snap-align:start}
+.ph .cd{position:absolute;left:0;right:0;bottom:6px;display:flex;justify-content:center;gap:4px;pointer-events:none;z-index:1}
+.ph .cd i{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.65);box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.ph .cd i.on{background:#fff;width:14px;border-radius:3px}
+.bdg.new{background:var(--ink);color:#fff}.bdg.hotb{background:#fff;color:var(--sale)}
+/* instagram feed */
+.igrow{display:grid;grid-auto-flow:column;grid-auto-columns:40%;gap:8px;overflow-x:auto;scrollbar-width:none}
+@media(min-width:760px){.igrow{grid-auto-columns:19%}}
+.igrow::-webkit-scrollbar{display:none}
+.igp{position:relative;aspect-ratio:4/5;border-radius:var(--r);overflow:hidden;background:var(--soft) center/cover no-repeat;border:0;padding:0;display:block;width:100%}
+.igp .tag{position:absolute;left:8px;bottom:8px;background:rgba(255,255,255,.95);color:var(--ink);font-size:11.5px;font-weight:600;padding:4px 8px;border-radius:999px}
+.lookbox{background:#fff;border-radius:8px;max-width:760px;width:100%;max-height:92vh;overflow:auto;display:grid;grid-template-columns:1fr;position:relative}
+@media(min-width:720px){.lookbox{grid-template-columns:1fr 1fr}}
+.lookbox .im{aspect-ratio:4/5;max-height:46vh;width:100%;background:var(--soft) center/cover no-repeat}@media(min-width:720px){.lookbox .im{max-height:none}}
+.lookbox .ls{padding:18px}
+.lookbox .x{position:absolute;right:8px;top:8px;background:#fff;border:0;border-radius:50%;width:34px;height:34px;padding:0;font-size:16px;z-index:2}
+.mini{display:flex;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.mini img,.mini .ni{width:56px;aspect-ratio:3/4;object-fit:cover;border-radius:var(--r);background:var(--soft);flex:none}
+.mini .d{flex:1;min-width:0;font-size:13px}.mini .d div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* search suggestions */
+.sugg{position:absolute;left:0;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.14);z-index:80;padding:10px 12px;max-height:70vh;overflow:auto;text-align:left}
+.sugg h5{margin:6px 0 6px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:flex;justify-content:space-between}
+.sugg h5 button{border:0;padding:0;background:none;font-size:12px;color:var(--muted);text-decoration:underline;text-transform:none;letter-spacing:0}
+.sugg .chips{padding-bottom:4px}
+.sugg .all{display:block;text-align:center;padding:10px 0 4px;font-weight:600;text-decoration:underline;font-size:13px}
 .promo b{font-weight:600}
 /* header */
 header{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--line)}
@@ -113,7 +157,6 @@ h2.sec a{font-size:13px;font-weight:500;text-decoration:underline}
 .bdg.out{background:#6b6b6b;color:#fff}.card.out .ph img{opacity:.88;filter:grayscale(.25)}.card.out .ph img.b{display:none}.pd.out .slides img,.pd.out .thumbs img{filter:grayscale(.2);opacity:.92}.outbox{background:#f4f1ee;border-radius:var(--r);padding:12px 14px;font-size:14px;margin:6px 0 4px}.outbox b{display:block;font-size:15px;margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}a.outask{display:inline-block;font-size:13px;color:var(--ink);text-decoration:underline;margin-top:8px}.nfrow{display:flex;gap:8px}.nfrow>div{flex:1}.nfopt{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}.nfopt .sbtn{min-width:44px}
 .sbtn.out{color:#9a9a9a;text-decoration:line-through;background:#faf8f6}.sbtn.out .bell{text-decoration:none;display:inline-block;font-size:11px;margin-left:2px}.sbtn.out.on{color:var(--ink)}
 .outhint{font-size:12.5px;color:var(--muted);margin:6px 0 0}.outmsg{color:var(--ink);font-weight:600}button.primary.notify{background:#fff;color:var(--ink);border:1.5px solid var(--ink)}
-.bdg.new{background:var(--ink);color:#fff}
 .meta{padding:10px 2px 0}
 .br{font-weight:700;font-size:13.5px}
 .nm{color:#444;font-size:13.5px;margin:1px 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -271,7 +314,15 @@ const TX = {
   hero_p:['Copë origjinale nga markat më të mira italiane dhe spanjolle. Sasi të kufizuara.','Capi originali dei migliori brand italiani e spagnoli. Quantità limitate.','Original pieces from the best Italian and Spanish brands. Limited quantities.'],
   hero_b:['Shiko të gjitha','Scopri tutto','Shop all'],
   usp1:['💶 Pagesë në dorëzim','💶 Paghi alla consegna','💶 Pay on delivery'], usp2:['🚚 Dërgesë AL · XK · MK','🚚 Spedizione AL · XK · MK','🚚 Shipping AL · XK · MK'], usp3:['💬 Këshillim në WhatsApp','💬 Consulenza su WhatsApp','💬 Advice on WhatsApp'],
-  all:['Të gjitha','Tutto','All'], news:['Të reja','Novità','New in'], sale:['Ulje','Saldi','Sale'], brands:['Markat','Brand','Brands'], see_all:['Shiko të gjitha','Vedi tutto','See all'],
+  all:['Të gjitha','Tutto','All'], b_new:['E re','Novità','New'], b_hot:['🔥 Më i kërkuari','🔥 Più richiesto','🔥 Most wanted'], cat_t:['Kategoritë','Categorie','Categories'],
+  rec_t:['Shikuar së fundi','Visti di recente','Recently viewed'], clear_rec:['Fshij','Cancella','Clear'],
+  igf_t:['Nga Instagram-i ynë','Dal nostro Instagram','From our Instagram'], igf_sub:['Prekni një postim dhe blini look-un','Tocca un post e compra il look','Tap a post and shop the look'],
+  igf_open:['Shiko në Instagram','Vedi su Instagram','View on Instagram'], igf_shop:['Bli look-un','Compra il look','Shop the look'],
+  lk_t:['Plotësoni look-un','Completa il look','Complete the look'], lk_view:['Shiko','Vedi','View'],
+  st_last:['Copët e fundit','Ultimi pezzi','Last pieces'], st_hot:['Më të kërkuarit','I più richiesti','Most wanted'],
+  sr_recent:['Kërkimet e fundit','Ricerche recenti','Recent searches'], sr_pop:['Më të kërkuarit','I più richiesti','Popular now'],
+  sr_all:['Shiko të gjitha {n} rezultatet','Vedi tutti i {n} risultati','See all {n} results'], sr_none:['Asnjë rezultat','Nessun risultato','No results'],
+  news:['Të reja','Novità','New in'], sale:['Ulje','Saldi','Sale'], brands:['Markat','Brand','Brands'], see_all:['Shiko të gjitha','Vedi tutto','See all'],
   new_in:['Të sapoardhura','Ultimi arrivi','Just in'], products:['produkte','prodotti','items'], product1:['produkt','prodotto','item'],
   sort:['Rendit','Ordina','Sort'], s_new:['Më të rejat','Più recenti','Newest'], s_low:['Çmimi: nga më i ulëti','Prezzo crescente','Price: low to high'], s_high:['Çmimi: nga më i larti','Prezzo decrescente','Price: high to low'],
   filters:['Filtro','Filtri','Filters'], f_size:['Masa','Taglia','Size'], f_color:['Ngjyra','Colore','Colour'], f_brand:['Marka','Brand','Brand'], f_cat:['Kategoria','Categoria','Category'], f_price:['Çmimi (€)','Prezzo (€)','Price (€)'],
@@ -397,7 +448,8 @@ const NEW_DAYS = 21;
 let CODE = store.get('mvshop_code', null), CODEOK = null, TOK = store.get('mvshop_tok', null), ME = null;
 let G = store.get('mvshop_g', '');
 const gOk = p => !G || p.gender === G || p.gender === 'unisex';
-let P = [], URLS = {}, CART = store.get('mvshop_cart', []), WISH = store.get('mvshop_wish', []), Q = '', SORT = 'new', F = {size:[], color:[], brand:[], cat:'', grp:'', min:'', max:'', sale:false, news:false};
+let P = [], URLS = {}, CART = store.get('mvshop_cart', []), WISH = store.get('mvshop_wish', []), Q = '', SORT = 'new', F = {size:[], color:[], brand:[], cat:'', grp:'', min:'', max:'', sale:false, news:false, last:false, hot:false};
+let REC = store.get('mvshop_recent', []), SRCH = store.get('mvshop_srch', []), IGF = [], HOT = new Set();
 const saveCart = () => { store.set('mvshop_cart', CART); badges(); };
 const saveWish = () => { store.set('mvshop_wish', WISH); badges(); };
 function toast(m, html){ document.querySelectorAll('.toast').forEach(x => x.remove()); const d = document.createElement('div'); d.className = 'toast'; if (html) d.innerHTML = m; else d.textContent = m; document.body.appendChild(d); setTimeout(() => d.remove(), 2600); }
@@ -423,19 +475,25 @@ async function load(){
   const avail = {}; P.forEach(p => p.variants.forEach(v => avail[v.id] = v.available));
   CART = CART.filter(c => avail[c.v] > 0).map(c => ({...c, q: Math.min(c.q, avail[c.v])})); saveCart();
   WISH = WISH.filter(id => P.some(p => p.id === id)); saveWish();
+  HOT = new Set(P.filter(p => !soldOut(p) && p.hot >= 4).sort((a, b) => b.hot - a.hot).slice(0, 6).map(p => p.id));
+  REC = REC.filter(id => P.some(p => p.id === id));
+  try { const r = await sb.rpc('shop_ig_feed'); IGF = (r.data || []).filter(x => x.img && P.some(p => p.id === x.model_id)); } catch (e) { IGF = []; }
   chrome(); route();
 }
+let PMI = 0;
+setInterval(() => { const a = document.querySelectorAll('#promo .pm'); if (a.length < 2) return; PMI = (PMI + 1) % a.length; a.forEach((x, i) => x.classList.toggle('on', i === PMI)); }, 3800);
 function chrome(){
   document.documentElement.lang = L;
   if (!location.hash.startsWith('#/p/')) document.getElementById('sbuy')?.classList.remove('show');
-  $('#promo').innerHTML = t('promo') + ((store.get('mvshop_nl', null) || ME) ? '' : ` · <a href="javascript:openSignup()" style="text-decoration:underline;font-weight:700">🎁 ${t('nl_strip')}</a>`);
+  const pms = [...t('promo').split(' · '), ...((store.get('mvshop_nl', null) || ME) ? [] : [`<a href="javascript:openSignup()" style="text-decoration:underline;font-weight:700">🎁 ${t('nl_strip')}</a>`])];
+  $('#promo').innerHTML = pms.map((m, i) => `<div class="pm ${i === PMI % pms.length ? 'on' : ''}">${m}</div>`).join('');
   $('#lang').innerHTML = LANGS.map(l => `<option value="${l}" ${l === L ? 'selected' : ''}>${l.toUpperCase()}</option>`).join('');
   ['#q', '#q2'].forEach(s => { $(s).placeholder = t('search'); $(s).value = Q; });
   const PG = P.filter(gOk);
   const grps = [...new Map(PG.filter(p => p.group?.id).map(p => [p.group.id, p.group])).values()];
   const r = location.hash;
   $('#gens').innerHTML = [['', 'g_all'], ['donna', 'g_donna'], ['uomo', 'g_uomo'], ['bambini', 'g_bambini']].map(([k, l]) => `<a href="#/shop?g=${k || 'all'}" class="${G === k ? 'on' : ''}">${t(l)}</a>`).join('');
-  $('#cats').innerHTML = `<a href="#/shop" class="${r.startsWith('#/shop') && !F.cat && !F.grp && !F.news && !F.sale ? 'on' : ''}">${t('all')}</a>` +
+  $('#cats').innerHTML = `<a href="#/shop" class="${r.startsWith('#/shop') && !F.cat && !F.grp && !F.news && !F.sale && !F.last && !F.hot ? 'on' : ''}">${t('all')}</a>` +
     grps.map(c => `<a href="#/shop?grp=${c.id}" class="${String(F.grp) === String(c.id) ? 'on' : ''}">${esc(c[L])}</a>`).join('') +
     (PG.some(isSale) ? `<a href="#/shop?sale" class="hot ${F.sale ? 'on' : ''}">${t('sale')}</a>` : '') +
     `<a href="#/brands">${t('brands')}</a>`;
@@ -450,7 +508,34 @@ function accIcon(){ const a = $('#accicon'); if (!a) return;
   else { a.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>'; a.setAttribute('aria-label', 'account'); } }
 function badges(){ accIcon(); const n = CART.reduce((a, c) => a + c.q, 0); const c = $('#ccnt'); c.hidden = !n; c.textContent = n; const w = $('#wcnt'); w.hidden = !WISH.length; w.textContent = WISH.length; }
 $('#lang').addEventListener('change', e => { L = e.target.value; store.set('mvshop_lang2', L); chrome(); route(); });
-const onSearch = e => { Q = e.target.value; ['#q', '#q2'].forEach(s => { if ($(s) !== e.target) $(s).value = Q; }); if (!location.hash.startsWith('#/shop')) location.hash = '#/shop'; else renderShop(true); };
+function saveSrch(q){ q = String(q || '').trim(); if (q.length < 2) return; SRCH = [q, ...SRCH.filter(x => x.toLowerCase() !== q.toLowerCase())].slice(0, 6); store.set('mvshop_srch', SRCH); }
+function suggHide(){ document.querySelectorAll('.sugg').forEach(x => x.remove()); }
+function suggShow(inp){
+  suggHide(); const box = document.createElement('div'); box.className = 'sugg';
+  const q = norm(inp.value), PG = P.filter(gOk);
+  if (!q){
+    const pop = PG.filter(p => HOT.has(p.id)).slice(0, 4), br = [...new Set(PG.map(p => p.brand).filter(Boolean))].slice(0, 10);
+    box.innerHTML = `${SRCH.length ? `<h5>${t('sr_recent')}<button type="button" data-clr="1">${t('clear_rec')}</button></h5><div class="chips">${SRCH.map(x => `<span class="chip x" data-q="${esc(x)}">🕘 ${esc(x)}</span>`).join('')}</div>` : ''}
+      ${br.length ? `<h5>${t('brands')}</h5><div class="chips">${br.map(b => `<a class="chip" href="#/shop?brand=${encodeURIComponent(b)}">${esc(b)}</a>`).join('')}</div>` : ''}
+      ${pop.length ? `<h5>${t('sr_pop')}</h5>${pop.map(miniRow).join('')}` : ''}`;
+    if (!box.innerHTML.trim()) return;
+  } else {
+    const res = availFirst(PG.filter(p => qMatch(p, q)));
+    box.innerHTML = res.length ? `${res.slice(0, 5).map(miniRow).join('')}<a class="all" href="#/shop" data-go="1">${t('sr_all', res.length)}</a>` : `<div style="color:var(--muted);padding:6px 0">${t('sr_none')}</div>`;
+  }
+  box.addEventListener('mousedown', e => e.preventDefault());
+  box.addEventListener('click', e => {
+    if (e.target.closest('[data-clr]')){ SRCH = []; store.set('mvshop_srch', []); suggShow(inp); return; }
+    const c = e.target.closest('[data-q]'); if (c){ inp.value = c.dataset.q; inp.dispatchEvent(new Event('input')); return; }
+    if (e.target.closest('a')){ saveSrch(inp.value); suggHide(); inp.blur(); }
+  });
+  inp.closest('.search').appendChild(box);
+}
+['#q', '#q2'].forEach(s => { const i = $(s);
+  i.addEventListener('focus', () => suggShow(i));
+  i.addEventListener('blur', () => setTimeout(suggHide, 150));
+  i.addEventListener('keydown', e => { if (e.key === 'Enter'){ saveSrch(i.value); suggHide(); i.blur(); if (!location.hash.startsWith('#/shop')) location.hash = '#/shop'; } else if (e.key === 'Escape'){ suggHide(); i.blur(); } }); });
+const onSearch = e => { Q = e.target.value; ['#q', '#q2'].forEach(s => { if ($(s) !== e.target) $(s).value = Q; }); if (!location.hash.startsWith('#/shop')) location.hash = '#/shop'; else renderShop(true); if (document.activeElement === e.target) suggShow(e.target); };
 $('#q').addEventListener('input', onSearch); $('#q2').addEventListener('input', onSearch);
 
 // ---------- router ----------
@@ -460,7 +545,7 @@ function route(){
   $('#sbuy').classList.remove('show');
   const legacy = h.match(/^#p\/(\d+)/); if (legacy) { location.replace('#/p/' + legacy[1]); return; }
   const pm = h.match(/^#\/p\/(\d+)/);
-  if (h.startsWith('#/shop')){ const qs = new URLSearchParams(h.split('?')[1] || ''); if (qs.has('g')){ G = qs.get('g') === 'all' ? '' : qs.get('g'); store.set('mvshop_g', G); } F.cat = qs.get('cat') || ''; F.grp = qs.get('grp') || ''; F.news = qs.has('news'); F.sale = qs.has('sale'); const b = qs.get('brand'); F.brand = b ? [b] : (qs.has('keep') ? F.brand : []); chrome(); renderShop(); }
+  if (h.startsWith('#/shop')){ const qs = new URLSearchParams(h.split('?')[1] || ''); if (qs.has('g')){ G = qs.get('g') === 'all' ? '' : qs.get('g'); store.set('mvshop_g', G); } F.cat = qs.get('cat') || ''; F.grp = qs.get('grp') || ''; F.news = qs.has('news'); F.sale = qs.has('sale'); F.last = qs.has('last'); F.hot = qs.has('hot'); const b = qs.get('brand'); F.brand = b ? [b] : (qs.has('keep') ? F.brand : []); chrome(); renderShop(); }
   else if (pm) renderProduct(Number(pm[1]));
   else if (h === '#/cart') renderCart();
   else if (h === '#/checkout') renderCheckout();
@@ -478,16 +563,22 @@ window.addEventListener('resize', setHH);
 
 // ---------- cards ----------
 function card(p){
-  const a = URLS[p.photos[0]], b = URLS[p.photos[1]], sale = isSale(p), cols = colorsOf(p);
-  const out = soldOut(p);
-  return `<a class="card${out ? ' out' : ''}" href="#/p/${p.id}"><div class="ph">${a ? `<img src="${esc(a)}" alt="${esc(p.brand + ' ' + p.name)}" loading="lazy">` : '<div class="noimg">MV</div>'}${b && !out ? `<img class="b" src="${esc(b)}" alt="" loading="lazy">` : ''}
+  const a = URLS[p.photos[0]], sale = isSale(p), cols = colorsOf(p);
+  const out = soldOut(p), ph = out ? [] : p.photos.map(x => URLS[x]).filter(Boolean).slice(0, 4);
+  const alt = esc(p.brand + ' ' + p.name);
+  const img = ph.length > 1 ? `<div class="cs" onscroll="cdots(this)">${ph.map((u, i) => `<img src="${esc(u)}" alt="${i ? '' : alt}" loading="lazy">`).join('')}</div><div class="cd">${ph.map((_, i) => `<i class="${i ? '' : 'on'}"></i>`).join('')}</div>`
+    : a ? `<img src="${esc(a)}" alt="${alt}" loading="lazy">` : '<div class="noimg">MV</div>';
+  const bd = out ? [`<span class="bdg out">${t('b_out')}</span>`] : [sale ? `<span class="bdg sale">-${pct(p)}%</span>` : '', HOT.has(p.id) ? `<span class="bdg hotb">${t('b_hot')}</span>` : '', isNew(p) ? `<span class="bdg new">${t('b_new')}</span>` : '', pieces(p) === 1 ? `<span class="bdg">${t('b_last')}</span>` : ''].filter(Boolean).slice(0, 2);
+  return `<a class="card${out ? ' out' : ''}" href="#/p/${p.id}"${ph.length > 1 ? ' onmouseenter="cHov(this,1)" onmouseleave="cHov(this,0)"' : ''}><div class="ph">${img}
     <button class="heart ${WISH.includes(p.id) ? 'on' : ''}" onclick="event.preventDefault();toggleWish(${p.id},this)" aria-label="wishlist">${HEART}</button>
-    <div class="badges">${out ? `<span class="bdg out">${t('b_out')}</span>` : `${sale ? `<span class="bdg sale">-${pct(p)}%</span>` : ''}${pieces(p) === 1 ? `<span class="bdg">${t('b_last')}</span>` : ''}`}</div></div>
+    <div class="badges" style="${ph.length > 1 ? 'bottom:18px' : ''}">${bd.join('')}</div></div>
     <div class="meta"><div class="br">${esc(p.brand || '')}</div><div class="nm">${esc(p.name)}</div>
     <div class="pr ${sale ? 'sale' : ''}"><span class="now">${eur(price(p))}</span>${sale ? `<span class="old">${eur(p.list_price)}</span>` : ''}</div>
     <div class="sz">${out ? `🔔 ${t('notify_short')}` : sizesOf(p).map(sizeLbl).map(esc).join(' · ')}</div>
     ${cols.some(v => v.color) && cols.length > 1 ? `<div class="dots">${cols.map(v => `<span class="dot" title="${esc(colName(v.color))}" style="background:${hexOf(v.color, v.color_hex) || RAINBOW}"></span>`).join('')}</div>` : ''}</div></a>`;
 }
+function cdots(el){ const i = Math.round(el.scrollLeft / el.clientWidth); el.parentElement.querySelectorAll('.cd i').forEach((x, j) => x.classList.toggle('on', i === j)); }
+function cHov(card, i){ if (!matchMedia('(hover:hover)').matches) return; const cs = card.querySelector('.cs'); if (cs) cs.scrollTo({left: i * cs.clientWidth, behavior: 'smooth'}); }
 function toggleWish(id, el){ const i = WISH.indexOf(id); if (i >= 0) WISH.splice(i, 1); else WISH.push(id); saveWish(); if (TOK) sb.rpc('shop_wish_set', {p_token: TOK, p_model: id, p_on: WISH.includes(id)}).then(() => {}, () => {}); document.querySelectorAll(`[data-wish="${id}"]`).forEach(x => x.classList.toggle('on', WISH.includes(id))); if (el) el.classList.toggle('on', WISH.includes(id)); if (location.hash === '#/wish') renderWish(); }
 
 // ---------- account ----------
@@ -662,6 +753,59 @@ function maybePopup(){
 }
 
 // ---------- home ----------
+function photoOf(list){ const p = list.find(x => !soldOut(x) && URLS[x.photos[0]]) || list.find(x => URLS[x.photos[0]]); return p ? URLS[p.photos[0]] : ''; }
+function storiesHtml(PG){
+  const it = [];
+  const add = (href, label, list, emo) => { if (list.length) it.push(`<a href="${href}"><div class="ring"><span style="${photoOf(list) ? `background-image:url('${esc(photoOf(list))}')` : ''}">${photoOf(list) ? '' : emo}</span></div>${esc(label)}</a>`); };
+  add('#/shop?news', t('news'), PG.filter(isNew), '✨');
+  add('#/shop?sale', t('sale'), PG.filter(p => !soldOut(p) && isSale(p)), '%');
+  add('#/shop?hot', t('st_hot'), PG.filter(p => HOT.has(p.id)), '🔥');
+  add('#/shop?last', t('st_last'), PG.filter(p => !soldOut(p) && pieces(p) === 1), '⏳');
+  const cats = [...new Map(PG.filter(p => p.category?.id).map(p => [p.category.id, p.category])).values()].map(c => [c, PG.filter(p => p.category?.id === c.id)]).sort((a, b) => b[1].length - a[1].length).slice(0, 4);
+  cats.forEach(([c, list]) => add(`#/shop?cat=${c.id}`, c[L], list, '👗'));
+  const br = [...new Set(PG.map(p => p.brand).filter(Boolean))].map(b => [b, PG.filter(p => p.brand === b)]).sort((a, b) => b[1].length - a[1].length).slice(0, 4);
+  br.forEach(([b, list]) => add(`#/shop?brand=${encodeURIComponent(b)}`, b, list, '★'));
+  return it.length > 2 ? `<div class="stories">${it.join('')}</div>` : '';
+}
+function tilesHtml(PG){
+  const cats = [...new Map(PG.filter(p => p.category?.id).map(p => [p.category.id, p.category])).values()]
+    .map(c => [c, PG.filter(p => p.category?.id === c.id), PG.filter(p => p.category?.id === c.id && !soldOut(p)).length]).filter(x => x[2] > 0).sort((a, b) => b[2] - a[2]).slice(0, 8);
+  if (cats.length < 2) return '';
+  return `<h2 class="sec">${t('cat_t')}</h2><div class="tiles">${cats.map(([c, list, n]) => `<a class="tile" href="#/shop?cat=${c.id}" style="${photoOf(list) ? `background-image:url('${esc(photoOf(list))}')` : ''}"><div><b>${esc(c[L])}</b><small>${n} ${n === 1 ? t('product1') : t('products')}</small></div></a>`).join('')}</div>`;
+}
+function recentHtml(exclude){
+  const list = REC.filter(id => id !== exclude).map(id => P.find(p => p.id === id)).filter(Boolean).slice(0, 10);
+  if (!list.length) return '';
+  return `<h2 class="sec">${t('rec_t')}<a href="#" onclick="REC=[];store.set('mvshop_recent',[]);this.closest('h2').nextElementSibling.remove();this.closest('h2').remove();return false">${t('clear_rec')}</a></h2><div class="row-scroll">${list.map(card).join('')}</div>`;
+}
+function igHtml(){
+  const list = IGF.filter(x => gOk(P.find(p => p.id === x.model_id) || {})).slice(0, 10);
+  if (!list.length) return '';
+  return `<h2 class="sec">📷 ${t('igf_t')}<a href="https://www.instagram.com/${IG_USER}/" target="_blank" rel="noopener">@${IG_USER}</a></h2><p style="margin:-6px 0 12px;color:var(--muted);font-size:13px">${t('igf_sub')}</p>
+  <div class="igrow">${list.map(x => { const p = P.find(q => q.id === x.model_id); return `<button class="igp" onclick="openLook('${esc(x.id)}')" style="background-image:url('${esc(x.img)}')" aria-label="${esc((p?.brand || '') + ' ' + (p?.name || ''))}"><img src="${esc(x.img)}" alt="" style="display:none" onerror="this.parentElement.style.backgroundImage='url(${esc(URLS[p?.photos?.[0]] || '')})'"><span class="tag">🛍 ${t('igf_shop')}</span></button>`; }).join('')}</div>`;
+}
+function lookFor(p, n = 3){
+  const byId = id => P.find(x => x.id === id);
+  const man = (p.look || []).map(byId).filter(Boolean).filter(x => x.id !== p.id);
+  if (man.length) return [...man.filter(x => !soldOut(x)), ...man.filter(soldOut)].slice(0, 4);
+  const g = p.gender, grp = p.group?.id;
+  const cand = P.filter(x => x.id !== p.id && !soldOut(x) && (x.gender === g || x.gender === 'unisex' || g === 'unisex') && x.category?.id !== p.category?.id)
+    .map(x => ({x, s: (x.group?.id !== grp ? 1 : 0) + (x.brand === p.brand ? 3 : 0) + Math.min(x.hot || 0, 6) / 2 + (isNew(x) ? 1 : 0) + (Math.abs(price(x) - price(p)) < price(p) * .6 ? 1 : 0)}))
+    .sort((a, b) => b.s - a.s);
+  const out = [], seen = new Set();
+  for (const {x} of cand){ const k = x.category?.id; if (seen.has(k)) continue; seen.add(k); out.push(x); if (out.length >= n) break; }
+  return out;
+}
+function miniRow(p){ const u = URLS[p.photos[0]]; return `<a class="mini" href="#/p/${p.id}" onclick="document.querySelector('.pop-bg')?.remove()">${u ? `<img src="${esc(u)}" alt="">` : '<div class="ni"></div>'}<div class="d"><div><b>${esc(p.brand || '')}</b></div><div>${esc(p.name)}</div><div class="pr ${isSale(p) ? 'sale' : ''}"><span class="now">${eur(price(p))}</span>${soldOut(p) ? ` · <span style="color:var(--muted)">${t('b_out')}</span>` : ''}</div></div><span class="chip">${t('lk_view')} →</span></a>`; }
+function openLook(id){
+  const x = IGF.find(q => q.id === id); if (!x) return; const p = P.find(q => q.id === x.model_id); if (!p) return;
+  const bg = document.createElement('div'); bg.className = 'pop-bg';
+  bg.innerHTML = `<div class="lookbox"><button class="x" aria-label="close">✕</button><div class="im" style="background-image:url('${esc(x.img)}'),url('${esc(URLS[p.photos[0]] || '')}')"></div>
+    <div class="ls"><h3 style="margin:0 0 4px">🛍 ${t('igf_shop')}</h3>${[p, ...lookFor(p)].map(miniRow).join('')}
+    ${x.permalink ? `<a href="${esc(x.permalink)}" target="_blank" rel="noopener" style="display:block;margin-top:14px;font-size:13px;text-decoration:underline">📷 ${t('igf_open')}</a>` : ''}</div></div>`;
+  bg.addEventListener('click', e => { if (e.target === bg || e.target.closest('.x')) bg.remove(); });
+  document.body.appendChild(bg);
+}
 function renderHome(){
   chrome();
   if (!P.length){ $('#view').innerHTML = `<div class="empty">${t('soon')}</div>`; return; }
@@ -669,13 +813,16 @@ function renderHome(){
   const PG = P.filter(gOk);
   const fresh = availFirst([...PG].sort((a, b) => b.created_at.localeCompare(a.created_at))).slice(0, 8);
   const brands = [...new Set(P.map(p => p.brand).filter(Boolean))].sort();
-  $('#view').innerHTML = `
+  $('#view').innerHTML = `${storiesHtml(PG)}
   <section class="hero"><div class="txt"><h1>${t('hero_t')}</h1><p>${t('hero_p')}</p><button class="primary" onclick="location.hash='#/shop'">${t('hero_b')} →</button></div>
     <a class="img" href="#/p/${heroP.id}" style="${URLS[heroP.photos[0]] ? `background-image:url('${esc(URLS[heroP.photos[0]])}')` : ''}"></a></section>
   ${nlBand()}
   <div class="usp"><div>${t('usp1')}</div><div>${t('usp2')}</div><div>${t('usp3')}</div></div>
+  ${recentHtml()}
   <h2 class="sec">${t('new_in')}<a href="#/shop">${t('see_all')}</a></h2>
   ${fresh.length ? `<div class="row-scroll">${fresh.map(card).join('')}</div>` : `<div class="empty" style="padding:30px 0">${t('soon')}</div>`}
+  ${tilesHtml(PG)}
+  ${igHtml()}
   ${brands.length > 1 ? `<h2 class="sec">${t('brands')}</h2><div class="brands">${brands.map(b => `<a href="#/shop?brand=${encodeURIComponent(b)}">${esc(b)}</a>`).join('')}</div>` : ''}
   <h2 class="sec">${t('all')}<a href="#/shop">${t('see_all')}</a></h2>
   ${PG.length ? `<div class="grid" style="padding-bottom:0">${availFirst(PG).slice(0, 12).map(card).join('')}</div>` : ''}
@@ -689,6 +836,8 @@ function renderBrands(){
 }
 
 // ---------- shop listing ----------
+const hayOf = p => norm([p.brand, p.name, p.category?.it, p.category?.en, p.category?.sq, ...p.variants.flatMap(v => [v.color, ...(ckey(v.color).startsWith('c') ? COL_TX[+ckey(v.color).slice(1)] : [])])].join(' '));
+const qMatch = (p, q) => { const h = hayOf(p); return q.split(' ').filter(Boolean).every(w => h.includes(w)); };
 function filtered(){
   const q = norm(Q);
   let list = P.filter(p => {
@@ -697,12 +846,14 @@ function filtered(){
     if (F.cat && String(p.category?.id) !== String(F.cat)) return false;
     if (F.news && !isNew(p)) return false;
     if (F.sale && !isSale(p)) return false;
+    if (F.last && (soldOut(p) || pieces(p) !== 1)) return false;
+    if (F.hot && !HOT.has(p.id)) return false;
     if (F.brand.length && !F.brand.includes(p.brand)) return false;
     if (F.size.length && !avV(p).some(v => F.size.includes(v.size))) return false;
     if (F.color.length && !p.variants.some(v => F.color.includes(ckey(v.color)))) return false;
     if (F.min !== '' && price(p) < Number(F.min)) return false;
     if (F.max !== '' && price(p) > Number(F.max)) return false;
-    if (q){ const hay = norm([p.brand, p.name, p.category?.it, p.category?.en, p.category?.sq, ...p.variants.flatMap(v => [v.color, ...(ckey(v.color).startsWith('c') ? COL_TX[+ckey(v.color).slice(1)] : [])])].join(' ')); if (!q.split(' ').every(w => hay.includes(w))) return false; }
+    if (q && !qMatch(p, q)) return false;
     return true; });
   if (SORT === 'low') list.sort((a, b) => price(a) - price(b));
   else if (SORT === 'high') list.sort((a, b) => price(b) - price(a));
@@ -713,7 +864,7 @@ function renderShop(onlyGrid){
   const list = filtered();
   const gname = G ? t('g_' + G) + ' · ' : '';
   const subs = F.grp ? [...new Map(P.filter(p => gOk(p) && String(p.group?.id) === String(F.grp) && p.category?.id !== p.group?.id).map(p => [p.category.id, p.category])).values()] : [];
-  const title = gname + (F.cat ? (P.find(p => String(p.category?.id) === String(F.cat))?.category?.[L] || '') : F.grp ? (P.find(p => String(p.group?.id) === String(F.grp))?.group?.[L] || '') : F.news ? t('news') : F.sale ? t('sale') : F.brand.length === 1 ? F.brand[0] : t('all'));
+  const title = gname + (F.cat ? (P.find(p => String(p.category?.id) === String(F.cat))?.category?.[L] || '') : F.grp ? (P.find(p => String(p.group?.id) === String(F.grp))?.group?.[L] || '') : F.news ? t('news') : F.sale ? t('sale') : F.last ? t('st_last') : F.hot ? t('st_hot') : F.brand.length === 1 ? F.brand[0] : t('all'));
   const active = [...F.size.map(s => ['size', s, sizeLbl(s)]), ...F.color.map(c => ['color', c, colName((P.flatMap(p => p.variants).find(v => ckey(v.color) === c) || {}).color || c)]), ...F.brand.map(b => ['brand', b, b]),
     ...(F.min !== '' ? [['min', F.min, '≥ ' + eur(F.min)]] : []), ...(F.max !== '' ? [['max', F.max, '≤ ' + eur(F.max)]] : [])];
   const nF = active.length;
@@ -789,7 +940,9 @@ function renderProduct(id){
   const photos = p.photos.map(x => URLS[x]).filter(Boolean);
   const desc = (L === 'en' && p.description_en) || (L === 'sq' && p.description_sq) || p.description || '';
   const sale = isSale(p);
-  const related = P.filter(x => x.id !== p.id && (x.category?.id === p.category?.id || x.brand === p.brand)).slice(0, 8);
+  REC = [id, ...REC.filter(x => x !== id)].slice(0, 12); store.set('mvshop_recent', REC);
+  const look = lookFor(p), lookIds = new Set(look.map(x => x.id));
+  const related = P.filter(x => x.id !== p.id && !lookIds.has(x.id) && (x.category?.id === p.category?.id || x.brand === p.brand)).slice(0, 8);
   $('#view').innerHTML = `<div class="crumbs"><a href="#/">${t('home')}</a> / ${p.category?.id ? `<a href="#/shop?cat=${p.category.id}">${esc(p.category[L])}</a> / ` : ''}${esc(p.name)}</div>
   <div class="pd${soldOut(p) ? ' out' : ''}"><div class="gal"><div class="thumbs">${photos.map((u, i) => `<img src="${esc(u)}" alt="" class="${i ? '' : 'on'}" onclick="goSlide(${i})">`).join('')}</div>
     <div class="main"><div class="slides" id="slides" onscroll="slideDots()">${photos.length ? photos.map(u => `<img src="${esc(u)}" alt="${esc(p.brand + ' ' + p.name)}">`).join('') : '<div class="ph" style="flex:0 0 100%"><div class="noimg">MV</div></div>'}</div>
@@ -810,7 +963,9 @@ function renderProduct(id){
         (det ? `<details class="acc"><summary>${t('d_det')}</summary><div class="c" style="white-space:normal">${det}</div></details>` : '') +
         `<details class="acc"><summary>${t('fit')}</summary><div class="c" style="white-space:normal">${fit}${fit ? '<div style="margin-top:10px"></div>' : ''}<div style="white-space:pre-line">${esc(p.size_guide || t('fit_def'))}</div></div></details>`; })()}
     <details class="acc"><summary>${t('ship')}</summary><div class="c" style="white-space:pre-line">${t('ship_t')}</div></details></div></div></div>
-  ${related.length ? `<h2 class="sec">${t('like')}</h2><div class="row-scroll" style="padding-bottom:30px">${related.map(card).join('')}</div>` : ''}`;
+  ${look.length ? `<h2 class="sec">✨ ${t('lk_t')}</h2><div class="row-scroll">${look.map(card).join('')}</div>` : ''}
+  ${related.length ? `<h2 class="sec">${t('like')}</h2><div class="row-scroll" style="padding-bottom:10px">${related.map(card).join('')}</div>` : ''}
+  <div style="padding-bottom:30px">${recentHtml(id)}</div>`;
   $('#sbuy').innerHTML = `<div class="p"><b>${esc(p.brand || '')}</b><div>${esc(p.name)}</div></div><button class="primary" onclick="sbuyClick()" id="sbuyb">${t('add')}</button>`;
   drawOpts(); window.scrollTo(0, 0);
   const io = new IntersectionObserver(es => es.forEach(e => $('#sbuy').classList.toggle('show', !e.isIntersecting && location.hash.startsWith('#/p/'))));
