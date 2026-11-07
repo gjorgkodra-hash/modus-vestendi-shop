@@ -475,7 +475,7 @@ const NEW_DAYS = 21;
 let CODE = store.get('mvshop_code', null), CODEOK = null, TOK = store.get('mvshop_tok', null), ME = null;
 let G = store.get('mvshop_g', '');
 const gOk = p => !G || p.gender === G || p.gender === 'unisex';
-let P = [], URLS = {}, CART = store.get('mvshop_cart', []), WISH = store.get('mvshop_wish', []), Q = '', SORT = 'new', F = {size:[], color:[], brand:[], cat:'', grp:'', min:'', max:'', sale:false, news:false, last:false, hot:false};
+let P = [], URLS = {}, CART = store.get('mvshop_cart', []), WISH = store.get('mvshop_wish', []), Q = '', SORT = 'new', F = {type:[], size:[], color:[], brand:[], cat:'', grp:'', min:'', max:'', sale:false, news:false, last:false, hot:false};
 let BLOG = [], REC = store.get('mvshop_recent', []), SRCH = store.get('mvshop_srch', []), IGF = [], HOT = new Set();
 const saveCart = () => { store.set('mvshop_cart', CART); badges(); };
 const saveWish = () => { store.set('mvshop_wish', WISH); badges(); };
@@ -933,6 +933,7 @@ function filtered(){
     if (F.last && (soldOut(p) || pieces(p) !== 1)) return false;
     if (F.hot && !HOT.has(p.id)) return false;
     if (F.brand.length && !F.brand.includes(p.brand)) return false;
+    if (F.type.length && !F.type.includes(String(p.category?.id))) return false;
     if (F.size.length && !avV(p).some(v => F.size.includes(v.size))) return false;
     if (F.color.length && !p.variants.some(v => F.color.includes(ckey(v.color)))) return false;
     if (F.min !== '' && price(p) < Number(F.min)) return false;
@@ -949,7 +950,7 @@ function renderShop(onlyGrid){
   const gname = G ? t('g_' + G) + ' · ' : '';
   const subs = F.grp ? [...new Map(P.filter(p => gOk(p) && String(p.group?.id) === String(F.grp) && p.category?.id !== p.group?.id).map(p => [p.category.id, p.category])).values()] : [];
   const title = gname + (F.cat ? (P.find(p => String(p.category?.id) === String(F.cat))?.category?.[L] || '') : F.grp ? (P.find(p => String(p.group?.id) === String(F.grp))?.group?.[L] || '') : F.news ? t('news') : F.sale ? t('sale') : F.last ? t('st_last') : F.hot ? t('st_hot') : F.brand.length === 1 ? F.brand[0] : t('all'));
-  const active = [...F.size.map(s => ['size', s, sizeLbl(s)]), ...F.color.map(c => ['color', c, colName((P.flatMap(p => p.variants).find(v => ckey(v.color) === c) || {}).color || c)]), ...F.brand.map(b => ['brand', b, b]),
+  const active = [...F.type.map(c => ['type', c, (P.find(p => String(p.category?.id) === c)?.category?.[L]) || c]), ...F.size.map(s => ['size', s, sizeLbl(s)]), ...F.color.map(c => ['color', c, colName((P.flatMap(p => p.variants).find(v => ckey(v.color) === c) || {}).color || c)]), ...F.brand.map(b => ['brand', b, b]),
     ...(F.min !== '' ? [['min', F.min, '≥ ' + eur(F.min)]] : []), ...(F.max !== '' ? [['max', F.max, '≤ ' + eur(F.max)]] : [])];
   const nF = active.length;
   const gridHtml = list.length ? list.map(card).join('') : `<div class="empty" style="grid-column:1/-1">${t('none')}</div>`;
@@ -963,16 +964,20 @@ function renderShop(onlyGrid){
   ${nlBand()}<div class="grid" id="grid" style="margin-top:14px">${gridHtml}</div>`;
 }
 function rmF(k, v){ if (k === 'min' || k === 'max') F[k] = ''; else F[k] = F[k].filter(x => x !== v); renderShop(); }
-function clearF(){ F.size = []; F.color = []; F.brand = []; F.min = ''; F.max = ''; renderShop(); }
+function clearF(){ F.type = []; F.size = []; F.color = []; F.brand = []; F.min = ''; F.max = ''; renderShop(); }
 function openFilters(){
   const all = P.flatMap(p => p.variants);
   const sizes = [...new Set(all.map(v => v.size))].sort((a, b) => sRank(a) - sRank(b));
   const colors = [...new Map(all.filter(v => v.color).map(v => [ckey(v.color), v])).entries()];
   const brands = [...new Set(P.map(p => p.brand).filter(Boolean))].sort();
-  const tmp = {size:[...F.size], color:[...F.color], brand:[...F.brand]};
+  const base = P.filter(p => gOk(p) && (!F.grp || String(p.group?.id) === String(F.grp)));
+  const types = [...new Map(base.filter(p => p.category?.id).map(p => [String(p.category.id), p.category])).entries()]
+    .map(([id, c]) => [id, c[L], base.filter(p => String(p.category?.id) === id && !soldOut(p)).length]).sort((a, b) => b[2] - a[2] || a[1].localeCompare(b[1]));
+  const tmp = {type:[...F.type], size:[...F.size], color:[...F.color], brand:[...F.brand]};
   const bg = document.createElement('div'); bg.className = 'sheet-bg';
   const sec = (k, title, items) => `<h4>${title}</h4><div class="chips">${items.map(([v, l, extra]) => `<span class="chip x ${tmp[k].includes(v) ? 'on' : ''}" data-k="${k}" data-v="${esc(v)}">${extra || ''}${esc(l)}</span>`).join('')}</div>`;
   bg.innerHTML = `<div class="sheet"><div class="hd">${t('filters')}<button class="ib" data-close aria-label="close">✕</button></div><div class="bd">
+    ${types.length > 1 ? sec('type', t('f_cat'), types.map(([id, l, n]) => [id, l + (n ? ` (${n})` : '')])) : ''}
     ${sec('size', t('f_size'), sizes.map(s => [s, sizeLbl(s)]))}
     ${colors.length ? sec('color', t('f_color'), colors.map(([k, v]) => [k, colName(v.color), `<span class="dot" style="background:${hexOf(v.color, v.color_hex) || RAINBOW}"></span>`])) : ''}
     ${brands.length > 1 ? sec('brand', t('f_brand'), brands.map(b => [b, b])) : ''}
@@ -981,8 +986,8 @@ function openFilters(){
   bg.addEventListener('click', e => {
     if (e.target === bg || e.target.closest('[data-close]')) return bg.remove();
     const c = e.target.closest('.chip[data-k]'); if (c){ const k = c.dataset.k, v = c.dataset.v; const i = tmp[k].indexOf(v); if (i >= 0) tmp[k].splice(i, 1); else tmp[k].push(v); c.classList.toggle('on'); }
-    if (e.target.closest('[data-clear]')){ tmp.size = []; tmp.color = []; tmp.brand = []; bg.querySelectorAll('.chip.on').forEach(x => x.classList.remove('on')); bg.querySelector('#fmin').value = ''; bg.querySelector('#fmax').value = ''; }
-    if (e.target.closest('[data-apply]')){ F.size = tmp.size; F.color = tmp.color; F.brand = tmp.brand; F.min = bg.querySelector('#fmin').value; F.max = bg.querySelector('#fmax').value; bg.remove(); renderShop(); }
+    if (e.target.closest('[data-clear]')){ tmp.type = []; tmp.size = []; tmp.color = []; tmp.brand = []; bg.querySelectorAll('.chip.on').forEach(x => x.classList.remove('on')); bg.querySelector('#fmin').value = ''; bg.querySelector('#fmax').value = ''; }
+    if (e.target.closest('[data-apply]')){ F.type = tmp.type; F.size = tmp.size; F.color = tmp.color; F.brand = tmp.brand; F.min = bg.querySelector('#fmin').value; F.max = bg.querySelector('#fmax').value; bg.remove(); renderShop(); }
   });
   document.body.appendChild(bg);
 }
