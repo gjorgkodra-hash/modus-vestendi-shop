@@ -53,6 +53,24 @@ label{display:block;font-size:13px;font-weight:600;margin:14px 0 6px}
 .stories .ring{width:68px;height:68px;border-radius:50%;padding:2.5px;background:conic-gradient(from 200deg,#deb598,#c8102e,#4c2f2a,#deb598);margin:0 auto 6px}
 .stories .ring span{display:block;width:100%;height:100%;border-radius:50%;border:2.5px solid #fff;background:var(--soft) center/cover no-repeat;font-size:24px;display:grid;place-items:center}
 .stories a:active .ring{transform:scale(.95)}
+/* blog */
+.blrow{display:grid;grid-auto-flow:column;grid-auto-columns:72%;gap:12px;overflow-x:auto;scrollbar-width:none}
+@media(min-width:760px){.blrow{grid-auto-columns:31%}}
+.blrow::-webkit-scrollbar{display:none}
+.blgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.blc{display:block;color:inherit}.blc .im{aspect-ratio:4/5;border-radius:var(--r);background:var(--soft) center/cover no-repeat;margin-bottom:8px}
+.blc .kk{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--brand,#4c2f2a);font-weight:600}.blc .tt{font:500 17px/1.3 Jost,sans-serif;margin:3px 0}.blc .mt{font-size:12.5px;color:var(--muted)}
+.post{max-width:720px;margin:0 auto;font-size:16.5px;line-height:1.7;overflow-wrap:anywhere}
+.post .cv{width:100%;aspect-ratio:4/5;max-height:72vh;object-fit:cover;border-radius:var(--r);margin:12px 0 4px;background:var(--soft)}
+.post .kk{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;margin-top:12px;color:#4c2f2a}
+.post h1{font:400 32px/1.15 Jost,sans-serif;margin:6px 0 6px}.post h2{font:500 22px/1.3 Jost,sans-serif;margin:28px 0 6px}.post h3{font:500 19px Jost,sans-serif;margin:28px 0 12px}
+.post .mt{font-size:13px;color:var(--muted)}.post .lead{font-size:18px;color:#4a403c}
+.post .tip{background:var(--soft);border-radius:var(--r);padding:12px 14px;margin:16px 0}
+.post blockquote{border-left:3px solid #deb598;margin:18px 0;padding:4px 0 4px 16px;font:400 20px/1.45 Jost,sans-serif}.post cite{display:block;font-size:13px;color:var(--muted);margin-top:6px;font-style:normal}
+.post .tw{overflow-x:auto;margin:10px 0}.post table{border-collapse:collapse;font-size:14px;min-width:100%}.post th,.post td{border-bottom:1px solid var(--line);padding:7px 9px;text-align:left;white-space:nowrap}.post th{background:var(--soft)}
+.post .src{margin-top:28px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r);font-size:13.5px;color:#4a403c}
+.post .shr{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:22px 0 8px;font-size:14px}.post .shr a{text-decoration:underline}
+.post .ask{background:var(--soft);border-radius:var(--r);padding:12px 14px;font-size:14px}.post .ask a{text-decoration:underline;font-weight:600}
 /* category tiles */
 .tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 @media(min-width:760px){.tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
@@ -327,6 +345,9 @@ const TX = {
   st_last:['Copët e fundit','Ultimi pezzi','Last pieces'], st_hot:['Më të kërkuarit','I più richiesti','Most wanted'],
   sr_recent:['Kërkimet e fundit','Ricerche recenti','Recent searches'], sr_pop:['Më të kërkuarit','I più richiesti','Popular now'],
   sr_all:['Shiko të gjitha {n} rezultatet','Vedi tutti i {n} risultati','See all {n} results'], sr_none:['Asnjë rezultat','Nessun risultato','No results'],
+  blog_t:['Blog','Blog','Blog'], blog_sub:['Udhëzues masash, trende dhe këshilla stili nga Modus Vestendi.','Guide alle taglie, tendenze e consigli di stile (in albanese).','Size guides, trends and style tips (in Albanian).'],
+  blog_none:['Artikulli nuk u gjet.','Articolo non trovato.','Article not found.'], blog_shop:['Produktet e artikullit','I prodotti dell\'articolo','Shop this article'], blog_share:['Shpërndajeni','Condividi','Share'],
+  blog_copy:['Kopjo linkun','Copia link','Copy link'], blog_ask:['Keni pyetje për masën? Na shkruani:','Dubbi sulla taglia? Scrivici:','Questions about size? Message us:'], blog_more:['Lexoni edhe','Leggi anche','Read also'],
   news:['Të reja','Novità','New in'], sale:['Ulje','Saldi','Sale'], brands:['Markat','Brand','Brands'], see_all:['Shiko të gjitha','Vedi tutto','See all'],
   new_in:['Të sapoardhura','Ultimi arrivi','Just in'], products:['produkte','prodotti','items'], product1:['produkt','prodotto','item'],
   sort:['Rendit','Ordina','Sort'], s_new:['Më të rejat','Più recenti','Newest'], s_low:['Çmimi: nga më i ulëti','Prezzo crescente','Price: low to high'], s_high:['Çmimi: nga më i larti','Prezzo decrescente','Price: high to low'],
@@ -454,7 +475,7 @@ let CODE = store.get('mvshop_code', null), CODEOK = null, TOK = store.get('mvsho
 let G = store.get('mvshop_g', '');
 const gOk = p => !G || p.gender === G || p.gender === 'unisex';
 let P = [], URLS = {}, CART = store.get('mvshop_cart', []), WISH = store.get('mvshop_wish', []), Q = '', SORT = 'new', F = {size:[], color:[], brand:[], cat:'', grp:'', min:'', max:'', sale:false, news:false, last:false, hot:false};
-let REC = store.get('mvshop_recent', []), SRCH = store.get('mvshop_srch', []), IGF = [], HOT = new Set();
+let BLOG = [], REC = store.get('mvshop_recent', []), SRCH = store.get('mvshop_srch', []), IGF = [], HOT = new Set();
 const saveCart = () => { store.set('mvshop_cart', CART); badges(); };
 const saveWish = () => { store.set('mvshop_wish', WISH); badges(); };
 function toast(m, html){ document.querySelectorAll('.toast').forEach(x => x.remove()); const d = document.createElement('div'); d.className = 'toast'; if (html) d.innerHTML = m; else d.textContent = m; document.body.appendChild(d); setTimeout(() => d.remove(), 2600); }
@@ -482,6 +503,7 @@ async function load(){
   WISH = WISH.filter(id => P.some(p => p.id === id)); saveWish();
   HOT = new Set(P.filter(p => !soldOut(p) && p.hot >= 4).sort((a, b) => b.hot - a.hot).slice(0, 6).map(p => p.id));
   REC = REC.filter(id => P.some(p => p.id === id));
+  try { const rb = await sb.rpc('shop_blog'); BLOG = rb.data || []; const cv = BLOG.map(b => b.cover).filter(x => x && !URLS[x]); if (cv.length){ const r = await sb.storage.from('foto').createSignedUrls(cv, 60 * 60 * 6); (r.data || []).forEach(x => { if (x.signedUrl) URLS[x.path] = x.signedUrl; }); } } catch (e) { BLOG = []; }
   chrome(); route();
 }
 function chrome(){
@@ -500,7 +522,7 @@ function chrome(){
   $('#cats').innerHTML = `<a href="#/shop" class="${r.startsWith('#/shop') && !F.cat && !F.grp && !F.news && !F.sale && !F.last && !F.hot ? 'on' : ''}">${t('all')}</a>` +
     grps.map(c => `<a href="#/shop?grp=${c.id}" class="${String(F.grp) === String(c.id) ? 'on' : ''}">${esc(c[L])}</a>`).join('') +
     (PG.some(isSale) ? `<a href="#/shop?sale" class="hot ${F.sale ? 'on' : ''}">${t('sale')}</a>` : '') +
-    `<a href="#/brands">${t('brands')}</a>`;
+    `<a href="#/brands">${t('brands')}</a>` + (BLOG.length ? `<a href="#/blog" class="${r.startsWith('#/blog') ? 'on' : ''}">${t('blog_t')}</a>` : '');
   $('#foot').innerHTML = `<div><h4>${t('f_about')}</h4><p>${t('f_about_t')}</p></div>
     <div><h4>${t('f_help')}</h4><p>${t('f_how')}</p></div>
     <div><h4>${t('f_contact')}</h4><p><a href="https://wa.me/${WA_NUMBER}" target="_blank" rel="noopener">WhatsApp +${WA_NUMBER.replace(/^(\d{2})(\d{3})(\d{3})(\d+)/, '$1 $2 $3 $4')}</a></p><p><a href="https://www.instagram.com/${IG_USER}/" target="_blank" rel="noopener">Instagram @${IG_USER}</a></p><p><a href="mailto:${EMAIL}">${EMAIL}</a></p></div>
@@ -558,6 +580,8 @@ function route(){
   else if (h === '#/reset') renderReset(1);
   else if (h.startsWith('#/verify')) renderVerify();
   else if (h === '#/brands') renderBrands();
+  else if (h.startsWith('#/blog/')) renderPost(decodeURIComponent(h.slice(7).split('?')[0].replace(/\/$/, '')));
+  else if (h.startsWith('#/blog')) renderBlog();
   else renderHome();
   if (!pm) window.scrollTo(0, 0);
   setHH();
@@ -810,6 +834,60 @@ function openLook(id){
   bg.addEventListener('click', e => { if (e.target === bg || e.target.closest('.x')) bg.remove(); });
   document.body.appendChild(bg);
 }
+// ---------- blog (articles in Albanian; the static page /blog/<slug>/ is built every 30 min, this view covers fresh posts and browsing) ----------
+const BL_CAT = {trend:'Trendet', guida_taglie:'Udhëzues masash', stile:'Si ta vishni', brand:'Historia e markës', cura:'Kujdesi për veshjet', novita:'Të reja'};
+const blogUrl = b => `/blog/${b.slug}/`;
+const blogDate = d => d ? new Date(d).toLocaleDateString('sq-AL', {day:'numeric', month:'long', year:'numeric'}) : '';
+function blogCard(b){
+  const u = URLS[b.cover];
+  return `<a class="blc" href="#/blog/${esc(b.slug)}"><div class="im" style="${u ? `background-image:url('${esc(u)}')` : ''}"></div>
+    <div class="kk">${esc(BL_CAT[b.category] || '')}</div><div class="tt">${esc(b.title)}</div><div class="mt">${b.reading_min || 1} min lexim</div></a>`;
+}
+function blogRow(){
+  if (!BLOG.length) return '';
+  return `<h2 class="sec">✍️ ${t('blog_t')}<a href="#/blog">${t('see_all')}</a></h2><div class="blrow">${BLOG.slice(0, 6).map(blogCard).join('')}</div>`;
+}
+function renderBlog(){
+  chrome(); document.title = 'Blog · Modus Vestendi';
+  const cats = [...new Set(BLOG.map(b => b.category))];
+  const c = (location.hash.split('?c=')[1] || '');
+  const list = BLOG.filter(b => !c || b.category === c);
+  $('#view').innerHTML = `<h1 class="sec" style="font:400 30px Jost,sans-serif;margin:22px 0 4px">${t('blog_t')}</h1><p style="color:var(--muted);margin:0 0 14px">${t('blog_sub')}</p>
+    ${cats.length > 1 ? `<div class="chips" style="margin-bottom:14px"><a class="chip ${!c ? 'on' : ''}" href="#/blog">${t('all')}</a>${cats.map(k => `<a class="chip ${c === k ? 'on' : ''}" href="#/blog?c=${k}">${esc(BL_CAT[k] || k)}</a>`).join('')}</div>` : ''}
+    ${list.length ? `<div class="blgrid">${list.map(blogCard).join('')}</div>` : `<div class="empty">${t('soon')}</div>`}`;
+}
+function blogBody(b){
+  const md = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  return (b.body || []).map(x => x.t === 'h' ? `<h2>${md(x.text || '')}</h2>` : x.t === 'p' ? `<p>${md(x.text || '')}</p>` : x.t === 'tip' ? `<div class="tip">💡 ${md(x.text || '')}</div>`
+    : x.t === 'quote' ? `<blockquote>«${md(x.text || '')}»${x.cite ? `<cite>— ${esc(x.cite)}</cite>` : ''}</blockquote>` : x.t === 'list' ? `<ul>${(x.items || []).map(i => `<li>${md(i)}</li>`).join('')}</ul>`
+    : x.t === 'table' && (x.rows || []).length ? `<div class="tw"><table>${x.rows.map((r, i) => `<tr>${r.map(c => i ? `<td>${esc(c)}</td>` : `<th>${esc(c)}</th>`).join('')}</tr>`).join('')}</table></div>`
+    : x.t === 'products' ? (() => { const ps = (x.ids || []).map(id => P.find(p => p.id === Number(id))).filter(Boolean); return ps.length ? `<h3>🛍 ${esc(x.title || 'Bli trendin')}</h3><div class="grid" style="padding-bottom:0">${availFirst(ps).map(card).join('')}</div>` : ''; })() : '').join('');
+}
+function renderPost(slug){
+  chrome();
+  const b = BLOG.find(x => x.slug === slug);
+  if (!b){ $('#view').innerHTML = `<div class="empty">${t('blog_none')} <a href="#/blog">${t('blog_t')} →</a></div>`; return; }
+  document.title = `${b.seo_title || b.title} · Modus Vestendi`;
+  const u = URLS[b.cover], url = location.origin + blogUrl(b), more = BLOG.filter(x => x.id !== b.id).slice(0, 3);
+  const inBody = new Set((b.body || []).filter(x => x.t === 'products').flatMap(x => (x.ids || []).map(Number)));
+  const extra = (b.products || []).map(Number).filter(id => !inBody.has(id)).map(id => P.find(p => p.id === id)).filter(Boolean);
+  const msg = encodeURIComponent(`${b.title} ${url}`);
+  $('#view').innerHTML = `<article class="post">
+    <p style="margin:14px 0 0;font-size:13px"><a href="#/blog">← ${t('blog_t')}</a></p>
+    ${u ? `<img class="cv" src="${esc(u)}" alt="${esc(b.title)}">` : ''}
+    <div class="kk">${esc(BL_CAT[b.category] || '')}</div><h1>${esc(b.title)}</h1>
+    <div class="mt">${blogDate(b.published_at)} · ${b.reading_min || 1} min lexim</div>
+    ${b.excerpt ? `<p class="lead">${esc(b.excerpt)}</p>` : ''}
+    ${blogBody(b)}
+    ${extra.length ? `<h3>🛍 ${t('blog_shop')}</h3><div class="grid" style="padding-bottom:0">${availFirst(extra).map(card).join('')}</div>` : ''}
+    ${b.source?.url ? `<div class="src">📰 <b>Burimi:</b> ${esc(b.source.name || '')}${b.source.author ? ', ' + esc(b.source.author) : ''}${b.source.date ? ', ' + blogDate(b.source.date) : ''} — <a href="${esc(b.source.url)}" target="_blank" rel="noopener nofollow">“${esc(b.source.title || 'artikulli origjinal')}”</a>. Artikull i shkruar nga Modus Vestendi, i frymëzuar nga ky burim.</div>` : ''}
+    <div class="shr"><span>${t('blog_share')}:</span><a href="https://wa.me/?text=${msg}" target="_blank" rel="noopener">WhatsApp</a><a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}" target="_blank" rel="noopener">Facebook</a><a href="#" onclick="navigator.clipboard.writeText('${esc(url)}');this.textContent='✓';return false">${t('blog_copy')}</a></div>
+    <div class="ask">💬 ${t('blog_ask')} <a href="https://ig.me/m/${IG_USER}" target="_blank" rel="noopener">Instagram</a> · <a href="https://wa.me/${WA_NUMBER}" target="_blank" rel="noopener">WhatsApp</a></div>
+  </article>
+  ${more.length ? `<h2 class="sec">${t('blog_more')}</h2><div class="blrow">${more.map(blogCard).join('')}</div>` : ''}
+  ${nlBlock()}`;
+}
+
 function renderHome(){
   chrome();
   if (!P.length){ $('#view').innerHTML = `<div class="empty">${t('soon')}</div>`; return; }
@@ -826,6 +904,7 @@ function renderHome(){
   <h2 class="sec">${t('new_in')}<a href="#/shop">${t('see_all')}</a></h2>
   ${fresh.length ? `<div class="row-scroll">${fresh.map(card).join('')}</div>` : `<div class="empty" style="padding:30px 0">${t('soon')}</div>`}
   ${tilesHtml(PG)}
+  ${blogRow()}
   ${brands.length > 1 ? `<h2 class="sec">${t('brands')}</h2><div class="brands">${brands.map(b => `<a href="#/shop?brand=${encodeURIComponent(b)}">${esc(b)}</a>`).join('')}</div>` : ''}
   <h2 class="sec">${t('all')}<a href="#/shop">${t('see_all')}</a></h2>
   ${PG.length ? `<div class="grid" style="padding-bottom:0">${availFirst(PG).slice(0, 12).map(card).join('')}</div>` : ''}
